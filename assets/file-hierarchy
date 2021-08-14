@@ -1,0 +1,22 @@
+pages配下のファイル構成
+articles.vue
+articles
+--articlesCcreate.vue 記事作成ページ
+--_articlesId.vue 記事詳細ページ
+--_articlesIdEdit.vue 記事編集ページ
+sign
+--signIn.vue ログインページ
+--signUp.vue 新規登録ページ
+myPage
+--myPage.vue マイページ
+--_myPageId.vue マイページ詳細ページ
+--_myPageIdEdit.vue マイページ編集ページ
+
+components配下のファイル構成
+Frame
+--AppBar.vue
+--SideBarLeft.vue
+--SideBarRight.vue
+
+layouts配下のファイル構成
+default.vue Frameコンポーネントをまとめる。
