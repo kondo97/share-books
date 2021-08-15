@@ -8,7 +8,7 @@
   >
     <v-container class="d-flex align-center fixed-width px-0">
       <nuxt-link to="/" tag="div">
-        <p class="grey--text text--lighten-3 logo">Share Books</p>
+        <p class="grey--text text--lighten-3 logo">Share Hondana</p>
       </nuxt-link>
       <v-spacer></v-spacer>
       <!-- 非ログイン時に表示 -->
@@ -98,8 +98,8 @@ export default {
 
 .logo {
   margin-bottom: 0 !important;
-  font-size: 24px;
-  width: 160px !important;
+  font-size: 22px;
+  width: 180px !important;
   cursor: pointer;
 }
 

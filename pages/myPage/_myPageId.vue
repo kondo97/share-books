@@ -234,8 +234,6 @@ export default {
   },
   data() {
     return {
-      isAuth: true,
-      isFollow: false,
       tabs: null,
       tops: [
         { name: "マイ本棚" },

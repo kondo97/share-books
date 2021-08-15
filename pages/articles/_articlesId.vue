@@ -96,11 +96,6 @@ export default {
 <style>
 
 
-.article-title,
-.comment-title,
-.comment-contents {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-}
 
 
 

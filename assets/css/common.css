@@ -4,14 +4,19 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+.bg-color {
+  background-color: #f3efed !important;
+}
+
 .fixed-width {
   max-width: 1200px;
   width: 100%;
   height: 100%;
 }
 
-.bg-main-color {
-  background-color: #fff;
+.bg-main-color,
+.bgMainColor {
+  background-color: #fff !important;
 }
 
 .fixed {
@@ -24,12 +29,45 @@
   background-color: #998377;
 }
 
+.logo {
+  width: 200px;
+}
+
+.logo--amazon {
+  width: 100%;
+  pointer-events: auto;
+  cursor: pointer !important;
+}
+
+.logo--amazon:hover {
+  opacity: 0.8;
+}
+
+.book-width {
+  width: 600px;
+}
+
+.article-title,
+.comment-title,
+.comment-contents,
+.articleTitle {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.mdi-edit {
+  pointer-events: auto;
+  cursor: pointer !important;
+}
+
 @media screen and (max-width: 480px) {
   .sp-user-name {
     font-size: 12px !important;
   }
   .sp-time {
     font-size: 12px !important;
+  }
+  .book-width {
+    width: 100%;
   }
 }
 /*# sourceMappingURL=common.css.map */
