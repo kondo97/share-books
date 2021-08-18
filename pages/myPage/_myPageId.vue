@@ -5,7 +5,7 @@
       <MyPageHead />
       <template v-slot:extension>
         <v-tabs v-model="tabs" centered>
-          <v-tab v-for="top in tops" :key="top" class="sp-tab">
+          <v-tab v-for="(top, index) in tops" :key="index" class="sp-tab">
             {{ top.name }}
           </v-tab>
         </v-tabs>
@@ -18,7 +18,7 @@
         <v-card flat>
           <v-card-text class="pt-0">
             <v-list four-line class="pa-sm-6 mx-sm-12">
-              <template v-for="(item, index) in items">
+              <template v-for="(item, index) in items" >
                 <v-subheader
                   v-if="item.header"
                   :key="item.header"
@@ -31,7 +31,7 @@
                   :inset="item.inset"
                 ></v-divider>
 
-                <v-list-item v-else :key="item.title">
+                <v-list-item v-else :key="index">
                   <v-list-item-avatar>
                     <v-img :src="item.avatar"></v-img>
                   </v-list-item-avatar>
@@ -92,7 +92,7 @@
       <v-tab-item class="mt-3">
         <v-card flat>
           <v-list class="py-6">
-            <v-list-item-group v-model="model">
+            <v-list-item-group>
               <v-list-item v-for="(follow, i) in follows" :key="i">
                 <v-card-text class="follow-border mx-sm-16">
                   <v-row class="py-3 px-sm-12">
@@ -120,7 +120,7 @@
       <v-tab-item class="mt-3">
         <v-card flat>
           <v-list class="py-6">
-            <v-list-item-group v-model="model">
+            <v-list-item-group>
               <v-list-item v-for="(follower, i) in followers" :key="i">
                 <v-card-text class="follow-border mx-sm-16">
                   <v-row class="py-3 mx-sm-12">
@@ -164,7 +164,7 @@
                   :inset="like.inset"
                 ></v-divider>
 
-                <v-list-item v-else :key="like.title">
+                <v-list-item v-else :key="index">
                   <v-list-item-avatar>
                     <v-img :src="like.avatar"></v-img>
                   </v-list-item-avatar>
@@ -353,39 +353,5 @@ export default {
 </script>
 
 <style>
-.mypage-width {
-  width: 80%;
-}
 
-.avatar-size {
-  width: 72px !important;
-  height: 72px !important;
-}
-
-.mypage-border {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.follow-border {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.follower-color {
-  color: #5f9ea0;
-}
-
-@media screen and (max-width: 480px) {
-  .mypage-width {
-    width: 100%;
-  }
-
-  .avatar-size {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  .sp-tab {
-    font-size: 12px !important;
-  }
-}
 </style>

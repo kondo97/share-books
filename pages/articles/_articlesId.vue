@@ -44,7 +44,7 @@
           </div>
           <div class="bg-main-color my-9 pt-6">
             <h2 class="comment-title px-6 pb-1">コメント</h2>
-            <!-- 一つのコメント -->
+            <!-- コメント -->
             <ArticlesComment />
             <!-- 投稿レイアウト -->
             <div class="mt-sm-9 mt-6 px-sm-6 px-3 pb-6 mb-16 mb-md-0 comment-contents">
@@ -60,9 +60,11 @@
                   <p class="ma-0 sp-user-name">@近藤（フロントエンドエンジニアを目指す）</p>
                 </v-col>
               </v-row>
-              <v-textarea solo label="コメントを入力" class="mt-6"></v-textarea>
+              <v-form ref="form" v-model="valid">
+              <v-textarea solo label="コメントを入力（最大140文字）" class="mt-6" autofocus :rules="commentRules"></v-textarea>
+              </v-form>
               <div class="text-right">
-                <v-btn color="success"> 投稿 </v-btn>
+                <v-btn color="success" :disabled="!valid"> 投稿 </v-btn>
               </div>
             </div>
           </div>
@@ -88,7 +90,14 @@ export default {
     MyPageHead: () => import("~/components/MyPageHead")
   },
   data() {
-    return {};
+    return {
+      // ルール設定
+      valid: false,
+      commentRules: [
+        (v) => !!v || "コメントを投稿してみましょう！",
+        (v) => (v && v.length <= 140) || "最大140文字です。",
+      ]
+    };
   },
 };
 </script>

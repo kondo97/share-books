@@ -81,7 +81,9 @@ export default {
         (v) => !!v || "user name is required",
         (v) => (v && v.length <= 15) || "最大15文字です。",
       ],
-      mailRules: [(v) => !!v || "mail is required"],
+      mailRules: [
+        (v) => !!v || "mail is required",
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
       pwRules: [(v) => !!v || "password is required"],
     };
   },
@@ -100,7 +102,5 @@ export default {
 </script>
 
 <style>
-.signUp-border-top {
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
-}
+
 </style>

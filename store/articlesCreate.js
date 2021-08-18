@@ -1,11 +1,14 @@
 export const state = () => ({
+  // 本棚のデータを格納
   contents:[],
+  // 本のデータを格納
   content:{
     title: "",
     author: "",
     descript: "",
     url: "",
   },
+  //編集する本の番号を取得
   editIndex:''
 })
 

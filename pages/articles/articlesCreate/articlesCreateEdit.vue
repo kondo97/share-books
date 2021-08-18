@@ -102,12 +102,12 @@ export default {
   methods: {
     // キャンセルボタン押下
     cancelCreateEdit() {
-      this.$router.push('/articles/articlesCreate/')
+      this.$router.push('/articles/articlesCreate/articlesCreate/')
     },
     // 更新ボタン押下
     updateCreateEdit() {
       this.$store.dispatch('articlesCreate/updateCreate', this.create)
-      this.$router.push('/articles/articlesCreate/')
+      this.$router.push('/articles/articlesCreate/articlesCreate/')
     }
   },
 }

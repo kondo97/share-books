@@ -51,7 +51,7 @@
           dense
           :rules="pwRules"
         ></v-text-field>
-        <p class="forget-pw" @click="forgetPw">パスワードを忘れた方</p>
+        <p class="pointer" @click="forgetPw">パスワードを忘れた方</p>
         <div class="text-center">
           <v-btn class="primary" :disabled="!valid">ログイン</v-btn>
         </div>
@@ -65,7 +65,9 @@ export default {
   data() {
     return {
       valid: false,
-      mailRules: [(v) => !!v || "mail is required"],
+      mailRules: [
+        (v) => !!v || "mail is required",
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
       pwRules: [(v) => !!v || "password is required"],
     };
   },
@@ -87,16 +89,5 @@ export default {
 </script>
 
 <style>
-.siginIn-border-top {
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
-}
 
-.forget-pw {
-  cursor: pointer;
-  display: inline-block;
-}
-
-.forget-pw:hover {
-  opacity: 0.7;
-}
 </style>

@@ -45,7 +45,5 @@ export default {
 </script>
 
 <style>
-.footer-card {
-  width: 100%;
-}
+
 </style>

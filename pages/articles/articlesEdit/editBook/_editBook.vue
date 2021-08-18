@@ -45,9 +45,17 @@
             <div class="text-center">
               <v-btn
                 elevation="2"
+                color="grey lighten-2"
+                @click="cancelCreateEdit"
+                class="mr-3"
+                >キャンセル</v-btn
+              >
+              <v-btn
+                elevation="2"
                 color="success"
                 @click="nextBook"
                 :disabled="!validCreate"
+                class="ml-3"
                 >更新する</v-btn
               >
             </div>

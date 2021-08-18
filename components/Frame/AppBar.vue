@@ -22,7 +22,7 @@
         @click="displayNews"
         v-click-outside="clickOutsideNews"
       >
-        <v-icon dark class="mr-1 mr-sm-3 bell">mdi-bell</v-icon>
+        <v-icon dark class="mr-1 mr-sm-3 pointer">mdi-bell</v-icon>
         <div class="news">
           <div class="news--list" v-if="showNews">
             <NewsList @closeNews="clickOutsideNews" />
@@ -50,7 +50,7 @@
       <v-btn elevation="2" color="primary" v-if="!isAuth" class="ml-6">新規登録</v-btn>
       </nuxt-link>
       <!-- ログイン時に表示 -->
-      <nuxt-link to="/articles/articlesCreate" tag="div">
+      <nuxt-link to="/articles/articlesCreate/articlesCreate" tag="div">
         <v-btn elevation="2" color="success" v-if="isAuth">新規投稿</v-btn>
       </nuxt-link>
     </v-container>
@@ -91,39 +91,5 @@ export default {
 </script>
 
 <style>
-.app-bar {
-  /* background: linear-gradient(-135deg, #1e130c, #9a8478); */
-  background: linear-gradient(-135deg, #9a8478, #1e130c);
-}
 
-.logo {
-  margin-bottom: 0 !important;
-  font-size: 22px;
-  width: 180px !important;
-  cursor: pointer;
-}
-
-.bell,
-.avatar {
-  cursor: pointer;
-}
-
-.menu,
-.news {
-  position: relative;
-}
-
-.menu--list {
-  position: absolute;
-  top: 0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.news--list {
-  position: absolute;
-  top: 1.2rem;
-  left: 50%;
-  transform: translateX(-50%);
-}
 </style>

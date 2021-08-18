@@ -7,7 +7,7 @@
       <p class="c">
         c
       </p>
-      <div class="logo mt-6 mx-auto">
+      <div class="logo--wrap--amazon mt-6 mx-auto">
         <img
           src="~/static/amazon.png"
           alt="amazonのロゴ"

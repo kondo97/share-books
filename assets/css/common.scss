@@ -10,6 +10,9 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
+// ーーーーーーーーーー
+//    共通
+// ーーーーーーーーーー
 .bg-color {
   background-color: #f3efed !important;
 }
@@ -26,7 +29,7 @@
 }
 
 .fixed {
-  position: fixed;
+  position: fixed !important;
 }
 
 .sp-articles-left-fixed {
@@ -35,7 +38,7 @@
   background-color: #998377;
 }
 
-.logo {
+.logo--wrap--amazon {
   width: 200px;
 }
 
@@ -45,8 +48,8 @@
   cursor: pointer !important;
 }
 
-.logo--amazon:hover {
-  opacity: 0.8;
+.prevent-item {
+  pointer-events: auto;
 }
 
 .book-width {
@@ -56,27 +59,33 @@
 .article-title,
 .comment-title,
 .comment-contents,
-.articleTitle {
+.articleTitle,
+.mypage-border {
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-.mdi-edit {
-  pointer-events: auto;
-  cursor: pointer !important;
+.siginIn-border-top,
+.signUp-border-top {
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 
-@media screen and (min-width:999px) {
-
+.pointer {
+  cursor: pointer;
 }
 
+
+
+.contents:hover,
+.forget-pw:hover,
+.logo--amazon:hover {
+  opacity: 0.8;
+}
 
 @media screen and (max-width:480px) {
-  .sp-user-name {
-    font-size: 12px !important;
-  }
-
-  .sp-time {
+  .sp-user-name,
+  .sp-time,
+  .sp-tab {
     font-size: 12px !important;
   }
 
@@ -84,4 +93,227 @@
     width: 100%;
   }
 }
+
+// ーーーーーーーーーー
+//   コンポーネント
+// ーーーーーーーーーー
+
+//ArticlesComponent
+.comment-item {
+  display: block;
+}
+
+//AppBar
+.app-bar {
+  background: linear-gradient(-135deg, #9a8478, #1e130c);
+}
+
+.logo {
+  margin-bottom: 0 !important;
+  font-size: 22px;
+  width: 180px !important;
+  cursor: pointer;
+}
+
+.menu,
+.news {
+  position: relative;
+}
+
+.menu--list {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.news--list {
+  position: absolute;
+  top: 1.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+//FooterBar
+.footer-card {
+  width: 100%;
+}
+
+//SideMenuLeft 
+//SideMenuRight
+.left-menu
+.right-menu  {
+  width: 180px;
+}
+
+
+.sm-twitter {
+  text-align: right;
+}
+
+.sm-category {
+  width: 60%;
+}
+
+
+.contents {
+  position: relative;
+  cursor: pointer;
+  border-radius: 5% !important; 
+}
+
+
+.contents--inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+}
+
+.twitter {
+  width: 100%;
+}
+
+.left-menu-fixed {
+  position: fixed !important;
+  overflow: auto;
+  height: 65vh;
+}
+
+//NewsList
+.wrap-text {
+  word-break: break-all;
+  white-space: normal;
+}
+
+// ーーーーーーーーーーー
+//      Pages
+// ーーーーーーーーーーー
+
+//_articlesIdEdit
+.how-to-create {
+  text-decoration: none;
+}
+
+.create-border {
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.public-btn {
+  position: fixed !important;
+  top: 15%;
+  right: 5%;
+  z-index: 10;
+}
+
+.left-create,
+.right-create {
+  width: 50%;
+  height: 90vh;
+  overflow: auto;
+}
+
+.create-field-small {
+  transform: scale(0.85);
+}
+
+@media screen and (max-width: 480px) {
+  .create-border {
+    border-left: none;
+  }
+
+  .left-create,
+  .right-create {
+    width: 100%;
+    height: auto;
+    overflow: none;
+  }
+
+  .public-btn {
+    top: 90%;
+    right: 5%;
+  }
+}
+
+//articlesCreate
+.how-to-create {
+  text-decoration: none;
+}
+
+.create-border {
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.public-btn {
+  position: fixed;
+  top: 15%;
+  right: 5%;
+  z-index: 10;
+}
+
+.left-create,
+.right-create {
+  width: 50%;
+  height: 90vh;
+  overflow: auto;
+}
+
+.create-field-small {
+  transform: scale(0.85);
+}
+
+@media screen and (max-width: 480px) {
+.create-border {
+  border-left: none;
+}
+
+.left-create,
+.right-create {
+  width: 100%;
+  height: auto;
+  overflow: none;
+}
+
+.public-btn {
+  top: 90%;
+  right: 5%;
+}
+}
+
+//mtPageId
+.mypage-width {
+  width: 80%;
+}
+
+.avatar-size {
+  width: 72px !important;
+  height: 72px !important;
+}
+
+.follow-border {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.follower-color {
+  color: #5f9ea0;
+}
+
+@media screen and (max-width: 480px) {
+  .mypage-width {
+    width: 100%;
+  }
+
+  .avatar-size {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
+
+
+
+
+
+
 

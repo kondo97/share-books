@@ -55,8 +55,5 @@ export default {
 </script>
 
 <style>
-.wrap-text {
-  word-break: break-all;
-  white-space: normal;
-}
+
 </style>

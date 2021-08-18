@@ -117,7 +117,7 @@
                 <h2 class="mt-9">{{ index + 1 }}冊目</h2>
                 <v-card class="my-2 px-sm-6 pa-6 pb-0" elevation="3">
                   <div class="text-right">
-                    <v-icon @click="editBook(index)" class="mdi-edit">mdi-pencil</v-icon>
+                    <v-icon @click="editBook(index)" class="prevent-item">mdi-pencil</v-icon>
                   </div>
                   <h2 class="mt-4 text-sm-h5 text-h6">
                     タイトル：{{ content.title }}
@@ -153,7 +153,7 @@
 <script>
 export default {
   created() {
-    
+
   },
   data() {
     return {
@@ -228,7 +228,6 @@ export default {
       };
     },
     editBook(index) {
-      console.log(index)
       this.$router.push('/articles/articlesEdit/editBook/d')
     } 
   },
@@ -236,49 +235,9 @@ export default {
 </script>
 
 <style>
-.how-to-create {
-  text-decoration: none;
-}
-
-.create-border {
-  border-left: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.public-btn {
-  position: fixed;
-  top: 15%;
-  right: 5%;
-  z-index: 10;
-}
-
-.left-create,
-.right-create {
-  width: 50%;
-  height: 90vh;
-  overflow: auto;
-}
-
-.create-field-small {
-  transform: scale(0.85);
-}
 
 
 
-@media screen and (max-width: 480px) {
-  .create-border {
-    border-left: none;
-  }
 
-  .left-create,
-  .right-create {
-    width: 100%;
-    height: auto;
-    overflow: none;
-  }
 
-  .public-btn {
-    top: 90%;
-    right: 5%;
-  }
-}
 </style>

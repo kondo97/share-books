@@ -117,7 +117,7 @@
                 elevation="3"
               >
               <div class="text-right">
-                    <v-icon @click="editCreateBook(index)" class="mdi-edit">mdi-pencil</v-icon>
+                    <v-icon @click="editCreateBook(index)" class="prevent-item ">mdi-pencil</v-icon>
                   </div>
                 <h2 class="mt-4 text-sm-h5 text-h6">
                   タイトル：{{ content.title }}
@@ -234,7 +234,7 @@ export default {
     editCreateBook(index) {
       const content = this.contents[index]
       this.$store.dispatch('articlesCreate/editCreate', {content,index})
-      this.$router.push('/articles/articlesCreateEdit/')
+      this.$router.push('/articles/articlesCreate/articlesCreateEdit/')
     }
   },
   computed: {
@@ -246,47 +246,5 @@ export default {
 </script>
 
 <style>
-.how-to-create {
-  text-decoration: none;
-}
 
-.create-border {
-  border-left: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.public-btn {
-  position: fixed;
-  top: 15%;
-  right: 5%;
-  z-index: 10;
-}
-
-.left-create,
-.right-create {
-  width: 50%;
-  height: 90vh;
-  overflow: auto;
-}
-
-.create-field-small {
-  transform: scale(0.85);
-}
-
-@media screen and (max-width: 480px) {
-.create-border {
-  border-left: none;
-}
-
-.left-create,
-.right-create {
-  width: 100%;
-  height: auto;
-  overflow: none;
-}
-
-.public-btn {
-  top: 90%;
-  right: 5%;
-}
-}
 </style>
