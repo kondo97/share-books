@@ -23,7 +23,7 @@
           ></v-text-field>
           <v-text-field
             label="パスワード"
-            placeholder="8文字以上の半角英数記号"
+            placeholder="半角英数字8文字以上"
             outlined
             dense
             :rules="pwRules"
@@ -84,18 +84,22 @@ export default {
       mailRules: [
         (v) => !!v || "mail is required",
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
-      pwRules: [(v) => !!v || "password is required"],
+      pwRules: [
+        (v) => !!v || "password is required",
+        v => /^[a-z\d]{8,100}$/i || '半角英数字8文字以上'],
     };
   },
   methods: {
     validate() {
       this.$refs.form.validate();
     },
+    // ツイッターログインの処理
     submitTwitter() {
-      // ツイッターログインの処理
+      this.$store.dispatch('signIn/singInTwitter')
     },
+    // グーグルログインの処理
     submitGoogle() {
-      // グーグルログインの処理
+      this.$store.dispatch('signIn/singInGoogle')
     },
   },
 };

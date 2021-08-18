@@ -57,7 +57,9 @@ export default {
       this.$emit('closeMenu')
       //logoutの確認
       if (action == "logout") {
-        confirm("clear!");
+        if(confirm("ログアウトしますか？")){
+          this.$store.dispatch('signIn/logout')
+        }
       } else {
         return;
       }

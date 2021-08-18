@@ -44,16 +44,18 @@
           outlined
           dense
           :rules="mailRules"
+          v-model="email"
         ></v-text-field>
         <v-text-field
           placeholder="パスワード"
           outlined
           dense
           :rules="pwRules"
+          v-model="password"
         ></v-text-field>
         <p class="pointer" @click="forgetPw">パスワードを忘れた方</p>
         <div class="text-center">
-          <v-btn class="primary" :disabled="!valid">ログイン</v-btn>
+          <v-btn class="primary" :disabled="!valid" @click="submitSignIn">ログイン</v-btn>
         </div>
       </v-form>
     </v-card-text>
@@ -69,20 +71,29 @@ export default {
         (v) => !!v || "mail is required",
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
       pwRules: [(v) => !!v || "password is required"],
+      email: '',
+      password: '',
     };
   },
   methods: {
     validate() {
       this.$refs.form.validate();
     },
-    submitTwitte() {
-      // ツイッターログインの処理
+    // ツイッターログイン
+    submitTwitter() {
+      this.$store.dispatch('signIn/singInTwitter')
     },
+    // グーグルログインの処理
     submitGoogle() {
-      // グーグルログインの処理
+      this.$store.dispatch('signIn/singInGoogle')
     },
+    // メールアドレスでログイン
+    submitSignIn() {
+      this.$store.dispatch('signIn/signIn',{email: this.email, password: this.password})
+    },
+    // パスワードを忘れた時の処理
     forgetPw() {
-      // パスワードを忘れた時の処理
+      console.log('test')
     },
   },
 };

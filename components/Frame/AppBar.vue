@@ -13,16 +13,18 @@
       <v-spacer></v-spacer>
       <!-- 非ログイン時に表示 -->
       <nuxt-link to="/signIn/signIn" tag="div">
-<v-btn elevation="2" color="success" v-if="!isAuth">ログイン</v-btn>
+        <v-btn elevation="2" color="success" v-if="!isAuth">ログイン</v-btn>
       </nuxt-link>
       <!-- ログイン時に表示 -->
       <!-- お知らせ -->
-      <div
-        v-if="isAuth"
-        @click="displayNews"
-        v-click-outside="clickOutsideNews"
-      >
-        <v-icon dark class="mr-1 mr-sm-3 pointer">mdi-bell</v-icon>
+      <div v-if="isAuth">
+        <v-icon
+          dark
+          class="mr-1 mr-sm-3 pointer"
+          @click="displayNews"
+          v-click-outside="clickOutsideNews"
+          >mdi-bell</v-icon
+        >
         <div class="news">
           <div class="news--list" v-if="showNews">
             <NewsList @closeNews="clickOutsideNews" />
@@ -31,12 +33,12 @@
       </div>
 
       <!-- アバター -->
-      <div
-        v-if="isAuth"
-        @click="displayMenu"
-        v-click-outside="clickOutsideMenu"
-      >
-        <v-avatar class="mr-1 mr-sm-3 avatar">
+      <div v-if="isAuth">
+        <v-avatar
+          class="mr-1 mr-sm-3 avatar pointer"
+          @click="displayMenu"
+          v-click-outside="clickOutsideMenu"
+        >
           <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
         </v-avatar>
         <div class="menu" v-if="showMenu">
@@ -47,7 +49,9 @@
       </div>
       <!-- 非ログイン時に表示 -->
       <nuxt-link to="/signIn/signUp" tag="div">
-      <v-btn elevation="2" color="primary" v-if="!isAuth" class="ml-6">新規登録</v-btn>
+        <v-btn elevation="2" color="primary" v-if="!isAuth" class="ml-6"
+          >新規登録</v-btn
+        >
       </nuxt-link>
       <!-- ログイン時に表示 -->
       <nuxt-link to="/articles/articlesCreate/articlesCreate" tag="div">
@@ -62,7 +66,7 @@ import ClickOutside from "vue-click-outside";
 export default {
   data() {
     return {
-      isAuth: true,
+      // isAuth: true,
       showMenu: false,
       showNews: false,
     };
@@ -70,10 +74,12 @@ export default {
   methods: {
     //メニューを開く。
     displayMenu() {
+      console.log("showmenu");
       this.showMenu = true;
     },
     //メニューを閉じる。
     clickOutsideMenu() {
+      console.log("closemenu");
       this.showMenu = false;
     },
     displayNews() {
@@ -87,9 +93,13 @@ export default {
   directives: {
     ClickOutside,
   },
+  computed: {
+    isAuth() {
+      return this.$store.getters["signIn/isAuth"];
+    },
+  },
 };
 </script>
 
 <style>
-
 </style>

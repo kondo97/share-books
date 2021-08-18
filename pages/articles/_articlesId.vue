@@ -46,8 +46,8 @@
             <h2 class="comment-title px-6 pb-1">コメント</h2>
             <!-- コメント -->
             <ArticlesComment />
-            <!-- 投稿レイアウト -->
-            <div class="mt-sm-9 mt-6 px-sm-6 px-3 pb-6 mb-16 mb-md-0 comment-contents">
+            <!-- コメントレイアウト -->
+            <div class="mt-sm-9 mt-6 px-sm-6 px-3 pb-6 mb-16 mb-md-0 comment-contents" v-if="isAuth">
               <v-row>
                 <v-col cols="2" sm="1">
                   <v-avatar size="36"
@@ -99,6 +99,11 @@ export default {
       ]
     };
   },
+  computed: {
+    isAuth() {
+      return this.$store.getters["signIn/isAuth"];
+    }
+  }
 };
 </script>
 
