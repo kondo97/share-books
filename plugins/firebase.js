@@ -12,9 +12,9 @@ if (!firebase.apps.length) {
   measurementId: "G-VYM2H115C4"
  })
 
- firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-  console.log('Initialized!')
-})
+//  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+//   console.log('Initialized!')
+// })
 }
 
 export default firebase

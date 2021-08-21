@@ -13,43 +13,44 @@
               v-model="input_image"
               accept="image/*"
               show-size
-              label="画像をアップロード。"
+              label="画像をアップロード"
               @change="onImagePicked"
             ></v-file-input>
           </v-col>
           <v-col cols="8" sm="8">
             <v-text-field
-              label="ユーザーネームを入力。"
-              placeholder="ユーザーネームを入力。"
+              label="ユーザーネームを入力"
+              placeholder="ユーザーネームを入力"
               solo
               dense
-              v-model="myPage.intro"
+              v-model="myPage.userName"
               :rules="nameRules"
             ></v-text-field>
           </v-col>
           <v-col cols="10" sm="10" class="pb-0">
             <v-textarea
-              label="自己紹介文を入力。（最大140文字）"
+              label="自己紹介文を入力（最大140文字）"
               solo
-              placeholder="自己紹介文を入力。（最大140文字）"
+              placeholder="自己紹介文を入力（最大140文字）"
               height="100"
+              v-model="myPage.intro"
               :rules="introRules"
             ></v-textarea>
           </v-col>
           <v-col cols="10" sm="10">
             <v-text-field
-              label="TwitterURLを貼付。"
-              placeholder="TwitterURLを貼付。"
+              label="TwitterURLを貼付"
+              placeholder="TwitterURLを貼付"
               solo
               dense
+              v-model="myPage.twitterURL"
             ></v-text-field>
           </v-col>
         </v-row>
       </v-form>
     </v-card>
     <div class="text-center mb-6">
-      <v-btn elevation="2" color="grey lighten-2" class="mr-3"
-        >キャンセル</v-btn
+      <v-btn elevation="2" color="grey lighten-2" class="mr-3" @click="cancelMyPageEdit">キャンセル</v-btn
       >
       <v-btn class="primary ml-3" @click="reMypaged" :disabled="!valid"> 更新 </v-btn>
     </div>
@@ -58,6 +59,12 @@
 
 <script>
 export default {
+  created() {
+    this.myPage.userName = this.$store.getters['profile/profile'].userName
+    this.myPage.iconURL = this.$store.getters['profile/profile'].iconURL
+    this.myPage.intro = this.$store.getters['profile/profile'].intro
+    this.myPage.twitterURL = this.$store.getters['profile/profile'].twitterURL
+  },
   data() {
     return {
       // ルール設定
@@ -72,13 +79,22 @@ export default {
       input_image: null,
       uploadImageUrl: "",
       myPage:{
-        intro:''
+        userName:'',
+        iconURL:'',
+        intro:'',
+        twitterURL:''
       }
     };
   },
   methods: {
     reMypaged() {
-      this.$router.push("/myPage/params.id");
+      this.$store.dispatch('profile/editMyPage', this.myPage)
+      const uid = this.$route.params["myPageEdit"]
+      this.$router.push(`/myPage/${uid}`)
+    },
+    cancelMyPageEdit() {
+      const uid = this.$route.params["myPageEdit"]
+      this.$router.push(`/myPage/${uid}`)
     },
     onImagePicked(file) {
       if (file !== undefined && file !== null) {

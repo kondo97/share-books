@@ -74,12 +74,14 @@
   cursor: pointer;
 }
 
-
-
 .contents:hover,
 .forget-pw:hover,
 .logo--amazon:hover {
   opacity: 0.8;
+}
+
+.hover-blue:hover {
+  color: #217BD4;
 }
 
 @media screen and (max-width:480px) {
@@ -192,7 +194,7 @@
 // ーーーーーーーーーーー
 
 //_articlesIdEdit
-.how-to-create {
+.how-to-create, .twitterURL {
   text-decoration: none;
 }
 

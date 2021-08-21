@@ -9,10 +9,11 @@
         <div class="mx-9">
           <v-text-field
             label="ユーザー名"
-            placeholder="15文字以内"
+            placeholder="50文字以内"
             outlined
             dense
             :rules="nameRules"
+            v-model="userName"
           ></v-text-field>
           <v-text-field
             label="メールアドレス"
@@ -20,6 +21,7 @@
             outlined
             dense
             :rules="mailRules"
+            v-model="email"
           ></v-text-field>
           <v-text-field
             label="パスワード"
@@ -27,10 +29,14 @@
             outlined
             dense
             :rules="pwRules"
+            :type="show ? 'text' : 'password'"
+             @click:append="show = !show"
+             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+            v-model="password"
           ></v-text-field>
         </div>
         <div class="text-center">
-          <v-btn class="primary" :disabled="!valid">登録</v-btn>
+          <v-btn class="primary" :disabled="!valid" @click="submitRegister">登録</v-btn>
         </div>
         <p class="signUp-border-top text-center mt-6 mb-0 pt-6">
           ソーシャルアカウントでログイン
@@ -79,19 +85,27 @@ export default {
       valid: false,
       nameRules: [
         (v) => !!v || "user name is required",
-        (v) => (v && v.length <= 15) || "最大15文字です。",
+        (v) => (v && v.length <= 50) || "最大50文字です。",
       ],
       mailRules: [
         (v) => !!v || "mail is required",
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
       pwRules: [
         (v) => !!v || "password is required",
-        v => /^[a-z\d]{8,100}$/i || '半角英数字8文字以上'],
+         v => /^[\w-]{8,72}$/.test(v) || '半角英数字8文字以上'],
+      show: false,
+      userName:'',
+      email:'',
+      password:''
     };
   },
   methods: {
     validate() {
       this.$refs.form.validate();
+    },
+    //アカウント登録
+    submitRegister () {
+     this.$store.dispatch('signIn/register', {userName: this.userName, email: this.email, password: this.password})
     },
     // ツイッターログインの処理
     submitTwitter() {

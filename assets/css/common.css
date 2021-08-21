@@ -70,6 +70,10 @@
   opacity: 0.8;
 }
 
+.hover-blue:hover {
+  color: #217BD4;
+}
+
 @media screen and (max-width: 480px) {
   .sp-user-name,
   .sp-time,
@@ -164,7 +168,7 @@
   white-space: normal;
 }
 
-.how-to-create {
+.how-to-create, .twitterURL {
   text-decoration: none;
 }
 

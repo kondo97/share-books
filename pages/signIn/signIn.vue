@@ -52,8 +52,9 @@
           dense
           :rules="pwRules"
           v-model="password"
+          :type="show ? 'text' : 'password'"
         ></v-text-field>
-        <p class="pointer" @click="forgetPw">パスワードを忘れた方</p>
+        <p class="pointer hover-blue" @click="forgetPw">パスワードをお忘れの方</p>
         <div class="text-center">
           <v-btn class="primary" :disabled="!valid" @click="submitSignIn">ログイン</v-btn>
         </div>
@@ -71,6 +72,7 @@ export default {
         (v) => !!v || "mail is required",
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
       pwRules: [(v) => !!v || "password is required"],
+      show: false,
       email: '',
       password: '',
     };
@@ -93,7 +95,7 @@ export default {
     },
     // パスワードを忘れた時の処理
     forgetPw() {
-      console.log('test')
+      this.$router.push('/signIn/forgetPw')
     },
   },
 };

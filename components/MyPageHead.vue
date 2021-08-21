@@ -2,16 +2,14 @@
   <v-row class="px-6 py-sm-8 py-3 mypage-border">
     <v-col cols="2" sm="3" class="text-center">
       <v-avatar class="avatar-size"
-        ><img
-          src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
-          alt="投稿者の画像" /></v-avatar
+        ><img :src="iconURL" alt="投稿者の画像" /></v-avatar
     ></v-col>
     <v-col
       cols="10"
       sm="7"
       class="d-flex align-center flex-sm-column align-sm-start"
     >
-      <p class="sp-user-name ma-0">近藤（フロントエンドエンジニアを目指す）</p>
+      <p class="sp-user-name ma-0">{{ userName }}</p>
       <!-- スマホでは非表示 -->
       <v-row class="hidden-sm-and-down">
         <v-col sm="3" class="text-center d-flex align-center"
@@ -21,7 +19,7 @@
           ><p class="my-0">12</p></v-col
         >
         <v-col sm="2" class="text-center d-flex align-center"
-          ><v-icon>mdi-twitter</v-icon></v-col
+          ><a :href="twitterURL" class="twitterURL"><v-icon>mdi-twitter</v-icon></a></v-col
         >
       </v-row>
     </v-col>
@@ -41,9 +39,9 @@
     </v-col>
     <v-col cols="4" sm="2">
       <!-- 非ログイン時に表示 -->
-      <nuxt-link to="/myPage/myPageEdit/params.id">
-        <v-btn v-if="isAuth" class="primary">編集する</v-btn>
-      </nuxt-link>
+      <!-- <nuxt-link to="/myPage/myPageEdit/$route.params.id"> -->
+        <v-btn v-if="isAuth" class="primary" @click="goMyPageEdit">編集する</v-btn>
+      <!-- </nuxt-link> -->
       <!-- ログイン時に表示 -->
       <!-- フォローしている時 -->
       <v-btn
@@ -68,7 +66,7 @@
     </v-col>
     <v-col sm="12" class="mt-3 pb-0">
       <p class="sp-user-name">
-        この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ
+        {{ intro }}
       </p>
     </v-col>
   </v-row>
@@ -80,7 +78,27 @@ export default {
     return {
       isAuth: true,
       isFollow: false,
+    };
+  },
+  methods: {
+    goMyPageEdit() {
+      const uid = this.$route.params["myPageId"]
+      this.$router.push(`/myPage/myPageEdit/${uid}/`)
     }
   },
-}
+  computed: {
+    userName() {
+      return this.$store.getters["profile/profile"].userName;
+    },
+    iconURL() {
+      return this.$store.getters["profile/profile"].iconURL;
+    },
+    intro() {
+      return this.$store.getters["profile/profile"].intro;
+    },
+    twitterURL() {
+      return this.$store.getters["profile/profile"].twitterURL
+    }
+  },
+};
 </script>

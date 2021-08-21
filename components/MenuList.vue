@@ -22,8 +22,9 @@
 
 <script>
 export default {
-  data: () => ({
-    items: [
+  data () {
+    return {
+      items: [
       {
         icon: "mdi-home",
         text: "HOME",
@@ -34,8 +35,8 @@ export default {
         icon: "mdi-account",
         text: "マイページ",
         // userによって動的に変化
-        to: "/myPage/myPage",
-        action: 'closeMenu'
+        to: "/myPage",
+        action: 'goMyPage'
       },
       {
         icon: "mdi-send",
@@ -48,9 +49,11 @@ export default {
         text: "ログアウト",
         action: "logout",
       },
-    ],
-    model: 1,
-  }),
+      ],
+       uid: this.$store.getters['profile/user'].uid,
+       model: 1,
+    };
+  },
   methods: {
     menuActionClick(action) {
       //メニューを閉じる。AppBarのメソッドを呼び出す。
@@ -60,7 +63,13 @@ export default {
         if(confirm("ログアウトしますか？")){
           this.$store.dispatch('signIn/logout')
         }
-      } else {
+      } 
+      //マイページへ遷移
+      if(action == "goMyPage") {
+          const uid = this.uid
+          this.$router.push(`/myPage/${uid}`)
+      }
+      else {
         return;
       }
     },

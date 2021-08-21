@@ -1,13 +1,14 @@
 <template>
     <div class="fullview">
-      <h1>ログインしています。</h1>
       <div class="loading-spacer"></div>
+        <no-ssr>
         <vue-loading
           type="spiningDubbles"
           color="#aaa"
           :size="{ width: '100px', height: '100px' }"
         >
         </vue-loading>
+        </no-ssr>
     </div>
 </template>
 
@@ -17,7 +18,6 @@ export default {
   name: 'Loading',
   created() {
     firebase.auth().onAuthStateChanged(user => {
-    console.log(user)
     if (user) {
       this.$router.push('/')
     }else {
@@ -39,7 +39,7 @@ h1 {
 .fullview {
   width: 100%;
   height: 100vh;
-  background: #D9CEC8;
+  background: #fff;
   position: fixed;
   top: 0;
   left: 0;

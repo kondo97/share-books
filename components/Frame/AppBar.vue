@@ -39,7 +39,9 @@
           @click="displayMenu"
           v-click-outside="clickOutsideMenu"
         >
-          <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+          <!-- <v-img :src="iconURL"></v-img> -->
+          <img :src="iconURL" />
+          <!-- <img src="~/static/icon.png"> -->
         </v-avatar>
         <div class="menu" v-if="showMenu">
           <div class="menu--list">
@@ -74,12 +76,10 @@ export default {
   methods: {
     //メニューを開く。
     displayMenu() {
-      console.log("showmenu");
       this.showMenu = true;
     },
     //メニューを閉じる。
     clickOutsideMenu() {
-      console.log("closemenu");
       this.showMenu = false;
     },
     displayNews() {
@@ -97,6 +97,9 @@ export default {
     isAuth() {
       return this.$store.getters["signIn/isAuth"];
     },
+    iconURL() {
+      return this.$store.getters['profile/profile'].iconURL
+    }
   },
 };
 </script>
