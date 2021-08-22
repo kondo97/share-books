@@ -92,10 +92,10 @@ export default {
       urlCreateRules: [(v) => !!v || "必須項目です。"],
       // 本の入力データ
       create: {
-        title: this.$store.getters["articlesCreate/content"].title,
-        author: this.$store.getters["articlesCreate/content"].author,
-        descript: this.$store.getters["articlesCreate/content"].descript,
-        url: this.$store.getters["articlesCreate/content"].url,
+        title: this.$store.getters["posts/content"].title,
+        author: this.$store.getters["posts/content"].author,
+        descript: this.$store.getters["posts/content"].descript,
+        url: this.$store.getters["posts/content"].url,
       },
     };
   },
@@ -106,7 +106,7 @@ export default {
     },
     // 更新ボタン押下
     updateCreateEdit() {
-      this.$store.dispatch('articlesCreate/updateCreate', this.create)
+      this.$store.dispatch('posts/updateCreate', this.create)
       this.$router.push('/articles/articlesCreate/articlesCreate/')
     }
   },

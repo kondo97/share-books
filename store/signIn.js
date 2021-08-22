@@ -12,6 +12,9 @@ export const getters = {
    isAuth: state => state.isAuth,
 }
 
+const db = firebase.firestore()
+const auth = firebase.auth()
+
 export const actions = {
    //アカウント登録
    async register({ dispatch }, { userName, email, password }) {
@@ -60,7 +63,26 @@ export const actions = {
       const result = await firebase.auth().signInWithPopup(provider)
       const isNewUser = result.additionalUserInfo.isNewUser
       dispatch('profile/pushUser', isNewUser, { root: true })
-      this.$router.push('signInLoading')
+      //メール認証が完了していなければ、メールを送る。
+      const emailVerified = result.user.emailVerified
+      console.log(emailVerified)
+      if(emailVerified == false) {
+         this.$router.push('twitterEmail')
+      } else {
+         this.$router.push('signInLoading')
+      }
+   },
+   submitTwitterMail({ commit }, {email, password}) {
+      const credential = firebase.auth.EmailAuthProvider.credential(email, password);
+      auth.currentUser.linkWithCredential(credential)
+      .then((usercred) => {
+         var user = usercred.user;
+         console.log("Account linking success", user);
+         auth.currentUser.sendEmailVerification()
+         this.$router.push('/')
+       }).catch((error) => {
+        alert('メールの送信に失敗しました。')
+       });
    },
    // Googleでログイン
    async singInGoogle({ dispatch, commit }) {
@@ -96,6 +118,7 @@ export const actions = {
       })
       commit('authCheckLogout')
       commit('profile/logoutReset', null, { root: true })
+      commit('posts/logoutReset', null, { root: true })
       this.$router.push('/')
    },
 

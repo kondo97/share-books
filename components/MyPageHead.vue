@@ -78,10 +78,7 @@ export default {
     //ユーザーが自分自身か判定する。
     const pageUid = this.$route.params["myPageId"]
     const seeUserUid = this.$store.getters["profile/user"].uid
-    console.log(pageUid)
-    console.log(seeUserUid)
     if(pageUid == seeUserUid) {
-      console.log('success')
       this.isSelf = true
     } else {
       this.isSelf = false

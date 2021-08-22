@@ -56,9 +56,9 @@
         >
       </nuxt-link>
       <!-- ログイン時に表示 -->
-      <nuxt-link to="/articles/articlesCreate/articlesCreate" tag="div">
-        <v-btn elevation="2" color="success" v-if="isAuth">新規投稿</v-btn>
-      </nuxt-link>
+      <!-- <nuxt-link to="/articles/articlesCreate/articlesCreate" tag="div"> -->
+        <v-btn elevation="2" color="success" v-if="isAuth" @click="newPosts">新規投稿</v-btn>
+      <!-- </nuxt-link> -->
     </v-container>
   </v-app-bar>
 </template>
@@ -88,6 +88,10 @@ export default {
     clickOutsideNews() {
       this.showNews = false;
     },
+    //新規投稿ボタン押下
+    newPosts() {
+      this.$store.dispatch('posts/createPosts')
+    }
   },
   //vue-click-outsideの仕様。
   directives: {
