@@ -1,45 +1,50 @@
 import firebase from '@/plugins/firebase'
 
 export const state = () => ({
-   // ログイン状態を判別する。認証ユーザーかは問わない。
-   isAuth: false
+   // ログイン状態を判別する。自分自身ユーザーかは問わない。
+   isAuth: false,
+   //ログインユーザーかつ自分自身ユーザー
+   // isMySelf: false
 })
 
 export const getters = {
-   // ログイン状態を判別する。認証ユーザーかは問わない。
+   // ログイン状態を判別する。自分自身ユーザーかは問わない。
    isAuth: state => state.isAuth,
 }
 
 export const actions = {
    //アカウント登録
-   register({ dispatch }, {userName, email, password}) {
+   async register({ dispatch }, { userName, email, password }) {
+      await this.$router.push('signInLoading')
       firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(result => {
-         dispatch('sendEmail')
-         const isNewUser = result.additionalUserInfo.isNewUser
-         result.user.updateProfile({
-            displayName: userName,
-            photoURL:"https://github.com/share-hondana.png"
-         }).then(() => {
-            dispatch('profile/pushUser', isNewUser, { root: true })
-            // this.$router.push('signInLoading')
-         })
+         .then(result => {
+            dispatch('sendEmail')
+            const isNewUser = result.additionalUserInfo.isNewUser
+            result.user.updateProfile({
+               displayName: userName,
+               photoURL: "https://github.com/share-hondana.png"
+            }).then(() => {
+               dispatch('profile/setUser', result.user, { root: true })
+                  .then(() => {
+                     dispatch('profile/pushUser', isNewUser, { root: true })
+                  })
+            })
          }).catch(function (error) {
-            if(error.code == "auth/email-already-in-use"){
+            if (error.code == "auth/email-already-in-use") {
                dispatch('errorEmail')
             } else {
                alert('ログインに失敗しました。')
             }
-           console.log({'code':error.code, 'message':error.message})
-      })
+            console.log({ 'code': error.code, 'message': error.message })
+         })
    },
-  //認証メールを送信
-  sendEmail({commit}) {
+   //認証メールを送信
+   sendEmail({ commit }) {
       firebase.auth().currentUser.sendEmailVerification()
-      .then(() => {
-       })
-       .catch((error) => {
-       })
+         .then(() => {
+         })
+         .catch((error) => {
+         })
    },
    // エラー画面へ遷移
    errorEmail({ commit }) {
@@ -66,19 +71,24 @@ export const actions = {
       this.$router.push('signInLoading')
    },
    // メールアでレスでログイン
-   signIn({ commit }, { email, password }) {
+   async signIn({ dispatch, commit }, { email, password }) {
+      await this.$router.push('signInLoading')
       firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(user => {
-         this.$router.push('signInLoading')
-       }).catch((error) => {
-          if(error.code == "auth/wrong-password") {
-            alert('パスワードが間違っています。')
-          } else if(error.code == "auth/user-not-found") {
-             alert('メールアドレスが間違っています。')
-          } else {
-             alert('ログインできません。')
-          }
-       });
+         .then(result => {
+            dispatch('profile/setUser', result.user, { root: true })
+               .then(() => {
+                  dispatch('profile/getUser', null, { root: true })
+               })
+         }).catch((error) => {
+            if (error.code == "auth/wrong-password") {
+               alert('パスワードが間違っています。')
+            } else if (error.code == "auth/user-not-found") {
+               alert('メールアドレスが間違っています。')
+            } else {
+               alert('ログインできません。')
+               dispatch('logout')
+            }
+         });
    },
    // ログアウト処理
    logout({ commit }) {

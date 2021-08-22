@@ -19,7 +19,7 @@
           ><p class="my-0">12</p></v-col
         >
         <v-col sm="2" class="text-center d-flex align-center"
-          ><a :href="twitterURL" class="twitterURL"><v-icon>mdi-twitter</v-icon></a></v-col
+          ><a :href="twitterURL" class="twitterURL" target=”_blank”><v-icon >mdi-twitter</v-icon></a></v-col
         >
       </v-row>
     </v-col>
@@ -33,36 +33,35 @@
           ><p class="my-0">12</p></v-col
         >
         <v-col cols="2" class="text-center d-flex align-center"
-          ><v-icon>mdi-twitter</v-icon></v-col
+          ><a :href="twitterURL" class="twitterURL" target=”_blank” ><v-icon>mdi-twitter</v-icon></a></v-col
         >
       </v-row>
     </v-col>
     <v-col cols="4" sm="2">
       <!-- 非ログイン時に表示 -->
       <!-- <nuxt-link to="/myPage/myPageEdit/$route.params.id"> -->
-        <v-btn v-if="isAuth" class="primary" @click="goMyPageEdit">編集する</v-btn>
+        <span v-if="isSelf" ><v-btn class="primary" @click="goMyPageEdit">編集する</v-btn></span>
       <!-- </nuxt-link> -->
       <!-- ログイン時に表示 -->
       <!-- フォローしている時 -->
-      <v-btn
-        v-if="!isAuth"
+      <span v-if="!isSelf" ><v-btn
         v-show="isFollow"
         dark
         color="#5F9EA0"
         @click="changeFollow"
       >
         フォロー中
-      </v-btn>
+      </v-btn></span>
       <!-- フォローしていない時 -->
-      <v-btn
-        v-if="!isAuth"
+      <span v-if="!isSelf" ><v-btn
+        v-if="!isSelf"
         v-show="!isFollow"
         outlined
         color="#5F9EA0"
         @click="changeFollow"
       >
         フォロー
-      </v-btn>
+      </v-btn></span>
     </v-col>
     <v-col sm="12" class="mt-3 pb-0">
       <p class="sp-user-name">
@@ -73,10 +72,29 @@
 </template>
 
 <script>
+import firebase from '@/plugins/firebase'
 export default {
+  created() {
+    //ユーザーが自分自身か判定する。
+    const pageUid = this.$route.params["myPageId"]
+    const seeUserUid = this.$store.getters["profile/user"].uid
+    console.log(pageUid)
+    console.log(seeUserUid)
+    if(pageUid == seeUserUid) {
+      console.log('success')
+      this.isSelf = true
+    } else {
+      this.isSelf = false
+    }
+    // if(pageUid == seeUserUid) {
+    //   this.isMySelf = true
+    // } else {
+    //   this.isMySelf = false
+    // }
+  },
   data() {
     return {
-      isAuth: true,
+      isSelf: false,
       isFollow: false,
     };
   },
@@ -84,6 +102,9 @@ export default {
     goMyPageEdit() {
       const uid = this.$route.params["myPageId"]
       this.$router.push(`/myPage/myPageEdit/${uid}/`)
+    },
+    changeFollow() {
+      this.isFollow = ! this.isFollow
     }
   },
   computed: {

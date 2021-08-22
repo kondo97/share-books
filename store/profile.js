@@ -1,6 +1,7 @@
 import firebase from '@/plugins/firebase'
 
 export const state = () => ({
+  //userNameとiconURLは、プロフィールのデータとずれる場合あり。
   user: {
     uid: '',
     userName: '',
@@ -25,8 +26,6 @@ export const actions = {
   //authのユーザー情報をstateに格納する。
   setUser({ commit }, user) {
     commit('setUser', user)
-    
-    
   },
   //stateのユーザーデータをfirestoreのprofileコレクションに格納する。
   pushUser({ getters, dispatch }, isNewUser) {

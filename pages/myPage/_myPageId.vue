@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto fixed-width">
   <v-card class="my-12 mypage-width mx-auto">
-    <v-toolbar color="#fff" flat prominent height="300">
+    <v-toolbar color="#fff" flat prominent height="280">
       <MyPageHead />
       <template v-slot:extension>
         <v-tabs v-model="tabs" centered>
