@@ -81,7 +81,13 @@ export const actions = {
          auth.currentUser.sendEmailVerification()
          this.$router.push('/')
        }).catch((error) => {
-        alert('メールの送信に失敗しました。')
+          if(error.code == "auth/provider-already-linked") {
+             alert('既にメールアドレスは登録されています。')
+             this.$router.push('/')
+          } else {
+            alert('メールの送信に失敗しました。')
+          }
+        console.log({ 'code': error.code, 'message': error.message })
        });
    },
    // Googleでログイン
@@ -119,6 +125,8 @@ export const actions = {
       commit('authCheckLogout')
       commit('profile/logoutReset', null, { root: true })
       commit('posts/logoutReset', null, { root: true })
+      commit('getPosts/logoutReset', null, { root: true })
+      commit('myPageProfile/logoutReset', null, { root: true })
       this.$router.push('/')
    },
 

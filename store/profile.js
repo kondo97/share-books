@@ -7,17 +7,17 @@ export const state = () => ({
     userName: '',
     iconURL: '',
   },
+  //現在ログインしているユーザーの情報
   profile: {
     userName: '',
     iconURL: "https://github.com/share-hondana.png",
-    intro: '',
-    twitterURL: ''
-  }
+  },
+
 })
 
 export const getters = {
   user: state => state.user,
-  profile: state => state.profile
+  profile: state => state.profile,
 }
 
 const db = firebase.firestore()
@@ -29,16 +29,15 @@ export const actions = {
   },
   //stateのユーザーデータをfirestoreのprofileコレクションに格納する。
   pushUser({ getters, dispatch }, isNewUser) {
-    console.log(isNewUser)
     const userID = getters.user.uid
-    if(isNewUser == true) {
+    if (isNewUser == true) {
       db.collection(`users/${userID}/profile`).doc(userID).set({
         userName: getters.user.userName,
         iconURL: getters.user.iconURL,
       })
-      .then(() => {
-        dispatch('getUser')
-      })
+        .then(() => {
+          dispatch('getUser')
+        })
     } else {
       dispatch('getUser')
     }
@@ -46,24 +45,31 @@ export const actions = {
   // profileコレクションからデータを取得
   getUser({ getters, commit }) {
     const userID = getters.user.uid
+    console.log(userID)
     db.collection(`users/${userID}/profile`).doc(userID).get()
       .then((doc) => {
         commit('getUser', doc.data())
       })
   },
   //マイページを編集
-  editMyPage({ getters, dispatch ,commit }, myPage) {
+  editMyPage({ getters, dispatch, commit }, { iconURL, myPage }) {
     const userID = getters.user.uid
     db.collection(`users/${userID}/profile`).doc(userID).update({
       userName: myPage.userName,
-      iconURL: myPage.iconURL,
+      iconURL: iconURL,
       intro: myPage.intro,
       twitterURL: myPage.twitterURL
+    }).then(() => {
+      commit('editMyPage', { iconURL, myPage })
+      commit('myPageProfile/editUser', { iconURL, myPage }, { root: true })
     })
-    commit('editMyPage', myPage)
-  },
+  },//ログアウト時にstateの値をリセット
   logoutReset({ commit }) {
     commit('logoutReset')
+  },
+  //firestoreから投稿記事データを取得
+  getPosts({ commit }) {
+    console.log('test')
   }
 }
 
@@ -77,13 +83,12 @@ export const mutations = {
   //profileコレクションのユーザー情報を取得
   getUser(state, profile) {
     state.profile.userName = profile.userName,
-    state.profile.iconURL = profile.iconURL
-    state.profile.intro =  profile.intro
-    state.profile.twitterURL = profile.twitterURL
+      state.profile.iconURL = profile.iconURL
   },
   //マイページを編集
-  editMyPage(state, myPage) {
-    state.profile = myPage
+  editMyPage(state, { iconURL, myPage }) {
+    state.profile.userName = myPage.userName,
+    state.profile.iconURL = iconURL
   },
   logoutReset(state) {
     state.user = {
@@ -94,8 +99,6 @@ export const mutations = {
       state.profile = {
         userName: '',
         iconURL: "https://github.com/share-hondana.png",
-        intro: '',
-        twitterURL: ''
       }
   }
 }

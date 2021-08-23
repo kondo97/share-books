@@ -1,4 +1,6 @@
 import firebase from '@/plugins/firebase'
+import dayjs from 'dayjs'
+
 
 const db = firebase.firestore()
 const auth = firebase.auth()
@@ -16,20 +18,23 @@ export const state = () => ({
   booksCounts: 0,
   overBooks: false,
   //編集する本の番号を取得
-  editIndex: ''
+  editIndex: '',
+  //画面遷移時の保存用
+  articleTitle:'',
+  articleDescript:'',
+  articleCate:''
 })
 
 export const getters = {
   contents: state => state.contents,
   content: state => state.content,
-  overBooks: state => state.overBooks
+  overBooks: state => state.overBooks,
+  articleTitle: state => state.articleTitle,
+  articleDescript: state => state.articleDescript,
+  articleCate: state => state.articleCate
 }
 
 export const actions = {
-  //新規投稿ボタンを押下
-  createPosts() {
-    this.$router.push('articles/articlesCreate/articlesCreate')
-  },
   // 本を追加
   pushBook({ state, commit }, create) {
     if (state.booksCounts <= 4) {
@@ -59,17 +64,24 @@ export const actions = {
   pushCreatePosts({ commit }, { articleTitle, articleDescript, articleCate, contents }) {
     const user = auth.currentUser
     const uid = user.uid
+    const time = this.$dayjs().unix()
+
     db.collection('posts').add({
       authorUid: uid,
       articleTitle: articleTitle,
       articleDescript: articleDescript,
       articleCate: articleCate,
       contents: contents,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      createdAt: time,
     }).then(() => {
       commit('logoutReset')
       this.$router.push('/')
     })
+  },
+  //画面遷移時に記事作成途中のデータをstateに保存
+  savePosts({ commit }, { articleTitle, articleDescript, articleCate}) {
+    console.log('success')
+    commit('savePosts', { articleTitle, articleDescript, articleCate})
   }
 }
 
@@ -109,7 +121,10 @@ export const mutations = {
       },
       state.booksCounts = 0,
       state.overBooks = false,
-      state.editIndex = ''
+      state.editIndex = '',
+      state.articleTitle = '',
+      state.articleDescript = '',
+      state.articleCate = ''
   },
   //ログアウト時はstateのデータを空にする。
   logoutReset(state) {
@@ -123,5 +138,15 @@ export const mutations = {
       state.booksCounts = 0,
       state.overBooks = false,
       state.editIndex = ''
+      state.articleTitle = '',
+      state.articleDescript = '',
+      state.articleCate = ''
   },
+  //画面遷移時に記事作成途中のデータをstateに保存
+  savePosts(state, { articleTitle, articleDescript, articleCate}) {
+    console.log(articleTitle)
+    state.articleTitle = articleTitle
+    state.articleDescript = articleDescript
+    state.articleCate = articleCate
+  }
 }

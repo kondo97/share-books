@@ -7,7 +7,8 @@
           <v-col>
             <h1 class="text-h5 mt-3">本棚を作成</h1>
           </v-col>
-          <v-col class="text-right">
+          <v-col class="justify-end align-end d-flex">
+            <div>
             <v-btn
               elevation="2"
               color="primary"
@@ -15,6 +16,7 @@
               @click="deletePosts"
               >破棄する</v-btn
             >
+            </div>
           </v-col>
         </v-row>
         <nuxt-link to="/" class="how-to-create">
@@ -185,6 +187,11 @@
 
 <script>
 export default {
+  created() {
+    this.articleTitle = this.$store.getters['posts/articleTitle']
+    this.articleDescript= this.$store.getters['posts/articleDescript']
+    this.articleCate = this.$store.getters['posts/articleCate']
+  },
   data() {
     return {
       // ルール設定
@@ -273,6 +280,9 @@ export default {
     //記事そのものを削除
     deletePosts() {
       if(confirm('記事を破棄しますか？(注意)復元は出来ません。')) {
+        this.articleTitle = '',
+        this.articleDescript = '',
+        this.articleCate = ''
         this.$router.push('/')
         this.$store.dispatch("posts/deletePosts");
       }
@@ -284,7 +294,11 @@ export default {
         articleDescript: this.articleDescript,
         articleCate: this.articleCate,
         contents: this.contents
-      });
+      }).then(() =>{
+        this.articleTitle = '',
+        this.articleDescript = '',
+        this.articleCate = ''
+      })
     },
   },
   computed: {
@@ -294,6 +308,13 @@ export default {
     overBooks() {
       return this.$store.getters['posts/overBooks']
     }
+  },
+  destroyed() {
+    this.$store.dispatch('posts/savePosts', {
+      articleTitle: this.articleTitle, 
+      articleDescript: this.articleDescript,
+      articleCate: this.articleCate,
+    })
   },
 };
 </script>

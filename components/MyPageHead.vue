@@ -83,11 +83,9 @@ export default {
     } else {
       this.isSelf = false
     }
-    // if(pageUid == seeUserUid) {
-    //   this.isMySelf = true
-    // } else {
-    //   this.isMySelf = false
-    // }
+    //プロフィール情報を取得
+    const uid = this.$route.params["myPageId"]
+    this.$store.dispatch('myPageProfile/wachedProfile', uid)
   },
   data() {
     return {
@@ -106,16 +104,16 @@ export default {
   },
   computed: {
     userName() {
-      return this.$store.getters["profile/profile"].userName;
+      return this.$store.getters["myPageProfile/wachedProfile"].userName;
     },
     iconURL() {
-      return this.$store.getters["profile/profile"].iconURL;
+      return this.$store.getters["myPageProfile/wachedProfile"].iconURL;
     },
     intro() {
-      return this.$store.getters["profile/profile"].intro;
+      return this.$store.getters["myPageProfile/wachedProfile"].intro;
     },
     twitterURL() {
-      return this.$store.getters["profile/profile"].twitterURL
+      return this.$store.getters["myPageProfile/wachedProfile"].twitterURL
     }
   },
 };

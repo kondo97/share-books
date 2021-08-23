@@ -9,7 +9,7 @@
           cols="12"
           sm="12"
           md="6"
-          class="mt-sm-9 py-3 bg-main-color mb-12"
+          class="mt-sm-9 py-3 bg-main-color mb-4"
         >
           <div class="px-sm-3 pt-sm-3">
             <v-text-field
@@ -20,7 +20,7 @@
             >
             </v-text-field>
             <v-list four-line>
-              <template v-for="(item, index) in scrollItems">
+              <template v-for="(item, index) in items">
                 <v-subheader
                   v-if="item.header"
                   :key="item.header"
@@ -35,23 +35,25 @@
 
                 <v-list-item v-else :key="index">
                   <v-list-item-avatar>
-                    <v-img :src="item.avatar"></v-img>
+                    <img :src="item.iconURL" class="pointer" @click="goProfile(item)">
                   </v-list-item-avatar>
 
                   <v-list-item-content>
                     <v-row class="d-flex justify-space-between">
                       <v-col cols="3">
                         <v-list-item-subtitle
-                          v-html="item.author"
+                          v-html="item.userName"
+                          class="pointer contents"
+                          @click="goProfile(item)"
                         ></v-list-item-subtitle>
                       </v-col>
                       <v-col cols="9" class="text-right">
                         <v-list-item-subtitle
-                          v-html="item.subtitle"
+                          v-html="item.createAt"
                         ></v-list-item-subtitle>
                       </v-col>
                     </v-row>
-                    <v-list-item-title v-html="item.title"></v-list-item-title>
+                    <v-list-item-title v-html="item.articleTitle" @click="goPost(item)" class="pointer hover-blue"></v-list-item-title>
                     <v-row class="d-flex justify-space-between mt-1">
                       <v-col cols="8" sm="5" md="6">
                         <v-row class="d-flex justify-space-between">
@@ -64,7 +66,7 @@
                             sm="8"
                           >
                             <v-list-item-subtitle
-                              v-html="item.category"
+                              v-html="item.articleCate"
                             ></v-list-item-subtitle>
                           </v-col>
                         </v-row>
@@ -87,16 +89,9 @@
                 </v-list-item>
               </template>
             </v-list>
-            <no-ssr>
-              <infinite-loading
-                ref="infiniteLoading"
-                spinner="spiral"
-                @infinite="infiniteHandler"
-              >
-                <span slot="no-results" />
-              </infinite-loading>
-            </no-ssr>
           </div>
+          <p v-if="!noData" class="text-center pointer hover-blue mt-6 pb-9" @click="showMorePosts">▼もっと表示する</p>
+        <p v-if="noData" class="text-center mt-6 pb-6">no more data</p>
         </v-col>
         <v-col cols="12" sm="12" md="3"><SideMenuRight /></v-col>
       </v-row>
@@ -106,250 +101,41 @@
 
 <script>
 export default {
-  name: "InfiniteScroll",
   components: {
     SideMenuLeft: () => import("~/components/Frame/SideMenuLeft"),
     SideMenuRight: () => import("~/components/Frame/SideMenuRight"),
   },
+  created() {
+    this.$store.dispatch('topPosts/resetPosts')
+    this.$store.dispatch('topPosts/getPosts')
+  },
   data() {
     return {
-      //無限スクロール用
-      items: [
-        { header: "本棚一覧" },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習にお",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習に",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
-      ],
-      scrollItems: [],
     };
   },
   methods: {
-    infiniteHandler() {
-      setTimeout(() => {
-        if (this.scrollItems.length < this.items.length) {
-          for (let i = 0; i < this.items.length; i++) {
-            this.scrollItems.push(this.items[i]);
-          }
-          this.$refs.infiniteLoading.stateChanger.loaded();
-        } else {
-          this.$refs.infiniteLoading.stateChanger.complete();
-        }
-      }, 100);
+    //記事をさらに表示させる
+    showMorePosts(){
+      this.$store.dispatch('topPosts/getPosts')
     },
+    //記事の詳細ページへ
+    goPost(item) {
+      this.$router.push(`/articles/${item.id}`)
+    },
+    //プロフィールページへ
+    goProfile(item) {
+      const id = item.authorUid
+      this.$router.push(`/myPage/${id}`)
+    }
   },
+  computed: {
+    items() {
+      return this.$store.getters['topPosts/items']
+    },
+    noData() {
+      return this.$store.getters['topPosts/noData']
+    }
+  }
 };
 </script>
 

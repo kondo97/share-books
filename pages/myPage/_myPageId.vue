@@ -33,23 +33,23 @@
 
                 <v-list-item v-else :key="index">
                   <v-list-item-avatar>
-                    <v-img :src="item.avatar"></v-img>
+                    <v-img :src="item.iconURL"></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
                     <v-row class="d-flex justify-space-between">
                       <v-col cols="3">
                         <v-list-item-subtitle
-                          v-html="item.author"
+                          v-html="item.userName"
                         ></v-list-item-subtitle>
                       </v-col>
                       <v-col cols="9" class="text-right">
                         <v-list-item-subtitle
-                          v-html="item.subtitle"
+                          v-html="item.createAt"
                         ></v-list-item-subtitle>
                       </v-col>
                     </v-row>
-                    <v-list-item-title v-html="item.title"></v-list-item-title>
+                    <v-list-item-title v-html="item.articleTitle" @click="goPost(item)" class="pointer hover-blue"></v-list-item-title>
                     <v-row class="d-flex justify-space-between mt-1">
                       <v-col cols="8" sm="3" md="6">
                         <v-row class="d-flex justify-space-between">
@@ -62,7 +62,7 @@
                             md="9"
                           >
                             <v-list-item-subtitle
-                              v-html="item.category"
+                              v-html="item.articleCate"
                             ></v-list-item-subtitle>
                           </v-col>
                         </v-row>
@@ -87,6 +87,9 @@
             </v-list>
           </v-card-text>
         </v-card>
+        <!-- <div class="text-center"><v-btn color="primary" @click="showMorePosts">さらに表示</v-btn></div> -->
+        <p v-if="!noData" class="text-center pointer hover-blue" @click="showMorePosts">▼もっと表示する</p>
+        <p v-if="noData" class="text-center">no more data</p>
       </v-tab-item>
       <!-- フォロー中 -->
       <v-tab-item class="mt-3">
@@ -232,6 +235,11 @@ export default {
   comments: {
     MyPageHead: () => import("~/components/MyPageHead")
   },
+  created() {
+    const uid = this.$route.params["myPageId"]
+    this.$store.dispatch('getPosts/resetPosts')
+    this.$store.dispatch('getPosts/getMyPosts', uid)
+  },
   data() {
     return {
       tabs: null,
@@ -240,36 +248,6 @@ export default {
         { name: "フォロー中" },
         { name: "フォロワー" },
         { name: "スキ" },
-      ],
-      items: [
-        { header: "本棚一覧" },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "芸術・エンターテイメント",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "文学・評論",
-          good: "12",
-        },
-        { divider: true, inset: true },
       ],
       follows: [
         {
@@ -348,7 +326,24 @@ export default {
     changeFollow() {
       this.isFollow = !this.isFollow;
     },
+    //記事の詳細ページへ
+    goPost(item) {
+      this.$router.push(`/articles/${item.id}`)
+    },
+    //記事をさらに表示させる
+    showMorePosts(){
+      const uid = this.$route.params["myPageId"]
+      this.$store.dispatch('getPosts/getMyPosts', uid)
+    }
   },
+  computed: {
+    items() {
+      return this.$store.getters['getPosts/items']
+    },
+    noData() {
+      return this.$store.getters['getPosts/noData']
+    }
+  }
 };
 </script>
 

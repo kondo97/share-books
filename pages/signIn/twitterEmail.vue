@@ -1,7 +1,8 @@
 <template>
   <v-card class="d-flex flex-column mx-auto my-6 flat" width="374" color="#fff">
     <v-card-title class="mx-auto mt-6"> 認証用のメールアドレスを送信 </v-card-title>
-    <v-form class="mx-9 mt-6" ref="form" v-model="valid">
+    <v-card-text class="text-center">(Twitterでログインしたユーザー様専用)</v-card-text>
+    <v-form class="mx-9 mt-4" ref="form" v-model="valid">
       <v-text-field
         placeholder="メールアドレス"
         outlined
@@ -38,7 +39,9 @@ export default {
       mailRules: [
         (v) => !!v || "mail is required",
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',],
-      pwRules: [(v) => !!v || "password is required"],
+      pwRules: [
+        (v) => !!v || "password is required",
+        v => /^[\w-]{8,72}$/.test(v) || '半角英数字8文字以上'],
       show: false,
     }
   },

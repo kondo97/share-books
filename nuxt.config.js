@@ -29,7 +29,8 @@ export default {
     { src: '~/plugins/infiniteloading', ssr: false },
     "@/plugins/authCheck",
     { src: '~/plugins/VueLoading', ssr: false},
-    { src: '~/plugins/persistedstate.js', ssr: false}
+    { src: '~/plugins/persistedstate.js', ssr: false},
+    '~/plugins/day.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

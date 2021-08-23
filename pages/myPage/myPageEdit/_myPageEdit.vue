@@ -61,7 +61,7 @@
 export default {
   created() {
     this.myPage.userName = this.$store.getters['profile/profile'].userName
-    this.myPage.iconURL = this.$store.getters['profile/profile'].iconURL
+    this.uploadImageUrl = this.$store.getters['profile/profile'].iconURL
     this.myPage.intro = this.$store.getters['profile/profile'].intro
     this.myPage.twitterURL = this.$store.getters['profile/profile'].twitterURL
   },
@@ -74,13 +74,13 @@ export default {
         (v) => (v && v.length <= 15) || "最大15文字です。",
       ],
       introRules: [
-        (v) => (v && v.length <= 140) || "最大140文字です。",
+        (v) => (v.length <= 140) || "最大140文字です。",
       ],
       input_image: null,
       uploadImageUrl: "",
       myPage:{
         userName:'',
-        iconURL:'',
+        // iconURL:'',
         intro:'',
         twitterURL:''
       }
@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     reMypaged() {
-      this.$store.dispatch('profile/editMyPage', this.myPage)
+      this.$store.dispatch('profile/editMyPage', {iconURL:this.uploadImageUrl, myPage:this.myPage})
       const uid = this.$route.params["myPageEdit"]
       this.$router.push(`/myPage/${uid}`)
     },
