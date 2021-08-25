@@ -2,7 +2,7 @@
   <v-row class="justify-center ma-3">
     <!-- 左側入力欄 -->
     <v-col cols="12" sm="6" class="px-sm-3 px-md-12 left-create pb-12">
-      <div class="">
+      <div>
         <h1 class="text-h5 my-3">本棚を編集</h1>
         <v-form ref="form" v-model="valid">
           <v-text-field
@@ -117,7 +117,12 @@
                 <h2 class="mt-9">{{ index + 1 }}冊目</h2>
                 <v-card class="my-2 px-sm-6 pa-6 pb-0" elevation="3">
                   <div class="text-right">
-                    <v-icon @click="editBook(index)" class="prevent-item">mdi-pencil</v-icon>
+                    <v-icon @click="editBook(index)" class="prevent-item"
+                      >mdi-pencil</v-icon
+                    >
+                    <v-icon @click="deleteContent(index)" class="prevent-item"
+                      >mdi-delete</v-icon
+                    >
                   </div>
                   <h2 class="mt-4 text-sm-h5 text-h6">
                     タイトル：{{ content.title }}
@@ -144,17 +149,20 @@
         </v-list>
       </div>
     </v-col>
-    <v-btn elevation="2" color="primary" class="public-btn" :disabled="!valid"
+    <v-btn
+      elevation="2"
+      color="primary"
+      class="public-btn"
+      :disabled="!valid"
+      @click="submitUpdate"
       >更新する</v-btn
     >
   </v-row>
 </template>
 
 <script>
+import firebase from "@/plugins/firebase";
 export default {
-  created() {
-
-  },
   data() {
     return {
       // ルール設定
@@ -179,7 +187,7 @@ export default {
         (v) => (v && v.length <= 140) || "最大140文字です。",
       ],
       urlCreateRules: [(v) => !!v || "必須項目です。"],
-            //カテゴリー
+      //カテゴリー
       items: [
         "文学・評論",
         "ノンフィクション",
@@ -204,10 +212,11 @@ export default {
       articleTitle: "",
       //本棚の説明
       articleDescript: "",
+
       // 本棚のカテゴリー
       articleCate: "",
       // 本のデータがここに格納される
-      contents: [],
+      contents: "",
       // 本の入力データ
       create: {
         title: "",
@@ -217,27 +226,67 @@ export default {
       },
     };
   },
+  async created() {
+    const postId = this.$route.params["articlesIdEdit"];
+    try {
+      const doc = await firebase
+        .firestore()
+        .collection("posts")
+        .doc(postId)
+        .get();
+      this.articleTitle = doc.data().articleTitle;
+      this.articleDescript = doc.data().articleDescript;
+      this.articleCate = doc.data().articleCate;
+      this.contents = doc.data().contents;
+      this.$store.dispatch("postsDetail/getEditInitial", doc);
+    } catch (error) {
+      consile.lgo("error");
+    }
+  },
   methods: {
+    //追加する
     nextBook() {
-      this.contents.push(this.create);
-      this.create = {
-        title: "",
-        author: "",
-        descript: "",
-        url: "",
-      };
+      if (this.contents.length <= 47) {
+        this.contents.push(this.create);
+        this.create = {
+          title: "",
+          author: "",
+          descript: "",
+          url: "",
+        };
+      } else {
+        alert('最大5冊まで登録できます。')
+      }
+    },
+    //更新ボタン押下
+    submitUpdate() {
+      const postId = this.$route.params["articlesIdEdit"];
+      this.$store.dispatch("postsDetail/updatePost", {
+        postId: postId,
+        articleTitle: this.articleTitle,
+        articleDescript: this.articleDescript,
+        articleCate: this.articleCate,
+        contents: this.contents,
+      });
+    },
+    //本の削除
+    deleteContent(index) {
+      if (confirm("削除しますか？")) {
+        this.contents.splice(index, 1);
+      }
     },
     editBook(index) {
-      this.$router.push('/articles/articlesEdit/editBook/d')
-    } 
+      const postId = this.$route.params["articlesIdEdit"];
+      const content = this.contents[index];
+      this.$store.dispatch("posts/editCreate", { content, index });
+      this.$router.push(`/articles/articlesEdit/editBook/${postId}`);
+    },
+  },
+  destroyed() {
+    this.$store.dispatch("postsDetail/editDestroy");
   },
 };
 </script>
 
 <style>
-
-
-
-
-
 </style>

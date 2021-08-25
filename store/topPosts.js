@@ -23,7 +23,6 @@ export const actions = {
   resetPosts({ commit }) {
     commit('resetItems')
     lastVisible = ''
-    console.log('test')
   },
   //firestoreから自分の投稿記事のデータを取得
   async getPosts({ dispatch, commit }) {
@@ -38,7 +37,6 @@ export const actions = {
         dispatch('pushPosts', { id: doc.id, item: doc.data() })
       }, lastVisible)
     })
-    console.log('test2')
   },
   //必要なデータを合致させる
   pushPosts({ commit }, { id, item }) {

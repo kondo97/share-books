@@ -1,24 +1,39 @@
 <template>
-  <div>
-    <h2 class="mt-sm-12 mx-sm-6 pl-3">1冊目</h2>
-    <v-card class="mt-4 mx-sm-6 px-sm-6 pa-6 pb-0" elevation="3">
-      <h2 class="mt-4 text-sm-h5 text-h6">作品名：公式TOEIC Listening & Reading 問題集 7</h2>
-      <p class="mt-3">著者名：ELS</p>
-      <p class="c">
-        c
-      </p>
-      <div class="logo--wrap--amazon mt-6 mx-auto">
-        <img
-          src="~/static/amazon.png"
-          alt="amazonのロゴ"
-          class="logo--amazon"
-        />
-      </div>
-    </v-card>
-
-  </div>
+  <v-list>
+    <template v-for="(content, index) in contents">
+      <v-list-item :key="index" class="d-flex flex-column">
+        <h2 class="mt-sm-12 mx-sm-6 pl-3 d-flex book-count-width">{{ index + 1 }}冊目</h2>
+        <v-card class="mt-4  px-sm-6 pa-6 pb-0" elevation="3" width="500">
+          <v-list-item-title v-html="content.title" class="mt-4 text-sm-h5 text-h6"></v-list-item-title>
+          <p v-html="content.author" class="mt-3"></p>
+          <p v-html="content.descript" class=""></p>
+          <div class="logo--wrap--amazon mt-6 mx-auto">
+            <a :href="content.url">
+            <img
+              src="~/static/amazon.png"
+              alt="amazonのロゴ"
+              class="logo--amazon"
+            >
+            </a>
+          </div>
+        </v-card>
+      </v-list-item>
+    </template>
+  </v-list>
 </template>
 
-<style>
+<script>
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    contents() {
+      return this.$store.getters["postsDetail/postDetail"].contents;
+    },
+  },
+};
+</script>
 
+<style>
 </style>

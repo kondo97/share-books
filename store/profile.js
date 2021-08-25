@@ -12,7 +12,6 @@ export const state = () => ({
     userName: '',
     iconURL: "https://github.com/share-hondana.png",
   },
-
 })
 
 export const getters = {

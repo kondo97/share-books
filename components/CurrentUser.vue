@@ -1,16 +1,16 @@
 <template>
-  <v-row class="px-6 py-sm-8 py-3 mypage-border">
+  <v-row class="px-6 py-sm-8 py-3">
     <v-col cols="2" sm="3" class="text-center">
       <client-only>
       <v-avatar class="avatar-size"
-        ><img :src="iconURL" alt="投稿者の画像" /></v-avatar
+        ><img :src="iconURL" alt="投稿者の画像" @click="goProfile" class="pointer"></v-avatar
     ></client-only></v-col>
     <v-col
       cols="10"
       sm="7"
       class="d-flex align-center flex-sm-column align-sm-start"
     >
-      <p class="sp-user-name ma-0">{{ userName }}</p>
+      <p class="sp-user-name ma-0 pointer hover-blue" @click="goProfile">{{ userName }}</p>
       <!-- スマホでは非表示 -->
       <v-row class="hidden-sm-and-down">
         <v-col sm="3" class="text-center d-flex align-center"
@@ -46,12 +46,12 @@
     <v-col cols="4" sm="2">
       <client-only>
       <!-- 非ログイン時に表示 -->
-      <div v-if="isSelf"
+      <div v-if="matchUser"
         ><v-btn class="primary" @click="goMyPageEdit">編集する</v-btn></div
       >
       <!-- ログイン時に表示 -->
       <!-- フォローしている時 -->
-      <div v-if="!isSelf"
+      <div v-if="!matchUser"
         >
         <span v-if="isFollow" >
         <v-btn dark color="#5F9EA0" @click="changeFollow">
@@ -80,17 +80,6 @@
 import firebase from "@/plugins/firebase";
 export default {
   created() {
-    //ユーザーが自分自身か判定する。
-    const pageUid = this.$route.params["myPageId"];
-    const seeUserUid = this.$store.getters["profile/user"].uid;
-    if (pageUid == seeUserUid) {
-      this.isSelf = true;
-    } else {
-      this.isSelf = false;
-    }
-    //プロフィール情報を取得
-    // const uid = this.$route.params["myPageId"];
-    this.$store.dispatch("myPageProfile/wachedProfile", pageUid);
   },
   data() {
     return {
@@ -100,29 +89,33 @@ export default {
   },
   methods: {
     goMyPageEdit() {
-      const uid = this.$route.params["myPageId"];
-      this.$router.push(`/myPage/myPageEdit/${uid}/`);
+      const uid = this.$store.getters['postsDetail/postDetail'].authorUid
+      this.$router.push(`/myPage/${uid}`);
     },
     changeFollow() {
       this.isFollow = !this.isFollow;
     },
+    goProfile() {
+      const uid = this.$store.getters['postsDetail/postDetail'].authorUid
+      this.$router.push(`/myPage/${uid}`);
+    },
   },
   computed: {
     userName() {
-      return this.$store.getters["myPageProfile/wachedProfile"].userName;
+      return this.$store.getters["postsDetail/postDetail"].userName;
     },
     iconURL() {
-      return this.$store.getters["myPageProfile/wachedProfile"].iconURL;
+      return this.$store.getters["postsDetail/postDetail"].iconURL;
     },
     intro() {
-      return this.$store.getters["myPageProfile/wachedProfile"].intro;
+      return this.$store.getters["postsDetail/postDetail"].intro;
     },
     twitterURL() {
-      return this.$store.getters["myPageProfile/wachedProfile"].twitterURL;
+      return this.$store.getters["postsDetail/postDetail"].twitterURL;
     },
-  },
-  destroyed() {
-    this.$store.dispatch('myPageProfile/destroyProfile')
+    matchUser() {
+      return this.$store.getters["postsDetail/matchUser"]
+    }
   },
 };
 </script>

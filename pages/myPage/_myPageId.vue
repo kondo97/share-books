@@ -24,18 +24,15 @@
                   :key="item.header"
                   v-text="item.header"
                 ></v-subheader>
-
                 <v-divider
                   v-else-if="item.divider"
                   :key="index"
                   :inset="item.inset"
                 ></v-divider>
-
                 <v-list-item v-else :key="index">
                   <v-list-item-avatar>
                     <v-img :src="item.iconURL"></v-img>
                   </v-list-item-avatar>
-
                   <v-list-item-content>
                     <v-row class="d-flex justify-space-between">
                       <v-col cols="3">
@@ -88,8 +85,8 @@
           </v-card-text>
         </v-card>
         <!-- <div class="text-center"><v-btn color="primary" @click="showMorePosts">さらに表示</v-btn></div> -->
-        <p v-if="!noData" class="text-center pointer hover-blue" @click="showMorePosts">▼もっと表示する</p>
-        <p v-if="noData" class="text-center">no more data</p>
+        <p v-show="!noData" class="text-center pointer hover-blue" @click="showMorePosts">▼もっと表示する</p>
+        <p v-show="noData" class="text-center">no more data</p>
       </v-tab-item>
       <!-- フォロー中 -->
       <v-tab-item class="mt-3">
@@ -104,7 +101,7 @@
                         ><img :src="follow.avatar" alt="フォローユーザーの画像"
                       /></v-avatar>
                     </v-col>
-                    <v-col cols="10" sm="9" class="d-flex align-center">
+                    <v-col sm="10" class="d-flex align-center">
                       <p class="ma-0">
                         {{ follow.name }}
                       </p>

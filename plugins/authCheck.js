@@ -7,6 +7,7 @@ export default function ({ route, store, redirect, $axios }) {
       // ログイン状態を判別する
       store.dispatch('profile/setUser', user)
       store.dispatch('signIn/authCheck') 
+      store.dispatch('postsDetail/authChecked')
       // store.dispatch('profile/pushUser')
     } else {
       // 未ログイン時の処理

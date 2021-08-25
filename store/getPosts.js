@@ -53,7 +53,8 @@ export const actions = {
   //ログアウト時はstateの中身をリセット
   logoutReset({ commit }) {
     commit('logoutReset')
-  }
+  },
+  
 }
 
 export const mutations = {

@@ -16,10 +16,10 @@
         <v-col class="text-center"
           ><v-icon @click="shareFacebook">mdi-facebook</v-icon></v-col
         >
-        <v-col class="text-center"
+        <v-col class="text-center" v-show="matchUser"
           ><v-icon @click="editArticle">mdi-pencil</v-icon></v-col
         >
-        <v-col class="text-center"
+        <v-col class="text-center" v-show="matchUser"
           ><v-icon @click="articleDelete">mdi-delete</v-icon></v-col
         >
       </v-row>
@@ -43,10 +43,10 @@
         <v-col cols="2" sm="1" class="text-center d-flex align-center"
           ><v-icon dark @click="shareFacebook">mdi-facebook</v-icon></v-col
         >
-        <v-col cols="2" sm="1" class="text-center d-flex align-center"
+        <v-col cols="2" sm="1" class="text-center d-flex align-center" v-show="matchUser"
           ><v-icon dark @click="editArticle">mdi-pencil</v-icon></v-col
         >
-        <v-col cols="2" sm="1" class="text-center d-flex align-center"
+        <v-col cols="2" sm="1" class="text-center d-flex align-center" v-show="matchUser"
           ><v-icon dark @click="articleDelete">mdi-delete</v-icon></v-col
         >
       </v-row>
@@ -73,13 +73,21 @@ export default {
     articleDelete() {
       if (confirm("この本棚を削除してもよろしいですか。")) {
         //削除処理を記述する。
+        const pageUid = this.$route.params["articlesId"]
+        this.$store.dispatch('postsDetail/deletePost', pageUid)
       }
     },
     //本棚の編集
     editArticle() {
-      this.$router.push("/");
+      const pageUid = this.$route.params["articlesId"]
+      this.$router.push(`/articles/articlesEdit/${pageUid}`);
     },
   },
+  computed: {
+    matchUser() {
+      return this.$store.getters['postsDetail/matchUser']
+    }
+  }
 };
 </script>
 

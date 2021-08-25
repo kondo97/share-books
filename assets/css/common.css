@@ -172,6 +172,10 @@
   background-color: #9a8478;
 }
 
+.book-count-width {
+  width: 500px;
+}
+
 .how-to-create, .twitterURL {
   text-decoration: none;
 }

@@ -31,7 +31,8 @@ export const getters = {
   overBooks: state => state.overBooks,
   articleTitle: state => state.articleTitle,
   articleDescript: state => state.articleDescript,
-  articleCate: state => state.articleCate
+  articleCate: state => state.articleCate,
+  editIndex: state => state.editIndex
 }
 
 export const actions = {
@@ -64,7 +65,7 @@ export const actions = {
   pushCreatePosts({ commit }, { articleTitle, articleDescript, articleCate, contents }) {
     const user = auth.currentUser
     const uid = user.uid
-    const time = this.$dayjs().unix()
+    const time = firebase.firestore.FieldValue.serverTimestamp()
 
     db.collection('posts').add({
       authorUid: uid,
@@ -72,7 +73,7 @@ export const actions = {
       articleDescript: articleDescript,
       articleCate: articleCate,
       contents: contents,
-      createdAt: time,
+      createdAt: dayjs(time).unix(),
     }).then(() => {
       commit('logoutReset')
       this.$router.push('/')

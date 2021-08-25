@@ -46,14 +46,14 @@
               <v-btn
                 elevation="2"
                 color="grey lighten-2"
-                @click="cancelCreateEdit"
+                @click="cancelEdit"
                 class="mr-3"
                 >キャンセル</v-btn
               >
               <v-btn
                 elevation="2"
                 color="success"
-                @click="nextBook"
+                @click="updateBook"
                 :disabled="!validCreate"
                 class="ml-3"
                 >更新する</v-btn
@@ -92,12 +92,29 @@ export default {
       urlCreateRules: [(v) => !!v || "必須項目です。"],
       // 本の入力データ
       create: {
-        title: "",
-        author: "",
-        descript: "",
-        url: "",
+        title: this.$store.getters["posts/content"].title,
+        author: this.$store.getters["posts/content"].author,
+        descript: this.$store.getters["posts/content"].descript,
+        url: this.$store.getters["posts/content"].url,
       },
     };
+  },
+  methods: {
+    cancelEdit() {
+      const postId = this.$route.params["editBook"]
+      this.$router.push(`/articles/articlesEdit/${postId}`)
+    },
+    updateBook() {
+      const postId = this.$route.params["editBook"]
+      const editIndex = this.$store.getters['posts/editIndex']
+      console.log(postId)
+      console.log(editIndex)
+      this.$store.dispatch('postsDetail/updateEditInitial', {
+          postId: postId,
+          create: this.create,
+          editIndex: editIndex
+        })
+    }
   },
 }
 </script>

@@ -74,7 +74,8 @@ export default {
         (v) => (v && v.length <= 15) || "最大15文字です。",
       ],
       introRules: [
-        (v) => (v.length <= 140) || "最大140文字です。",
+        (v) => !!v || "introduction is required",
+        (v) => (v && v.length <= 140) || "最大140文字です。",
       ],
       input_image: null,
       uploadImageUrl: "",

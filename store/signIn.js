@@ -90,6 +90,27 @@ export const actions = {
         console.log({ 'code': error.code, 'message': error.message })
        });
    },
+
+   // async submitTwitterMail({ commit }, {email, password}) {
+   //    const credential = firebase.auth.EmailAuthProvider.credential(email, password);
+   //    try {
+   //       const usercred = await auth.currentUser.linkWithCredential(credential)
+   //       var user = usercred.user;
+   //       console.log("Account linking success", user);
+   //       auth.currentUser.sendEmailVerification()
+   //       this.$router.push('/')
+         
+   //    } catch (error) {
+   //       if(error.code == "auth/provider-already-linked") {
+   //          alert('既にメールアドレスは登録されています。')
+   //          this.$router.push('/')
+   //       } else {
+   //         alert('メールの送信に失敗しました。')
+   //         console.log({ 'code': error.code, 'message': error.message })
+   //       }
+         
+   //    }
+   // },
    // Googleでログイン
    async singInGoogle({ dispatch, commit }) {
       const provider = new firebase.auth.GoogleAuthProvider();
@@ -127,6 +148,7 @@ export const actions = {
       commit('posts/logoutReset', null, { root: true })
       commit('getPosts/logoutReset', null, { root: true })
       commit('myPageProfile/logoutReset', null, { root: true })
+      commit('postsDetail/logoutReset', null, { root: true })
       this.$router.push('/')
    },
 

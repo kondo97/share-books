@@ -23,6 +23,9 @@ export const actions = {
         commit('getUser', doc.data())
       })
   },
+  destroyProfile({ commit }) {
+    commit('destoryProfile')
+  }
 }
 
 export const mutations = {
@@ -41,6 +44,14 @@ export const mutations = {
     state.wachedProfile.twitterURL = myPage.twitterURL
   },
   logoutReset(state) {
+    state.wachedProfile =  {
+      userName: '',
+      iconURL: "https://github.com/share-hondana.png",
+      intro: '',
+      twitterURL: ''
+    }
+  },
+  destoryProfile(state) {
     state.wachedProfile =  {
       userName: '',
       iconURL: "https://github.com/share-hondana.png",
