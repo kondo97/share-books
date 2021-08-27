@@ -94,17 +94,17 @@
         <v-card flat>
           <v-list class="py-6">
             <v-list-item-group>
-              <v-list-item v-for="(follow, i) in follows" :key="i">
+              <v-list-item v-for="(followUser, i) in followUsers" :key="i">
                 <v-card-text class="follow-border mx-sm-16">
                   <v-row class="py-3 px-sm-12">
                     <v-col cols="2" sm="1">
                       <v-avatar size="36"
-                        ><img :src="follow.avatar" alt="フォローユーザーの画像"
+                        ><img :src="followUser.iconURL" alt="フォローユーザーの画像"
                       /></v-avatar>
                     </v-col>
                     <v-col sm="9" class="d-flex align-center">
                       <p class="ma-0">
-                        {{ follow.name }}
+                        {{ followUser.userName }}
                       </p>
                     </v-col>
                     <v-col sm="2" class="text-right text-sm-left">
@@ -316,6 +316,8 @@ export default {
     this.$store.dispatch('getPosts/getMyPosts', uid)
     //コメントした記事を取得
     this.$store.dispatch('getPosts/getCommentId', uid)
+    //フォロー中のユーザーを取得
+    this.$store.dispatch('follow/getFollowUser', uid)
   },
   data() {
     return {
@@ -326,22 +328,6 @@ export default {
         { name: "フォロワー" },
         { name: "スキ" },
         { name: 'コメント記事'}
-      ],
-      follows: [
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          name: "近藤（フロントエンドエンジニアを目指す）",
-        },
-
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          name: "近藤（フロントエンドエンジニアを目指す）",
-        },
-
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          name: "近藤（フロントエンドエンジニアを目指す）",
-        },
       ],
       followers: [
         {
@@ -436,8 +422,14 @@ export default {
     },
     noDataComment() {
       return this.$store.getters['getPosts/noDataComment']
+    },
+    followUsers() {
+      return this.$store.getters['follow/followUsers']
     }
-  }
+  },
+  destroyed() {
+    this.$store.dispatch('follow/destroyFollow')
+  },
 };
 </script>
 

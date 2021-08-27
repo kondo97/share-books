@@ -66,7 +66,7 @@ export const actions = {
       comment.id = id
       comment.userName = user.data().userName
       comment.iconURL = user.data().iconURL
-      comment.createdAt = dayjs(user.data().createdAt * 1000).format('YYYY年MM月DD日')
+      comment.createdAt = dayjs(comment.createdAt * 1000).format('YYYY年MM月DD日') 
       if(nowUser == commentAuthor) {
         comment.displayIcon = true
       } else {

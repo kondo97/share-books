@@ -3,7 +3,7 @@
     <!-- 左側入力欄 -->
     <v-col cols="12" sm="6" class="px-sm-3 px-md-12 left-create pb-12">
       <div>
-        <h1 class="text-h5 my-3">本棚を編集</h1>
+        <p class="text-h5 my-3">本棚を編集</p>
         <v-form ref="form" v-model="valid">
           <v-text-field
             label="本棚タイトル"
@@ -90,7 +90,7 @@
     </v-col>
     <!-- 右側表示欄 -->
     <v-col cols="12" sm="6" class="px-sm-3 px-md-12 create-border right-create">
-      <h1 class="text-h5 mt-3">プレビュー</h1>
+      <p class="text-h5 mt-3">プレビュー</p>
       <div class="pa-6 mt-3" :class="{ bgMainColor: articleTitle }">
         <h1 class="mt-6" :class="{ articleTitle: articleTitle }">
           {{ articleTitle }}

@@ -97,7 +97,7 @@ export default {
     },
     //新規投稿ボタン押下
     newPosts() {
-      const user = firebase.auth().currentUser;
+      const user = this.$store.getters["profile/user"];
       if (user.emailVerified == true) {
         this.$router.push("/articles/articlesCreate/articlesCreate");
       } else {

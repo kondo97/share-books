@@ -5,7 +5,7 @@
       <div class="">
         <v-row>
           <v-col>
-            <h1 class="text-h5 mt-3">本棚を作成</h1>
+            <p class="text-h5 mt-3">本棚を作成</p>
           </v-col>
           <v-col class="justify-end align-end d-flex">
             <div>
@@ -53,7 +53,7 @@
       <v-card color="#C8D7D0" class="create-card">
         <v-form ref="form" v-model="validCreate">
           <div class="py-3">
-            <h2 class="text-h6 create-field-small">タイトルを入力</h2>
+            <p class="text-h6 create-field-small">タイトルを入力</p>
             <v-text-field
               label="必須"
               placeholder="（例）TOEICパーフェクト単語集"
@@ -115,7 +115,7 @@
     </v-col>
     <!-- 右側表示欄 -->
     <v-col cols="12" sm="6" class="px-sm-3 px-md-12 create-border right-create">
-      <h1 class="text-h5 mt-3">プレビュー</h1>
+      <p class="text-h5 mt-3">プレビュー</p>
       <div class="pa-6 mt-3" :class="{ bgMainColor: articleTitle }">
         <h1 class="mt-6" :class="{ articleTitle: articleTitle }">
           {{ articleTitle }}

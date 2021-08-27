@@ -23,11 +23,11 @@
                   /></v-avatar>
                 </v-col>
                 <v-col cols="10" sm="8" class="d-flex align-center ml-sm-3 px-0 ">
-                  <p class="ma-0 sp-user-name pointer hover-blue" @click="goProfile">@{{ postDetail.userName }}</p>
+                  <p class="ma-0 sp-user-name pointer hover-blue" @click="goProfile">{{ postDetail.userName }}</p>
                 </v-col>
               </v-row>
             </v-container>
-            <h1 class="mt-sm-12 mt-6 article-title">{{ postDetail.articleTitle }}</h1>
+            <p class="mt-sm-12 mt-6 article-title text-h4">{{ postDetail.articleTitle }}</p>
             <p class="mt-9">
               {{ postDetail.articleDescript }}
             </p>

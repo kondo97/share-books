@@ -2,9 +2,9 @@
   <v-row class="px-6 py-sm-8 py-3 mypage-border">
     <v-col cols="2" sm="3" class="text-center">
       <client-only>
-      <v-avatar class="avatar-size"
-        ><img :src="iconURL" alt="投稿者の画像" /></v-avatar
-    ></client-only></v-col>
+        <v-avatar class="avatar-size"
+          ><img :src="iconURL" alt="投稿者の画像" /></v-avatar></client-only
+    ></v-col>
     <v-col
       cols="10"
       sm="7"
@@ -42,37 +42,34 @@
         >
       </v-row>
     </v-col>
-    
+
     <v-col cols="4" sm="2">
       <client-only>
-      <!-- 非ログイン時に表示 -->
-      <div v-if="isSelf"
-        ><v-btn class="primary" @click="goMyPageEdit">編集する</v-btn></div
-      >
-      <!-- ログイン時に表示 -->
-      <!-- フォローしている時 -->
-      <div v-if="!isSelf"
-        >
-        <span v-if="isFollow" >
-        <v-btn dark color="#5F9EA0" @click="unFollow">
-          フォロー中
-        </v-btn>
-        </span>
-        <!-- フォローしていない時 -->
-        <span v-if="!isFollow"> 
-        <v-btn outlined color="#5F9EA0" @click="follow">
-          フォロー
-        </v-btn>
-        </span>
-      </div>
+        <!-- 非ログイン時に表示 -->
+        <div v-if="isSelf">
+          <v-btn class="primary" @click="goMyPageEdit">編集する</v-btn>
+        </div>
+        <!-- ログイン時に表示 -->
+        <!-- フォローしている時 -->
+        <div v-if="!isSelf">
+          <span v-if="isFollow">
+            <v-btn dark color="#5F9EA0" @click="unFollow"> フォロー中 </v-btn>
+          </span>
+          <!-- フォローしていない時 -->
+          <span v-if="!isFollow">
+            <v-btn outlined color="#5F9EA0" @click="follow"> フォロー </v-btn>
+          </span>
+        </div>
       </client-only>
     </v-col>
-    
+
     <v-col sm="12" class="mt-3 pb-0">
       <p class="sp-user-name">
         {{ intro }}
       </p>
     </v-col>
+    <RequireVerify ref="child" />
+    <RequireLogin  ref="requireLogin" />
   </v-row>
 </template>
 
@@ -90,11 +87,14 @@ export default {
     }
     //プロフィール情報を取得
     this.$store.dispatch("myPageProfile/watchedProfile", pageUid);
+    //フォロー状態を確認
+    if (this.$store.getters["signIn/isAuth"]) {
+      this.$store.dispatch("follow/checkFollow", { pageUid, seeUserUid });
+    }
   },
   data() {
     return {
       isSelf: false,
-      isFollow: false,
     };
   },
   methods: {
@@ -105,12 +105,31 @@ export default {
     },
     //フォローする
     follow() {
-      this.isFollow = true
+      const user = this.$store.getters["profile/user"];
+      if (this.$store.getters["signIn/isAuth"]) {
+        if (user.emailVerified == true) {
+          const currentUserId = this.$store.getters["profile/user"].uid;
+          const followedUserId = this.$route.params["myPageId"];
+          this.$store.dispatch("follow/follow", {
+            currentUserId,
+            followedUserId,
+          });
+        } else {
+          this.$refs.child.childEvent();
+        }
+      } else {
+        this.$refs.requireLogin.requireEvent();
+      }
     },
     //フォローを外す
     unFollow() {
-      this.isFollow = false
-    }
+      const currentUserId = this.$store.getters["profile/user"].uid;
+      const followedUserId = this.$route.params["myPageId"];
+      this.$store.dispatch("follow/unFollow", {
+        currentUserId,
+        followedUserId,
+      });
+    },
   },
   computed: {
     userName() {
@@ -125,9 +144,12 @@ export default {
     twitterURL() {
       return this.$store.getters["myPageProfile/watchedProfile"].twitterURL;
     },
+    isFollow() {
+      return this.$store.getters["follow/isFollow"];
+    },
   },
   destroyed() {
-    this.$store.dispatch('myPageProfile/destroyProfile')
+    this.$store.dispatch("myPageProfile/destroyProfile");
   },
 };
 </script>

@@ -7,9 +7,9 @@ export const state = () => ({
   ],
   noData: false,
   commentItems: [
-    { header: 'マイ本棚' }
+    { header: 'コメント記事' }
   ],
-  noDataComment: false, 
+  noDataComment: false,
 })
 
 export const getters = {
@@ -54,18 +54,18 @@ export const actions = {
       const id = await db.collection(`users/${uid}/commented`).orderBy('createdAt', 'desc').startAfter(lastComment).limit(1)
       id.get().then(snapshot => {
         lastComment = snapshot.docs[snapshot.docs.length - 1]
-        if(lastComment == undefined) {
+        if (lastComment == undefined) {
           commit('noDataComment')
         }
         snapshot.forEach((doc) => {
           db.collection('posts').doc(doc.data().id).get()
-          .then((doc) => {
-            commit('getCommentPosts', {id: doc.id, commentItem: doc.data()})
-          })
+            .then((doc) => {
+              commit('getCommentPosts', { id: doc.id, commentItem: doc.data() })
+            })
         }, lastComment)
       })
     } catch (error) {
-      
+
     }
   },
   //ログアウト時はstateの中身をリセット
@@ -80,7 +80,11 @@ export const mutations = {
     state.items = [
       { header: 'マイ本棚' }
     ],
-      state.noData = false
+      state.noData = false,
+      state.commentItems = [
+        { header: 'コメント記事' }
+      ],
+      state.noDataComment = false
   },
   //読み込み時は、stateの値をリセット
   resetItems(state) {
@@ -89,14 +93,15 @@ export const mutations = {
     ],
       state.noData = false
     state.commentItems = [
-      { header: 'マイ本棚' }
-    ]
+      { header: 'コメント記事' }
+    ],
+      state.noDataComment = false
   },
   //itemsにデータを格納
-  getMyPosts(state, {id, item}) {
+  getMyPosts(state, { id, item }) {
     item.id = id
     item.userName = "@" + item.userName
-    item.createdAt =  dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
+    item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.items.push(item)
     state.items.push(
       { divider: true, inset: true },
@@ -107,12 +112,12 @@ export const mutations = {
     state.noData = true
   },
   //コメントした記事を取得
-  getCommentPosts(state, {id, commentItem}) {
+  getCommentPosts(state, { id, commentItem }) {
     commentItem.id = id
     commentItem.userName = "@" + commentItem.userName
     commentItem.createdAt = dayjs(commentItem.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.commentItems.push(commentItem)
-    state.items.push(
+    state.commentItems.push(
       { divider: true, inset: true },
     )
   },

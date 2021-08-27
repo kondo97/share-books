@@ -24,6 +24,9 @@ export const actions = {
     try {
       const doc = await db.collection('posts').doc(pageUid).get()
       commit('getPostDetail', { id: pageUid, item: doc.data() })
+      //フォロー状態を確認する
+      const followedUserId = doc.data().authorUid
+      dispatch('follow/checkFollowPost', {currentUid, followedUserId}, { root: true })
       if (isAuth) {
         // const currentUser = auth.currentUser.uid
         dispatch('getCurrentUser', currentUid)

@@ -2,7 +2,7 @@
   <v-card color="#C8D7D0" class="create-card mx-auto my-12" max-width="600">
         <v-form ref="form" v-model="validCreate">
           <div class="py-3">
-            <h2 class="text-h6 create-field-small">タイトルを入力</h2>
+            <p class="text-h6 create-field-small">タイトルを入力</p>
             <v-text-field
               label="必須"
               placeholder="（例）TOEICパーフェクト単語集"

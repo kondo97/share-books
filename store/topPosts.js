@@ -35,7 +35,6 @@ export const actions = {
         }
         snapshot.forEach((doc) => {
           commit('getPosts', { id: doc.id, item: doc.data() })
-          console.log(doc.data())
         }, lastVisible)
       })
     } catch (error) {

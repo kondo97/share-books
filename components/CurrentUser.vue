@@ -47,20 +47,20 @@
       <client-only>
       <!-- 非ログイン時に表示 -->
       <div v-if="matchUser"
-        ><v-btn class="primary" @click="goMyPageEdit">編集する</v-btn></div
+        ><v-btn class="primary" @click="goProfile">編集する</v-btn></div
       >
       <!-- ログイン時に表示 -->
       <!-- フォローしている時 -->
       <div v-if="!matchUser"
         >
-        <span v-if="isFollow" >
-        <v-btn dark color="#5F9EA0" @click="changeFollow">
+        <span v-if="isFollowPost" >
+        <v-btn dark color="#5F9EA0" @click="unFollow">
           フォロー中
         </v-btn>
         </span>
         <!-- フォローしていない時 -->
-        <span v-if="!isFollow"> 
-        <v-btn outlined color="#5F9EA0" @click="changeFollow">
+        <span v-if="!isFollowPost"> 
+        <v-btn outlined color="#5F9EA0" @click="follow">
           フォロー
         </v-btn>
         </span>
@@ -73,28 +73,48 @@
         {{ intro }}
       </p>
     </v-col>
+    <RequireVerify ref="child" />
+    <RequireLogin  ref="requireLogin" />
   </v-row>
 </template>
 
 <script>
 import firebase from "@/plugins/firebase";
 export default {
-  created() {
-  },
   data() {
     return {
       isSelf: false,
-      isFollow: false,
     };
   },
   methods: {
-    goMyPageEdit() {
-      const uid = this.$store.getters['postsDetail/postDetail'].authorUid
-      this.$router.push(`/myPage/${uid}`);
+     //フォローする
+    follow() {
+      const user = this.$store.getters["profile/user"];
+      if (this.$store.getters["signIn/isAuth"]) {
+        if (user.emailVerified == true) {
+          const currentUserId = this.$store.getters["profile/user"].uid;
+          const followedUserId = this.$store.getters['postsDetail/postDetail'].authorUid
+          this.$store.dispatch("follow/followPost", {
+            currentUserId,
+            followedUserId,
+          });
+        } else {
+          this.$refs.child.childEvent();
+        }
+      } else {
+        this.$refs.requireLogin.requireEvent();
+      }
     },
-    changeFollow() {
-      this.isFollow = !this.isFollow;
+     //フォローを外す
+    unFollow() {
+      const currentUserId = this.$store.getters["profile/user"].uid;
+      const followedUserId = this.$store.getters['postsDetail/postDetail'].authorUid
+      this.$store.dispatch("follow/unFollowPost", {
+        currentUserId,
+        followedUserId,
+      });
     },
+    //プロフィールページへ
     goProfile() {
       const uid = this.$store.getters['postsDetail/postDetail'].authorUid
       this.$router.push(`/myPage/${uid}`);
@@ -115,7 +135,13 @@ export default {
     },
     matchUser() {
       return this.$store.getters["postsDetail/matchUser"]
+    },
+    isFollowPost() {
+      return this.$store.getters["follow/isFollowPost"]
     }
+  },
+  destroyed() {
+    this.$store.dispatch('follow/destroyFollow')
   },
 };
 </script>
