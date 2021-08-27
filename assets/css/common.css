@@ -80,13 +80,13 @@
   .sp-tab {
     font-size: 12px !important;
   }
-  .book-width {
+  .book-width, .sp-tabs-width {
     width: 100%;
   }
 }
 
 .comment-item {
-  display: block;
+  display: block !important;
 }
 
 .app-bar {
@@ -101,7 +101,8 @@
 }
 
 .menu,
-.news {
+.news,
+.comment-edit {
   position: relative;
 }
 
@@ -260,6 +261,12 @@
     top: 90%;
     right: 5%;
   }
+}
+
+.comment-edit {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .mypage-width {

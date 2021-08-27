@@ -24,32 +24,36 @@ export const actions = {
     commit('resetItems')
     lastVisible = ''
   },
-  //firestoreから自分の投稿記事のデータを取得
+  //firestoreから全投稿記事のデータを取得
   async getPosts({ dispatch, commit }) {
-    const posts = await db.collection('posts').orderBy('createdAt', 'desc').startAfter(lastVisible).limit(5)
-    await posts.get().then(snapshot => {
-      lastVisible = snapshot.docs[snapshot.docs.length - 1]
-      console.log("last", lastVisible);
-      if(lastVisible == undefined) {
-        commit('noData')
-      }
-      snapshot.forEach((doc) => {
-        dispatch('pushPosts', { id: doc.id, item: doc.data() })
-      }, lastVisible)
-    })
+    try{
+      const posts = await db.collection('posts').orderBy('createdAt', 'desc').startAfter(lastVisible).limit(2)
+      posts.get().then(snapshot => {
+        lastVisible = snapshot.docs[snapshot.docs.length - 1]
+        if(lastVisible == undefined) {
+          commit('noData')
+        }
+        snapshot.forEach((doc) => {
+          dispatch('pushPosts', { id: doc.id, item: doc.data() })
+        }, lastVisible)
+      })
+    } catch (error) {
+      alert('データの取得に失敗しています。')
+    }
   },
   //必要なデータを合致させる
-  pushPosts({ commit }, { id, item }) {
+  async pushPosts({ commit }, { id, item }) {
     const uid = item.authorUid
-    db.collection(`users/${uid}/profile`).doc(uid).get()
-      .then(ref => {
-        item.id = id
-        item.userName = "@" + ref.data().userName
-        item.iconURL = ref.data().iconURL
-        item.createAt = dayjs(ref.data().createAt).format('YYYY年MM月DD日') + "に投稿"
-      }).then(() => [
-        commit('pushPosts', item)
-      ])
+    try {
+       const ref = await db.collection(`users/${uid}/profile`).doc(uid).get()
+       item.id = id
+       item.userName = "@" + ref.data().userName
+       item.iconURL = ref.data().iconURL
+       item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
+       commit('pushPosts', item)
+    } catch (erro) {
+      alert('データの取得に失敗しました。')
+    }
   },
 }
 
@@ -70,7 +74,6 @@ export const mutations = {
   },
   // マイ本棚の最後の記事が表示されたとき
   noData(state) {
-    console.log('worl')
     state.noData = true
   }
 }

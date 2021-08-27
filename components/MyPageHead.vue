@@ -89,8 +89,7 @@ export default {
       this.isSelf = false;
     }
     //プロフィール情報を取得
-    // const uid = this.$route.params["myPageId"];
-    this.$store.dispatch("myPageProfile/wachedProfile", pageUid);
+    this.$store.dispatch("myPageProfile/watchedProfile", pageUid);
   },
   data() {
     return {
@@ -109,16 +108,16 @@ export default {
   },
   computed: {
     userName() {
-      return this.$store.getters["myPageProfile/wachedProfile"].userName;
+      return this.$store.getters["myPageProfile/watchedProfile"].userName;
     },
     iconURL() {
-      return this.$store.getters["myPageProfile/wachedProfile"].iconURL;
+      return this.$store.getters["myPageProfile/watchedProfile"].iconURL;
     },
     intro() {
-      return this.$store.getters["myPageProfile/wachedProfile"].intro;
+      return this.$store.getters["myPageProfile/watchedProfile"].intro;
     },
     twitterURL() {
-      return this.$store.getters["myPageProfile/wachedProfile"].twitterURL;
+      return this.$store.getters["myPageProfile/watchedProfile"].twitterURL;
     },
   },
   destroyed() {

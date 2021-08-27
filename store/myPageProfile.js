@@ -2,7 +2,7 @@ import firebase from '@/plugins/firebase'
 
 export const state = () => ({
   //閲覧対象のユーザーの情報
-  wachedProfile: {
+  watchedProfile: {
     userName: '',
     iconURL: "https://github.com/share-hondana.png",
     intro: '',
@@ -11,17 +11,18 @@ export const state = () => ({
 })
 
 export const getters = {
-  wachedProfile: state => state.wachedProfile
+  watchedProfile: state => state.watchedProfile
 }
 
 const db = firebase.firestore()
 
 export const actions = {
-  wachedProfile({ commit }, uid) {
-    db.collection(`users/${uid}/profile`).doc(uid).get()
-      .then((doc) => {
-        commit('getUser', doc.data())
-      })
+  async watchedProfile({ commit }, uid) {
+    try {
+      const doc = await db.collection(`users/${uid}/profile`).doc(uid).get()
+      commit('getUser', doc.data())
+    } catch(errro) {
+    }
   },
   destroyProfile({ commit }) {
     commit('destoryProfile')
@@ -29,22 +30,18 @@ export const actions = {
 }
 
 export const mutations = {
-  getUser(state, wachedProfile) {
-    console.log(wachedProfile)
-    state.wachedProfile.userName = wachedProfile.userName,
-    state.wachedProfile.iconURL = wachedProfile.iconURL
-    state.wachedProfile.intro = wachedProfile.intro
-    state.wachedProfile.twitterURL = wachedProfile.twitterURL
+  getUser(state, watchedProfile) {
+    state.watchedProfile = watchedProfile
   },
   // マイページ更新時
   editUser(state, { iconURL, myPage }) {
-    state.wachedProfile.userName = myPage.userName,
-    state.wachedProfile.iconURL = iconURL,
-    state.wachedProfile.intro = myPage.intro,
-    state.wachedProfile.twitterURL = myPage.twitterURL
+    state.watchedProfile.userName = myPage.userName,
+    state.watchedProfile.iconURL = iconURL,
+    state.watchedProfile.intro = myPage.intro,
+    state.watchedProfile.twitterURL = myPage.twitterURL
   },
   logoutReset(state) {
-    state.wachedProfile =  {
+    state.watchedProfile =  {
       userName: '',
       iconURL: "https://github.com/share-hondana.png",
       intro: '',
@@ -52,7 +49,7 @@ export const mutations = {
     }
   },
   destoryProfile(state) {
-    state.wachedProfile =  {
+    state.watchedProfile =  {
       userName: '',
       iconURL: "https://github.com/share-hondana.png",
       intro: '',

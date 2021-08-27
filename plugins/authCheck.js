@@ -4,11 +4,11 @@ export default function ({ route, store, redirect, $axios }) {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       // ログイン時の処理
-      // ログイン状態を判別する
+      // authデータの取得
       store.dispatch('profile/setUser', user)
+      // isAuthの取得
       store.dispatch('signIn/authCheck') 
-      store.dispatch('postsDetail/authChecked')
-      // store.dispatch('profile/pushUser')
+      //閲覧ユーザーのauth情報を取得
     } else {
       // 未ログイン時の処理
       store.dispatch("signIn/logout");

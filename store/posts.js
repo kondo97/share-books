@@ -65,15 +65,14 @@ export const actions = {
   pushCreatePosts({ commit }, { articleTitle, articleDescript, articleCate, contents }) {
     const user = auth.currentUser
     const uid = user.uid
-    const time = firebase.firestore.FieldValue.serverTimestamp()
-
+    
     db.collection('posts').add({
       authorUid: uid,
       articleTitle: articleTitle,
       articleDescript: articleDescript,
       articleCate: articleCate,
       contents: contents,
-      createdAt: dayjs(time).unix(),
+      createdAt: dayjs().unix()
     }).then(() => {
       commit('logoutReset')
       this.$router.push('/')

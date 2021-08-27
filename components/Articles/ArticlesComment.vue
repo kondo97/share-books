@@ -6,32 +6,42 @@
         :key="index"
         class="comment-item"
       >
-        <div class="mt-9 px-sm-6 pb-sm-6 comment-contents px-3 pb-3">
+        <div
+          class="
+            mt-9
+            px-sm-6
+            pb-sm-6
+            comment-contents
+            px-3
+            pb-3
+            comment-edit-wrap
+          "
+        >
           <v-row>
             <v-col cols="2" sm="1">
               <v-avatar size="36"
-                ><img :src="comment.userIcon" alt="コメント投稿者の画像"
+                ><img :src="comment.iconURL" alt="コメント投稿者の画像"
               /></v-avatar>
             </v-col>
-            <v-col cols="6" sm="8" class="d-flex align-center">
+            <v-col cols="7" sm="8" class="d-flex align-center">
               <p class="ma-0 sp-user-name">@{{ comment.userName }}</p>
             </v-col>
             <v-col
-              cols="4"
+              cols="3"
               sm="3"
               class="d-flex align-center justify-sm-end sp-time"
             >
-              <p>{{ comment.commentDate }}</p>
+              <p>{{ comment.createdAt }}</p>
             </v-col>
           </v-row>
-
           <p class="mt-6" v-if="!commentEdit">
-            {{ comment.commentContent }}
+            {{ comment.comment }}
           </p>
+
           <v-form ref="form" v-model="valid" v-if="commentEdit">
             <v-textarea
               solo
-              label="コメントを入力（最大140文字）"
+              label="コメントを編集（最大140文字）"
               autofocus
               class="mt-6 prevent-item"
               v-model="commentEditComment"
@@ -48,21 +58,28 @@
               </v-row>
             </v-col>
             <v-col cols="2" sm="1" v-if="!commentEdit">
-              <v-icon class="mr-4 mdi-edit" @click="editComment(index)"
+              <v-icon
+                class="prevent-item mr-4"
+                @click="editComment(index, comment)"
+                v-show="comment.displayIcon"
                 >mdi-pencil</v-icon
               >
             </v-col>
-            <v-col cols="2" sm="1" class="mdi-edit" v-if="!commentEdit">
-              <v-icon @click="deleteComment(index)">mdi-delete</v-icon>
+            <v-col cols="2" sm="1" class="prevent-item" v-if="!commentEdit">
+              <v-icon @click="submitDelete(index, comment)" v-show="comment.displayIcon"
+                >mdi-delete</v-icon
+              >
             </v-col>
             <v-col>
+              <div class="text-right">
               <v-btn
                 class="primary prevent-item"
-                @click="editComment"
+                @click="submitComment"
                 v-if="commentEdit"
               >
                 更新
               </v-btn>
+              </div>
             </v-col>
           </v-row>
         </div>
@@ -74,50 +91,60 @@
 <script>
 export default {
   created() {
-    this.comments = [
-      {
-        userIcon: "https://avatars0.githubusercontent.com/u/9064066?v=4&s=460",
-        userName: "近藤（フロントエンドエンジニアを目指す）",
-        commentDate: "2021-06-07 13:00",
-        commentContent:
-          " この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ、量、字間、行間等を確認するために入れています。この文章はダミーです。文字の大きさ",
-      },
-    ]
+    this.$store.dispatch("comment/resetComments");
+    const pageUid = this.$route.params["articlesId"];
+    const nowUser = this.$store.getters["profile/user"].uid
+    this.$store.dispatch("comment/getCommnets", {nowUser, pageUid});
   },
   data() {
     return {
+      items: [
+        {
+          icon: "mdi-home",
+          text: "HOME",
+          to: "/",
+          action: "closeMenu",
+        },
+      ],
       //ルール設定
       valid: false,
       commentRules: [
         (v) => !!v || "コメントを編集できます！",
         (v) => (v && v.length <= 140) || "最大140文字です。",
       ],
-      comments: [],
       commentEdit: false,
+      commentEditComment: '',
+      commentDots: false,
     };
   },
   methods: {
     //コメント編集ボタン押下
-    editComment(index) {
+    editComment(index, comment) {
+      this.commentEditComment = this.$store.getters["comment/comments"][index].comment
       this.commentEdit = !this.commentEdit;
-      this.$store.dispatch('comment/changeCommit', index);
+      const pageUid = this.$route.params["articlesId"];
+      this.$store.dispatch('comment/changeComment', {pageUid: pageUid, id: comment.id, index: index});
+    },
+    //更新ボタン押下
+    submitComment() {
+      this.$store.dispatch('comment/updateComment', this.commentEditComment)
+      this.commentEdit = !this.commentEdit;
     },
     //コメント削除ボタン押下
-    deleteComment(index) {
+    submitDelete(index,comment) {
       if (confirm("このコメントを削除しますか？")) {
-        console.log("sakuzyo");
+       const pageUid = this.$route.params["articlesId"];
+        this.$store.dispatch('comment/deleteComment', {pageUid: pageUid, id: comment.id, index: index})
       }
     },
   },
   computed: {
-    commentEditComment() {
-      const index = this.$store.getters["comment/index"]
-      return this.comments[index].commentContent
-    }
-  }
+    comments() {
+      return this.$store.getters["comment/comments"];
+    },
+  },
 };
 </script>
 
 <style>
-
 </style>

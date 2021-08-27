@@ -92,7 +92,7 @@
     font-size: 12px !important;
   }
 
-  .book-width {
+  .book-width, .sp-tabs-width {
     width: 100%;
   }
 }
@@ -103,7 +103,7 @@
 
 //ArticlesComponent
 .comment-item {
-  display: block;
+  display: block !important;
 }
 
 //AppBar
@@ -119,7 +119,8 @@
 }
 
 .menu,
-.news {
+.news,
+.comment-edit  {
   position: relative;
 }
 
@@ -298,6 +299,13 @@
   top: 90%;
   right: 5%;
 }
+}
+
+//ArticlesCommnet
+.comment-edit {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 //mtPageId

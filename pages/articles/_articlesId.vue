@@ -8,7 +8,7 @@
             <v-container class="px-sm-6 pt-sm-3 text-subtitle-2">
               <v-row>
                 <v-col cols="9" sm="10" class="d-flex align-center px-0">
-                  <p class="ma-0">{{ postDetail.createAt }}</p>
+                  <p class="ma-0">{{ postDetail.createdAt }}</p>
                 </v-col>
                 <v-col cols="3" sm="2" class="d-flex align-center px-0">
                   <p class="ma-0">1,000views</p>
@@ -65,10 +65,10 @@
                 </v-col>
               </v-row>
               <v-form ref="form" v-model="valid">
-              <v-textarea solo label="コメントを入力（最大140文字）" class="mt-6" :rules="commentRules"></v-textarea>
+              <v-textarea solo label="コメントを入力（最大140文字）" class="mt-6" :rules="commentRules" v-model="comment"></v-textarea>
               </v-form>
               <div class="text-right">
-                <v-btn color="success" :disabled="!valid"> 投稿 </v-btn>
+                <v-btn color="success" :disabled="!valid" @click="submitCommnet"> 投稿 </v-btn>
               </div>
             </div>
           </div>
@@ -96,7 +96,9 @@ export default {
   },
   created() {
     const pageUid = this.$route.params["articlesId"];
-    this.$store.dispatch('postsDetail/getPostDetail', pageUid)
+    const isAuth = this.$store.getters["signIn/isAuth"]
+    const currentUid = this.$store.getters['profile/user'].uid
+    this.$store.dispatch('postsDetail/getPostDetail', {isAuth, pageUid, currentUid})
   },
   data() {
     return {
@@ -105,7 +107,8 @@ export default {
       commentRules: [
         (v) => !!v || "コメントを投稿してみましょう！",
         (v) => (v && v.length <= 140) || "最大140文字です。",
-      ]
+      ],
+      comment: ''
     };
   },
   methods: {
@@ -115,16 +118,23 @@ export default {
     },
     //自分のマイページへ移動
     goCurrentUser() {
-      const user = firebase.auth().currentUser;
+      const user = this.$store.getters['profile/user']
       if (user.emailVerified == true) {
         const uid = user.uid;
         this.$router.push(`/myPage/${uid}`);
       }
+    },
+    //コメントを投稿
+    submitCommnet() {
+      const pageUid = this.$route.params["articlesId"]
+      const userUid = this.$store.getters['profile/user'].uid
+      this.$store.dispatch('comment/pushComment', {pageUid: pageUid, userUid: userUid, comment: this.comment})
+      this.comment = ''
     }
   },
   computed: {
     isAuth() {
-      return this.$store.getters["postsDetail/isAuth"];
+      return this.$store.getters["signIn/isAuth"];
     },
     postDetail() {
       return this.$store.getters['postsDetail/postDetail']

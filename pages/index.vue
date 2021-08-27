@@ -49,7 +49,7 @@
                       </v-col>
                       <v-col cols="9" class="text-right">
                         <v-list-item-subtitle
-                          v-html="item.createAt"
+                          v-html="item.createdAt"
                         ></v-list-item-subtitle>
                       </v-col>
                     </v-row>

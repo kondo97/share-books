@@ -4,7 +4,7 @@
     <v-toolbar color="#fff" flat prominent height="280">
       <MyPageHead />
       <template v-slot:extension>
-        <v-tabs v-model="tabs" centered>
+        <v-tabs v-model="tabs" centered class="sp-tabs-width">
           <v-tab v-for="(top, index) in tops" :key="index" class="sp-tab">
             {{ top.name }}
           </v-tab>
@@ -42,7 +42,7 @@
                       </v-col>
                       <v-col cols="9" class="text-right">
                         <v-list-item-subtitle
-                          v-html="item.createAt"
+                          v-html="item.createdAt"
                         ></v-list-item-subtitle>
                       </v-col>
                     </v-row>
@@ -84,7 +84,6 @@
             </v-list>
           </v-card-text>
         </v-card>
-        <!-- <div class="text-center"><v-btn color="primary" @click="showMorePosts">さらに表示</v-btn></div> -->
         <p v-show="!noData" class="text-center pointer hover-blue" @click="showMorePosts">▼もっと表示する</p>
         <p v-show="noData" class="text-center">no more data</p>
       </v-tab-item>
@@ -221,6 +220,80 @@
           </v-card-text>
         </v-card>
       </v-tab-item>
+      <!-- コメントした記事 -->
+      <v-tab-item>
+                <v-card flat>
+          <v-card-text class="pt-0">
+            <v-list four-line class="pa-sm-6 mx-sm-12">
+              <template v-for="(item, index) in commentItems" >
+                <v-subheader
+                  v-if="item.header"
+                  :key="item.header"
+                  v-text="item.header"
+                ></v-subheader>
+                <v-divider
+                  v-else-if="item.divider"
+                  :key="index"
+                  :inset="item.inset"
+                ></v-divider>
+                <v-list-item v-else :key="index">
+                  <v-list-item-avatar>
+                    <v-img :src="item.iconURL"></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-row class="d-flex justify-space-between">
+                      <v-col cols="3">
+                        <v-list-item-subtitle
+                          v-html="item.userName"
+                        ></v-list-item-subtitle>
+                      </v-col>
+                      <v-col cols="9" class="text-right">
+                        <v-list-item-subtitle
+                          v-html="item.createdAt"
+                        ></v-list-item-subtitle>
+                      </v-col>
+                    </v-row>
+                    <v-list-item-title v-html="item.articleTitle" @click="goPost(item)" class="pointer hover-blue"></v-list-item-title>
+                    <v-row class="d-flex justify-space-between mt-1">
+                      <v-col cols="8" sm="3" md="6">
+                        <v-row class="d-flex justify-space-between">
+                          <v-col cols="1" md="3">
+                            <v-icon> mdi-tag </v-icon>
+                          </v-col>
+                          <v-col
+                            class="d-flex align-center pa-0"
+                            cols="9"
+                            md="9"
+                          >
+                            <v-list-item-subtitle
+                              v-html="item.articleCate"
+                            ></v-list-item-subtitle>
+                          </v-col>
+                        </v-row>
+                      </v-col>
+                      <v-col cols="4" sm="4" md="2">
+                        <v-row class="d-flex justify-center">
+                          <v-col cols="6">
+                            <v-icon color="pink darken-1">mdi-heart</v-icon>
+                          </v-col>
+                          <v-col cols="6" class="d-flex align-center pa-0"
+                            ><v-list-item-subtitle
+                              v-html="item.good"
+                              class="text-subtitle-1"
+                            ></v-list-item-subtitle
+                          ></v-col>
+                        </v-row>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card-text>
+        </v-card>
+        <p v-show="!noData" class="text-center pointer hover-blue" @click="showMorePosts">▼もっと表示する</p>
+        <p v-show="noData" class="text-center">no more data</p>
+      </v-tab-item>
     </v-tabs-items>
   </v-card>
   </div>
@@ -235,7 +308,10 @@ export default {
   created() {
     const uid = this.$route.params["myPageId"]
     this.$store.dispatch('getPosts/resetPosts')
+    //自分の投稿記事を取得
     this.$store.dispatch('getPosts/getMyPosts', uid)
+    //コメントした記事を取得
+    this.$store.dispatch('getPosts/getCommentId', uid)
   },
   data() {
     return {
@@ -245,6 +321,7 @@ export default {
         { name: "フォロー中" },
         { name: "フォロワー" },
         { name: "スキ" },
+        { name: 'コメント記事'}
       ],
       follows: [
         {
@@ -339,6 +416,9 @@ export default {
     },
     noData() {
       return this.$store.getters['getPosts/noData']
+    },
+    commentItems() {
+      return this.$store.getters['getPosts/commentItems']
     }
   }
 };
