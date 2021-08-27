@@ -19,7 +19,6 @@
           </v-col>
           <v-col cols="8" sm="8">
             <v-text-field
-              label="ユーザーネームを入力"
               placeholder="ユーザーネームを入力"
               solo
               dense
@@ -29,7 +28,6 @@
           </v-col>
           <v-col cols="10" sm="10" class="pb-0">
             <v-textarea
-              label="自己紹介文を入力（最大140文字）"
               solo
               placeholder="自己紹介文を入力（最大140文字）"
               height="100"
@@ -39,7 +37,6 @@
           </v-col>
           <v-col cols="10" sm="10">
             <v-text-field
-              label="TwitterURLを貼付"
               placeholder="TwitterURLを貼付"
               solo
               dense

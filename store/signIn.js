@@ -104,7 +104,9 @@ export const actions = {
          const result = await auth.signInWithPopup(provider)
          const isNewUser = result.additionalUserInfo.isNewUser
          dispatch('profile/pushUser', isNewUser, { root: true })
+         console.log('test1')
          this.$router.push('signInLoading')
+         console.log('test2')
       } catch (error) {
          alert('ログインに失敗しました。')
       }

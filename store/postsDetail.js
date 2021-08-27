@@ -23,7 +23,7 @@ export const actions = {
   async getPostDetail({ getters, dispatch, commit }, {isAuth, pageUid, currentUid}) {
     try {
       const doc = await db.collection('posts').doc(pageUid).get()
-      dispatch('pushPostDetail', { uid: doc.data().authorUid, item: doc.data() })
+      commit('getPostDetail', { id: pageUid, item: doc.data() })
       if (isAuth) {
         // const currentUser = auth.currentUser.uid
         dispatch('getCurrentUser', currentUid)
@@ -34,21 +34,6 @@ export const actions = {
         }
       }
     } catch(error) {
-    }
-  },
-  //必要なデータを合致させる
-  async pushPostDetail({ commit }, { uid, item }) {
-    try {
-      const ref = await db.collection(`users/${uid}/profile`).doc(uid).get()
-      item.id = uid
-        item.userName = ref.data().userName
-        item.iconURL = ref.data().iconURL
-        item.intro = ref.data().intro
-        item.twitterURL = ref.data().twitterURL
-        item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
-        commit('pushPostDetail', item)
-    } catch {
-
     }
   },
   //閲覧ユーザーの情報を取得
@@ -120,7 +105,10 @@ export const mutations = {
     state.matchUser = false
   },
   //記事の必要情報をstateに格納
-  pushPostDetail(state, item) {
+  getPostDetail(state, {id, item}) {
+    item.id = id
+    item.userName = "@" + item.userName
+    item.createdAt =  dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.postDetail = item
   },
   currentUser(state, ref) {

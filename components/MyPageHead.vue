@@ -54,13 +54,13 @@
       <div v-if="!isSelf"
         >
         <span v-if="isFollow" >
-        <v-btn dark color="#5F9EA0" @click="changeFollow">
+        <v-btn dark color="#5F9EA0" @click="unFollow">
           フォロー中
         </v-btn>
         </span>
         <!-- フォローしていない時 -->
         <span v-if="!isFollow"> 
-        <v-btn outlined color="#5F9EA0" @click="changeFollow">
+        <v-btn outlined color="#5F9EA0" @click="follow">
           フォロー
         </v-btn>
         </span>
@@ -98,13 +98,19 @@ export default {
     };
   },
   methods: {
+    //編集する
     goMyPageEdit() {
       const uid = this.$route.params["myPageId"];
       this.$router.push(`/myPage/myPageEdit/${uid}/`);
     },
-    changeFollow() {
-      this.isFollow = !this.isFollow;
+    //フォローする
+    follow() {
+      this.isFollow = true
     },
+    //フォローを外す
+    unFollow() {
+      this.isFollow = false
+    }
   },
   computed: {
     userName() {

@@ -293,7 +293,8 @@ export default {
         articleTitle: this.articleTitle, 
         articleDescript: this.articleDescript,
         articleCate: this.articleCate,
-        contents: this.contents
+        contents: this.contents,
+        userUid: this.$store.getters['profile/user'].uid
       }).then(() =>{
         this.articleTitle = '',
         this.articleDescript = '',

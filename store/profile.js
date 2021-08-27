@@ -55,17 +55,43 @@ export const actions = {
   //マイページを編集
   async editMyPage({ getters, dispatch, commit }, { iconURL, myPage }) {
     const userID = getters.user.uid
+    if(myPage.twitterURL == undefined) {
+      myPage.twitterURL = ''
+    }
     try {
-      await  db.collection(`users/${userID}/profile`).doc(userID).update({
+      const ref = await db.collection(`users/${userID}/profile`).doc(userID)
+      ref.update({
         userName: myPage.userName,
         iconURL: iconURL,
         intro: myPage.intro,
         twitterURL: myPage.twitterURL
       })
+      const batch = await db.batch();
+      const refPosts = await db.collection('posts').where("authorUid", "==", userID)
+      refPosts.get().then(snapshot => {
+        snapshot.forEach((doc) => {
+          batch.update(doc.ref, {
+            userName : myPage.userName,
+            iconURL: iconURL
+          })
+          batch.commit()
+        })
+      })
+    
+      // const refPosts = await db.collection('posts').where("authorUid", "==", userID)
+      // refPosts.get().then(snapshot => {
+      //   snapshot.forEach((doc) => {
+      //     const docRef = db.collection('posts').doc(doc.id)
+      //     docRef.update({
+      //       userName: myPage.userName
+      //     })
+      //   })
+      // })
+      
       commit('editMyPage', { iconURL, myPage })
       commit('myPageProfile/editUser', { iconURL, myPage }, { root: true })
     } catch(error) {
-      alert('編集に失敗しました。')
+      alert('更新に失敗しました。')
     }
   },
   //ログアウト時にstateの値をリセット
@@ -85,12 +111,14 @@ export const mutations = {
   //profileコレクションのユーザー情報を取得
   getUser(state, profile) {
     state.profile.userName = profile.userName,
-      state.profile.iconURL = profile.iconURL
+    state.profile.iconURL = profile.iconURL
   },
   //マイページを編集
   editMyPage(state, { iconURL, myPage }) {
     state.profile.userName = myPage.userName,
-    state.profile.iconURL = iconURL
+    state.profile.iconURL = iconURL,
+    state.profile.intro = myPage.intro,
+    state.profile.twitterURL = myPage.twitterURL
   },
   logoutReset(state) {
     state.user = {

@@ -1,14 +1,14 @@
 <template>
     <div class="fullview">
       <div class="loading-spacer"></div>
-        <no-ssr>
+        <client-only>
         <vue-loading
           type="spiningDubbles"
           color="#aaa"
           :size="{ width: '100px', height: '100px' }"
         >
         </vue-loading>
-        </no-ssr>
+        </client-only>
     </div>
 </template>
 

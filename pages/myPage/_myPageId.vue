@@ -31,13 +31,15 @@
                 ></v-divider>
                 <v-list-item v-else :key="index">
                   <v-list-item-avatar>
-                    <v-img :src="item.iconURL"></v-img>
+                    <v-img :src="item.iconURL" @click="goProfile(item)" class="pointer"></v-img>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-row class="d-flex justify-space-between">
                       <v-col cols="3">
                         <v-list-item-subtitle
                           v-html="item.userName"
+                          @click="goProfile(item)"
+                          class="pointer contents"
                         ></v-list-item-subtitle>
                       </v-col>
                       <v-col cols="9" class="text-right">
@@ -100,7 +102,7 @@
                         ><img :src="follow.avatar" alt="フォローユーザーの画像"
                       /></v-avatar>
                     </v-col>
-                    <v-col sm="10" class="d-flex align-center">
+                    <v-col sm="9" class="d-flex align-center">
                       <p class="ma-0">
                         {{ follow.name }}
                       </p>
@@ -238,13 +240,15 @@
                 ></v-divider>
                 <v-list-item v-else :key="index">
                   <v-list-item-avatar>
-                    <v-img :src="item.iconURL"></v-img>
+                    <v-img :src="item.iconURL" @click="goProfile(item)" class="pointer"></v-img>
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-row class="d-flex justify-space-between">
                       <v-col cols="3">
                         <v-list-item-subtitle
                           v-html="item.userName"
+                          @click="goProfile(item)"
+                          class="pointer contents"
                         ></v-list-item-subtitle>
                       </v-col>
                       <v-col cols="9" class="text-right">
@@ -291,8 +295,8 @@
             </v-list>
           </v-card-text>
         </v-card>
-        <p v-show="!noData" class="text-center pointer hover-blue" @click="showMorePosts">▼もっと表示する</p>
-        <p v-show="noData" class="text-center">no more data</p>
+        <p v-show="!noDataComment" class="text-center pointer hover-blue" @click="showMoreComments">▼もっと表示する</p>
+        <p v-show="noDataComment" class="text-center">no more data</p>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -404,10 +408,20 @@ export default {
     goPost(item) {
       this.$router.push(`/articles/${item.id}`)
     },
-    //記事をさらに表示させる
+    goProfile(item) {
+      console.log(item)
+      const id = item.authorUid
+       this.$router.push(`/myPage/${id}`)
+    },
+    //マイ本棚の記事をさらに表示させる
     showMorePosts(){
       const uid = this.$route.params["myPageId"]
       this.$store.dispatch('getPosts/getMyPosts', uid)
+    },
+    //コメント記事を更に表示させる
+    showMoreComments() {
+      const uid = this.$route.params["myPageId"]
+      this.$store.dispatch('getPosts/getCommentId', uid)
     }
   },
   computed: {
@@ -419,6 +433,9 @@ export default {
     },
     commentItems() {
       return this.$store.getters['getPosts/commentItems']
+    },
+    noDataComment() {
+      return this.$store.getters['getPosts/noDataComment']
     }
   }
 };

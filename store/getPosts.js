@@ -8,13 +8,15 @@ export const state = () => ({
   noData: false,
   commentItems: [
     { header: 'マイ本棚' }
-  ]
+  ],
+  noDataComment: false, 
 })
 
 export const getters = {
   items: state => state.items,
   noData: state => state.noData,
-  commentItems: state => state.commentItems
+  commentItems: state => state.commentItems,
+  noDataComment: state => state.noDataComment
 }
 
 const db = firebase.firestore()
@@ -40,22 +42,10 @@ export const actions = {
           commit('noData')
         }
         snapshot.forEach((doc) => {
-          dispatch('pushMyPosts', { uid: uid, id: doc.id, item: doc.data() })
+          commit('getMyPosts', { id: doc.id, item: doc.data() })
         }, lastVisible)
       })
     } catch (error) {
-    }
-  },
-  //必要なデータを合致させる(マイ本棚)
-  async pushMyPosts({ commit }, { uid, id, item }) {
-    try {
-      const ref = await db.collection(`users/${uid}/profile`).doc(uid).get()
-      item.id = id
-      item.userName = "@" + ref.data().userName
-      item.iconURL = ref.data().iconURL
-      item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
-      commit('pushMyPosts', item)
-    } catch {
     }
   },
   //コメントした記事のIdを取得
@@ -64,31 +54,18 @@ export const actions = {
       const id = await db.collection(`users/${uid}/commented`).orderBy('createdAt', 'desc').startAfter(lastComment).limit(1)
       id.get().then(snapshot => {
         lastComment = snapshot.docs[snapshot.docs.length - 1]
+        if(lastComment == undefined) {
+          commit('noDataComment')
+        }
         snapshot.forEach((doc) => {
-          dispatch('getCommentPosts', doc.data().id)
+          db.collection('posts').doc(doc.data().id).get()
+          .then((doc) => {
+            commit('getCommentPosts', {id: doc.id, commentItem: doc.data()})
+          })
         }, lastComment)
       })
     } catch (error) {
       
-    }
-  },
-  // コメントした記事のデータを取得
-  async getCommentPosts({ commit }, id) {
-    try {
-      const post = await db.collection('posts').doc(id).get()
-      const userId = post.data().authorUid
-      const profileData = await db.collection(`users/${userId}/profile`).doc(userId).get()
-      const commentItem = {
-        postId: id,
-        userName: "@" + profileData.data().userName,
-        iconURL: profileData.data().iconURL,
-        createdAt: dayjs(post.data().createdAt * 1000).format('YYYY年MM月DD日') + "に投稿",
-        articleTitle: post.data().articleTitle,
-        articleCate: post.data().articleCate
-      }
-      console.log()
-      commit('getCommentPosts', commentItem)
-    } catch (error) {
     }
   },
   //ログアウト時はstateの中身をリセット
@@ -116,7 +93,10 @@ export const mutations = {
     ]
   },
   //itemsにデータを格納
-  pushMyPosts(state, item) {
+  getMyPosts(state, {id, item}) {
+    item.id = id
+    item.userName = "@" + item.userName
+    item.createdAt =  dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.items.push(item)
     state.items.push(
       { divider: true, inset: true },
@@ -127,10 +107,16 @@ export const mutations = {
     state.noData = true
   },
   //コメントした記事を取得
-  getCommentPosts(state, commentItem) {
+  getCommentPosts(state, {id, commentItem}) {
+    commentItem.id = id
+    commentItem.userName = "@" + commentItem.userName
+    commentItem.createdAt = dayjs(commentItem.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.commentItems.push(commentItem)
     state.items.push(
       { divider: true, inset: true },
     )
+  },
+  noDataComment(state) {
+    state.noDataComment = true
   }
 }

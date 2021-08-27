@@ -61,7 +61,7 @@
                   /></v-avatar>
                 </v-col>
                 <v-col cols="9" sm="8" class="d-flex align-center">
-                  <p class="ma-0 sp-user-name pointer hover-blue" @click="goCurrentUser">@{{ currentUser.userName }}</p>
+                  <p class="ma-0 sp-user-name pointer hover-blue" @click="goCurrentUser">{{ currentUser.userName }}</p>
                 </v-col>
               </v-row>
               <v-form ref="form" v-model="valid">

@@ -62,21 +62,26 @@ export const actions = {
     commit('deletePosts')
   },
   //公開ボタン押下
-  pushCreatePosts({ commit }, { articleTitle, articleDescript, articleCate, contents }) {
-    const user = auth.currentUser
-    const uid = user.uid
-    
-    db.collection('posts').add({
-      authorUid: uid,
-      articleTitle: articleTitle,
-      articleDescript: articleDescript,
-      articleCate: articleCate,
-      contents: contents,
-      createdAt: dayjs().unix()
-    }).then(() => {
+  async pushCreatePosts({ commit }, { articleTitle, articleDescript, articleCate, contents, userUid }) {
+    try {
+      const doc = await db.collection(`users/${userUid}/profile`).doc(userUid).get()
+      const userName = doc.data().userName
+      const iconURL = doc.data().iconURL
+      await  db.collection('posts').add({
+        authorUid: userUid,
+        articleTitle: articleTitle,
+        articleDescript: articleDescript,
+        articleCate: articleCate,
+        contents: contents,
+        createdAt: dayjs().unix(),
+        userName: userName,
+        iconURL: iconURL
+      })
       commit('logoutReset')
       this.$router.push('/')
-    })
+    } catch(error) {
+      alert('投稿に失敗しました。')
+    }
   },
   //画面遷移時に記事作成途中のデータをstateに保存
   savePosts({ commit }, { articleTitle, articleDescript, articleCate}) {

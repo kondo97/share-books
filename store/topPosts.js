@@ -34,25 +34,12 @@ export const actions = {
           commit('noData')
         }
         snapshot.forEach((doc) => {
-          dispatch('pushPosts', { id: doc.id, item: doc.data() })
+          commit('getPosts', { id: doc.id, item: doc.data() })
+          console.log(doc.data())
         }, lastVisible)
       })
     } catch (error) {
       alert('データの取得に失敗しています。')
-    }
-  },
-  //必要なデータを合致させる
-  async pushPosts({ commit }, { id, item }) {
-    const uid = item.authorUid
-    try {
-       const ref = await db.collection(`users/${uid}/profile`).doc(uid).get()
-       item.id = id
-       item.userName = "@" + ref.data().userName
-       item.iconURL = ref.data().iconURL
-       item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
-       commit('pushPosts', item)
-    } catch (erro) {
-      alert('データの取得に失敗しました。')
     }
   },
 }
@@ -66,13 +53,16 @@ export const mutations = {
     state.noData = false
   },
   //itemsにデータを格納
-  pushPosts(state, item) {
+  getPosts(state, {id, item}) {
+    item.id = id
+    item.userName = "@" + item.userName
+    item.createdAt =  dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.items.push(item)
     state.items.push(
       { divider: true, inset: true },
     )
   },
-  // マイ本棚の最後の記事が表示されたとき
+  // 本棚の最後の記事が表示されたとき
   noData(state) {
     state.noData = true
   }
