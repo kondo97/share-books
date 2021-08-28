@@ -3,19 +3,27 @@ import firebase from '@/plugins/firebase'
 export const state = () => ({
   isFollow: false,
   isFollowPost: false,
-  followUsers: []
+  followUsers: [],
+  noFollow: false
 })
 
 export const getters = {
   isFollow: state => state.isFollow,
   isFollowPost: state => state.isFollowPost,
-  followUsers: state => state.followUsers
+  followUsers: state => state.followUsers,
+  noFollow: state => state.noFollow
 }
 
 const db = firebase.firestore()
 const auth = firebase.auth()
 
+let followVisible = ''
+
 export const actions = {
+  resetFollow({ commit }) {
+    commit('resetFollow') 
+    followVisible = ''
+  },
   //フォロー状態を確認する(マイページ)
   async checkFollow({ commit }, {pageUid, seeUserUid}) {
     try {
@@ -93,16 +101,25 @@ export const actions = {
     }
   },
   //フォロー中のユーザーを取得
-  async getFollowUser({ dispatch, commmit }, uid) {
+  async getFollowUser({ dispatch, commit }, uid) {
     try {
-      const doc = await db.collection(`users/${uid}/follow`)
-      doc.get().then(snapshot => {
+      const follows = await db.collection(`users/${uid}/follow`).orderBy('id').startAfter(followVisible).limit(2)
+      console.log(follows)
+      await follows.get().then(snapshot => {
+      console.log(followVisible)
+      console.log(snapshot)
+      followVisible = snapshot.docs[snapshot.docs.length - 1]
+      console.log(followVisible)
+       if (followVisible == undefined) {
+          commit('noFollow')
+        }
         snapshot.forEach((doc) => {
+          console.log(doc.data())
           dispatch('matchFollowUser', doc.data())
-        })
+        }, followVisible)
       })
     } catch(error) {
-
+        console.log('miss')
     }
   },
   async matchFollowUser({ commit }, doc) {
@@ -122,6 +139,12 @@ export const actions = {
   }
 }
 export const mutations = {
+  resetFollow(state) {
+    state.isFollow = false,
+    state.isFollowPost = false
+    state.followUsers = [],
+    state.noFollow = false
+  },
   //フォローする
    follow(state) {
      state.isFollow = true
@@ -146,5 +169,9 @@ export const mutations = {
     state.isFollow = false,
     state.isFollowPost = false
     state.followUsers = []
+  },
+  //マイページ。フォロー中ユーザーの最後が表示された時
+  noFollow(state) {
+    state.noFollow = true
   }
 }

@@ -1,21 +1,25 @@
 import firebase from '@/plugins/firebase'
 import dayjs from 'dayjs'
+import _ from "lodash"
 
 export const state = () => ({
   //編集用にコメントのデータを格納
-  EditpageUid:'',
-  EditId :'',
-  EditIndex:'',
+  EditpageUid: '',
+  EditId: '',
+  EditIndex: '',
   //コメントの情報を格納
-  comments:[]
+  comments: []
 })
 
 export const getters = {
   index: state => state.index,
-  comments: state => state.comments,
   EditpageUid: state => state.EditpageUid,
   EditId: state => state.EditId,
-  EditIndex: state => state.EditIndex
+  EditIndex: state => state.EditIndex,
+  Orderdcomments: state => {
+    return _.sortBy(state.comments, 'createdAt')
+  },
+  comments: state => state.comments
 }
 
 const db = firebase.firestore()
@@ -27,20 +31,20 @@ export const actions = {
     commit('resetComments')
   },
   //コメントをcommentsコレクションに格納
-  async pushComment({ dispatch, commit }, {pageUid, userUid, comment}) {
+  async pushComment({ dispatch, commit }, { pageUid, userUid, comment }) {
     try {
       await db.collection(`posts/${pageUid}/comments`).add({
         comment: comment,
         user: userUid,
         createdAt: dayjs().unix()
       })
-      db.collection(`users/${userUid}/commented`).doc(pageUid).set({
+      await db.collection(`users/${userUid}/commented`).doc(pageUid).set({
         id: pageUid,
         createdAt: dayjs().unix()
       })
       dispatch('resetComments')
-      dispatch('getCommnets',{userUid, pageUid} )
-    } catch(error) {
+      dispatch('getCommnets', { nowUser: userUid, pageUid: pageUid })
+    } catch (error) {
       alert('コメントの投稿に失敗しました。')
     }
   },
@@ -57,16 +61,15 @@ export const actions = {
     
     }
   },
-  //コメントに必要情報を合致させる
+  // コメントに必要情報を合致させる
   async matchComments({ commit }, {id ,nowUser, comment}) {
-    //コメント投稿者のユーザーid
     const commentAuthor = comment.user
     try {
       const user = await db.collection(`users/${commentAuthor}/profile`).doc(commentAuthor).get()
       comment.id = id
       comment.userName = user.data().userName
       comment.iconURL = user.data().iconURL
-      comment.createdAt = dayjs(comment.createdAt * 1000).format('YYYY年MM月DD日') 
+      // comment.createdAt = dayjs(comment.createdAt * 1000).format('YYYY年MM月DD日') 
       if(nowUser == commentAuthor) {
         comment.displayIcon = true
       } else {
@@ -78,21 +81,20 @@ export const actions = {
     }
   },
   //コメントを削除
-  async deleteComment({ commit }, {pageUid, id, index}) {
+  async deleteComment({ commit }, { pageUid, id, index }) {
     try {
-     await db.collection(`posts/${pageUid}/comments`).doc(id).delete()
-     commit('deleteComment', index)
-    } catch(error) {
+      await db.collection(`posts/${pageUid}/comments`).doc(id).delete()
+      commit('deleteComment', index)
+    } catch (error) {
       alert('削除に失敗しました。')
     }
   },
   //編集アイコンを押下
-  changeComment({ commit }, {pageUid, id, index}) {
-    commit('changeComment', {pageUid, id, index})
+  changeComment({ commit }, { pageUid, id, index }) {
+    commit('changeComment', { pageUid, id, index })
   },
   //コメントを編集
   async updateComment({ getters, commit }, commentEditComment) {
-    console.log('success')
     const pageUid = getters.EditpageUid
     const id = getters.EditId
     const index = getters.EditIndex
@@ -100,8 +102,8 @@ export const actions = {
       await db.collection(`posts/${pageUid}/comments`).doc(id).update({
         comment: commentEditComment
       })
-      commit('updateComment', {index, commentEditComment})
-    } catch(error) {
+      commit('updateComment', { index, commentEditComment })
+    } catch (error) {
       alert('更新に失敗しました。')
     }
   }
@@ -113,14 +115,14 @@ export const mutations = {
     state.comments = []
   },
   //編集アイコンを押下。コメントのIDを格納。
-  changeComment(state, {pageUid, id, index}) {
+  changeComment(state, { pageUid, id, index }) {
     state.EditpageUid = pageUid,
-    state.EditId = id
+      state.EditId = id
     state.EditIndex = index
   },
   //コメントを編集
-  updateComment(state, {index, commentEditComment}) {
-    state.comments[index].comment = commentEditComment 
+  updateComment(state, { index, commentEditComment }) {
+    state.comments[index].comment = commentEditComment
   },
   //stateに格納
   matchComments(state, comment) {
@@ -128,6 +130,6 @@ export const mutations = {
   },
   //コメントを消去
   deleteComment(state, index) {
-   state.comments.splice(index, 1)
-  }   
+    state.comments.splice(index, 1)
+  }
 }

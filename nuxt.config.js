@@ -30,7 +30,8 @@ export default {
     "@/plugins/authCheck",
     { src: '~/plugins/VueLoading', ssr: false},
     { src: '~/plugins/persistedstate.js', ssr: false},
-    '~/plugins/day.js'
+    '~/plugins/day.js',
+    { src: '~/plugins/lodash.js' }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

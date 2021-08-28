@@ -36,8 +36,12 @@ export const actions = {
   async getMyPosts({ dispatch, commit }, uid) {
     try {
       const posts = await db.collection('posts').where("authorUid", "==", uid).orderBy('createdAt', 'desc').startAfter(lastVisible).limit(2)
+      console.log(posts)
       posts.get().then(snapshot => {
+        console.log(lastVisible)
+        console.log(snapshot)
         lastVisible = snapshot.docs[snapshot.docs.length - 1]
+        console.log(lastVisible)
         if (lastVisible == undefined) {
           commit('noData')
         }
