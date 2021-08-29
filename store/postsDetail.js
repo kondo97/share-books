@@ -27,6 +27,9 @@ export const actions = {
       //フォロー状態を確認する
       const followedUserId = doc.data().authorUid
       dispatch('follow/checkFollowPost', {currentUid, followedUserId}, { root: true })
+      //トータルいいね数を取得する。
+      const authorId = doc.data().authorUid
+      dispatch('like/totalLike', authorId, { root: true }) 
       if (isAuth) {
         // const currentUser = auth.currentUser.uid
         dispatch('getCurrentUser', currentUid)
@@ -89,6 +92,14 @@ export const actions = {
     }
 
   },
+  //いいね押下時にプラスする
+  additionLike({ commit }) {
+    commit('additionLike')
+  },
+  //いいね削除時にマイナスする
+  subtractLike({ commit }) {
+    commit('subtractLike')
+  },
   //stateの中身を消去
   destoryData({ commit }) {
     commit('destoryData')
@@ -130,4 +141,12 @@ export const mutations = {
   getEditInitial(state, ref) {
     state.editInitial = ref
   },
+  //いいね押下時にライクをプラスする
+  additionLike(state) {
+    state.postDetail.likeCount += 1
+  },
+  //いいね削除時にライクをマイナスする
+  subtractLike(state) {
+    state.postDetail.likeCount -= 1
+  }
 }

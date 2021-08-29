@@ -14,10 +14,10 @@
       <!-- スマホでは非表示 -->
       <v-row class="hidden-sm-and-down">
         <v-col sm="3" class="text-center d-flex align-center"
-          ><v-icon color="pink darken-1" size="24">mdi-heart</v-icon></v-col
+          ><v-icon color="pink lighten-2" size="24">mdi-heart</v-icon></v-col
         >
         <v-col sm="6" class="text-center d-flex align-center"
-          ><p class="my-0">12</p></v-col
+          ><p class="my-0">{{ totalLike }}</p></v-col
         >
         <v-col sm="2" class="text-center d-flex align-center"
           ><a :href="twitterURL" class="twitterURL" target="”_blank”"
@@ -33,7 +33,7 @@
           ><v-icon color="pink darken-1" size="24">mdi-heart</v-icon></v-col
         >
         <v-col cols="4" class="text-center d-flex align-center"
-          ><p class="my-0">12</p></v-col
+          ><p class="my-0">{{ totalLike }}</p></v-col
         >
         <v-col cols="2" class="text-center d-flex align-center"
           ><a :href="twitterURL" class="twitterURL" target="”_blank”"
@@ -91,6 +91,10 @@ export default {
     if (this.$store.getters["signIn/isAuth"]) {
       this.$store.dispatch("follow/checkFollow", { pageUid, seeUserUid });
     }
+    //トータルいいね数をリセット
+    this.$store.dispatch('like/resetLikeTotal')
+    //ユーザーのトータルいいね数を取得
+    this.$store.dispatch('like/totalLike', pageUid)
   },
   data() {
     return {
@@ -147,6 +151,9 @@ export default {
     isFollow() {
       return this.$store.getters["follow/isFollow"];
     },
+    totalLike() {
+      return this.$store.getters['like/totalLike']
+    }
   },
   destroyed() {
     this.$store.dispatch("myPageProfile/destroyProfile");

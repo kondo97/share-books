@@ -4,25 +4,31 @@ export const state = () => ({
   isFollow: false,
   isFollowPost: false,
   followUsers: [],
-  noFollow: false
+  noFollow: false,
+  followedUsers: [],
+  noFollowed: false,
 })
 
 export const getters = {
   isFollow: state => state.isFollow,
   isFollowPost: state => state.isFollowPost,
   followUsers: state => state.followUsers,
-  noFollow: state => state.noFollow
+  noFollow: state => state.noFollow,
+  followedUsers: state => state.followedUsers,
+  noFollowed: state => state.noFollowed,
 }
 
 const db = firebase.firestore()
 const auth = firebase.auth()
 
 let followVisible = ''
+let followerVisible = ''
 
 export const actions = {
   resetFollow({ commit }) {
     commit('resetFollow') 
     followVisible = ''
+    followerVisible = ''
   },
   //フォロー状態を確認する(マイページ)
   async checkFollow({ commit }, {pageUid, seeUserUid}) {
@@ -104,17 +110,12 @@ export const actions = {
   async getFollowUser({ dispatch, commit }, uid) {
     try {
       const follows = await db.collection(`users/${uid}/follow`).orderBy('id').startAfter(followVisible).limit(2)
-      console.log(follows)
       await follows.get().then(snapshot => {
-      console.log(followVisible)
-      console.log(snapshot)
       followVisible = snapshot.docs[snapshot.docs.length - 1]
-      console.log(followVisible)
        if (followVisible == undefined) {
           commit('noFollow')
         }
         snapshot.forEach((doc) => {
-          console.log(doc.data())
           dispatch('matchFollowUser', doc.data())
         }, followVisible)
       })
@@ -134,6 +135,35 @@ export const actions = {
     } catch(error) {
     }
   },
+  //フォロワーを取得
+  async getFollowedUser({ dispatch, commit }, uid) {
+    try {
+    const follower = await db.collection(`users/${uid}/followed`).orderBy('id').startAfter(followerVisible).limit(2)
+    await follower.get().then(snapshot => {
+      followerVisible= snapshot.docs[snapshot.docs.length - 1]
+       if (followerVisible == undefined) {
+          commit('noFollowed')
+       }
+        snapshot.forEach((doc) => {
+          dispatch('matchFollowedUser', doc.data())
+        }, followerVisible)
+      })
+    } catch(error) {
+        console.log('miss')
+    }
+  },
+  async matchFollowedUser({ commit }, doc) {
+    try {
+      const profileRef = await db.collection(`users/${doc.id}/profile`).doc(doc.id).get()
+      const followedUser = {
+        userName: profileRef.data().userName,
+        iconURL: profileRef.data().iconURL,
+        id: doc.id
+      }
+      commit('matchFollowedUser', followedUser)
+    } catch(error) {
+    }
+  },
   destroyFollow({ commit }) {
     commit('destroyFollow')
   }
@@ -143,7 +173,9 @@ export const mutations = {
     state.isFollow = false,
     state.isFollowPost = false
     state.followUsers = [],
-    state.noFollow = false
+    state.noFollow = false,
+    state.followedUsers = [],
+    state.noFollowed = false
   },
   //フォローする
    follow(state) {
@@ -165,13 +197,24 @@ export const mutations = {
   matchFollowUser(state, followUser) {
     state.followUsers.push(followUser)
   },
+  //フォロワーを取得
+  matchFollowedUser(state, followedUser) {
+    state.followedUsers.push(followedUser)
+  }, 
   destroyFollow(state) {
-    state.isFollow = false,
+    state.isFollow = false
     state.isFollowPost = false
     state.followUsers = []
+    state.noFollow = false
+    state.followedUsers = []
+    state.noFollowed = false
   },
   //マイページ。フォロー中ユーザーの最後が表示された時
   noFollow(state) {
     state.noFollow = true
+  },
+  //フォロワーがすべて表示された時
+  noFollowed(state) {
+    state.noFollowed = true
   }
 }

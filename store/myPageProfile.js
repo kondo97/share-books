@@ -16,6 +16,7 @@ export const getters = {
 
 const db = firebase.firestore()
 
+//プロフィール情報を取得
 export const actions = {
   async watchedProfile({ commit }, uid) {
     try {

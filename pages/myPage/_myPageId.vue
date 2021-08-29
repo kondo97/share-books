@@ -77,11 +77,11 @@
                         <v-col cols="4" sm="4" md="2">
                           <v-row class="d-flex justify-center">
                             <v-col cols="6">
-                              <v-icon color="pink darken-1">mdi-heart</v-icon>
+                              <v-icon color="pink lighten-2">mdi-heart</v-icon>
                             </v-col>
                             <v-col cols="6" class="d-flex align-center pa-0"
                               ><v-list-item-subtitle
-                                v-html="item.good"
+                                v-html="item.likeCount"
                                 class="text-subtitle-1"
                               ></v-list-item-subtitle
                             ></v-col>
@@ -107,6 +107,7 @@
         <v-tab-item class="mt-3">
           <v-card flat>
             <v-list class="py-6" flat>
+              <v-card-text class="follow-number mx-auto">{{ followNumber }}フォロー</v-card-text>
               <v-list-item v-for="(followUser, i) in followUsers" :key="i">
                 <v-card-text class="follow-border mx-sm-16">
                   <v-row class="py-3 px-sm-12">
@@ -128,16 +129,21 @@
                       </p>
                     </v-col>
                     <v-col sm="2" class="text-right text-sm-left">
-                      <span v-if="isFollow">
+                      <div v-if="isSelf">
+                      <span v-if="isFollower">
                         <v-btn dark color="#5F9EA0" @click="unFollow(followUser.id)"
                           >フォロー中</v-btn
                         >
                       </span>
-                      <span v-if="!isFollow">
+                      <span v-if="!isFollower">
                         <v-btn outlined color="#5F9EA0">
                           フォロー
                         </v-btn>
                       </span>
+                      </div>
+                      <div v-if="!isSelf">
+                        <p style="color: #5F9EA0;">フォロー中</p>
+                      </div>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -157,19 +163,22 @@
         <v-tab-item class="mt-3">
           <v-card flat>
             <v-list class="py-6">
-                <v-list-item v-for="(follower, i) in followers" :key="i">
+              <v-card-text class="follow-number mx-auto">{{ followedNumber }}フォロワー</v-card-text>
+                <v-list-item v-for="(follower, i) in followedUsers" :key="i">
                   <v-card-text class="follow-border mx-sm-16">
                     <v-row class="py-3 mx-sm-12">
                       <v-col cols="2" sm="1">
                         <v-avatar size="36"
                           ><img
-                            :src="follower.avatar"
+                            :src="follower.iconURL"
                             alt="フォローユーザーの画像"
+                            class="pointer"
+                            @click="goProfileFollow(follower)"
                         /></v-avatar>
                       </v-col>
                       <v-col cols="10" sm="9" class="d-flex align-center">
-                        <p class="ma-0">
-                          {{ follower.name }}
+                        <p class="ma-0 pointer hover-blue" @click="goProfileFollow(follower)">
+                          {{ follower.userName }}
                         </p>
                       </v-col>
                       <v-col sm="2" class="d-flex align-sm-center justify-end">
@@ -180,6 +189,14 @@
                 </v-list-item>
             </v-list>
           </v-card>
+          <p
+            v-show="!noFollowed"
+            class="text-center pointer hover-blue"
+            @click="showMoreFollowed"
+          >
+            ▼もっと表示する
+          </p>
+          <p v-show="noFollowed" class="text-center">no more data</p>
         </v-tab-item>
         <!-- スキした記事 -->
         <v-tab-item>
@@ -201,14 +218,16 @@
 
                   <v-list-item v-else :key="index">
                     <v-list-item-avatar>
-                      <v-img :src="like.avatar"></v-img>
+                      <v-img :src="like.iconURL" @click="goProfile(like)" class="pointer"></v-img>
                     </v-list-item-avatar>
 
                     <v-list-item-content>
                       <v-row class="d-flex justify-space-between">
                         <v-col cols="3">
                           <v-list-item-subtitle
-                            v-html="like.author"
+                            v-html="like.userName"
+                            @click="goProfile(like)"
+                            class="pointer contents"
                           ></v-list-item-subtitle>
                         </v-col>
                         <v-col cols="9" class="text-right">
@@ -218,7 +237,9 @@
                         </v-col>
                       </v-row>
                       <v-list-item-title
-                        v-html="like.title"
+                        v-html="like.articleTitle"
+                        @click="goPost(like)"
+                        class="pointer hover-blue"
                       ></v-list-item-title>
                       <v-row class="d-flex justify-space-between mt-1">
                         <v-col cols="8" sm="3" md="6">
@@ -232,7 +253,7 @@
                               md="9"
                             >
                               <v-list-item-subtitle
-                                v-html="like.category"
+                                v-html="like.articleCate"
                               ></v-list-item-subtitle>
                             </v-col>
                           </v-row>
@@ -240,11 +261,11 @@
                         <v-col cols="4" sm="4" md="2">
                           <v-row class="d-flex justify-center">
                             <v-col cols="6">
-                              <v-icon color="pink darken-1">mdi-heart</v-icon>
+                              <v-icon color="pink lighten-2">mdi-heart</v-icon>
                             </v-col>
                             <v-col cols="6" class="d-flex align-center pa-0"
                               ><v-list-item-subtitle
-                                v-html="like.good"
+                                v-html="like.likeCount"
                                 class="text-subtitle-1"
                               ></v-list-item-subtitle
                             ></v-col>
@@ -257,6 +278,14 @@
               </v-list>
             </v-card-text>
           </v-card>
+          <p
+            v-show="!noDataLike"
+            class="text-center pointer hover-blue"
+            @click="showMoreLikes"
+          >
+            ▼もっと表示する
+          </p>
+          <p v-show="noDataLike" class="text-center">no more data</p>
         </v-tab-item>
         <!-- コメントした記事 -->
         <v-tab-item>
@@ -322,11 +351,11 @@
                         <v-col cols="4" sm="4" md="2">
                           <v-row class="d-flex justify-center">
                             <v-col cols="6">
-                              <v-icon color="pink darken-1">mdi-heart</v-icon>
+                              <v-icon color="pink lighten-2">mdi-heart</v-icon>
                             </v-col>
                             <v-col cols="6" class="d-flex align-center pa-0"
                               ><v-list-item-subtitle
-                                v-html="item.good"
+                                v-html="item.likeCount"
                                 class="text-subtitle-1"
                               ></v-list-item-subtitle
                             ></v-col>
@@ -361,6 +390,7 @@ export default {
   },
   created() {
     const uid = this.$route.params["myPageId"];
+    const seeUserUid = this.$store.getters["profile/user"].uid;
     this.$store.dispatch("getPosts/resetPosts");
     this.$store.dispatch("follow/resetFollow");
     //自分の投稿記事を取得
@@ -369,56 +399,31 @@ export default {
     this.$store.dispatch("getPosts/getCommentId", uid);
     //フォロー中のユーザーを取得
     this.$store.dispatch("follow/getFollowUser", uid);
+    //フォロワーを取得
+    this.$store.dispatch('follow/getFollowedUser', uid)
+    //閲覧ユーザーとプロフィールユーザーが一致するか
+    if(uid == seeUserUid) {
+      this.isSelf = true;
+    } else {
+      this.isSelf = false;
+    }
+    //いいね記事のデータをリセット
+    this.$store.dispatch('like/resetLikePost')
+    //いいねした記事の一覧を取得
+    this.$store.dispatch('like/getLikePosts', uid)
   },
   data() {
     return {
-      isFollow: true,
+      //閲覧ユーザーとプロフィールユーザーが一致するか
+      isSelf: false,
+      isFollower: true,
       tabs: null,
       tops: [
         { name: "マイ本棚" },
         { name: "フォロー中" },
         { name: "フォロワー" },
-        { name: "スキ" },
+        { name: "いいね" },
         { name: "コメント記事" },
-      ],
-      likes: [
-        { header: "スキした本棚" },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          author: "@" + "田中",
-          subtitle: "2021年06月06日に投稿",
-          title: "英語学習におすすめの本を紹介",
-          category: "学習・趣味・自己啓発",
-          good: "12",
-        },
-        { divider: true, inset: true },
       ],
     };
   },
@@ -464,6 +469,16 @@ export default {
       });
       this.isFollow = false
     },
+    //フォロワーをもっと表示させる
+    showMoreFollowed(){
+     const uid = this.$store.getters["profile/user"].uid;
+     this.$store.dispatch('follow/getFollowedUser', uid)
+    },
+    //いいねした記事をもっと表示させる
+    showMoreLikes() {
+      const uid = this.$store.getters["profile/user"].uid;
+      this.$store.dispatch('like/getLikePosts', uid)
+    }
   },
   computed: {
     items() {
@@ -484,6 +499,26 @@ export default {
     noFollow() {
       return this.$store.getters["follow/noFollow"];
     },
+    followedUsers() {
+      return this.$store.getters['follow/followedUsers']
+    },
+    noFollowed() {
+      return this.$store.getters['follow/noFollowed']
+    },
+    followNumber() {
+      const followNumber = this.$store.getters["follow/followUsers"]
+      return followNumber.length
+    },
+    followedNumber() {
+      const followedNumber = this.$store.getters['follow/followedUsers']
+      return followedNumber.length
+    },
+    likes() {
+      return this.$store.getters['like/likes']
+    },
+    noDataLike() {
+      return this.$store.getters['like/noDataLike']
+    }
   },
   destroyed() {
     this.$store.dispatch("follow/destroyFollow");

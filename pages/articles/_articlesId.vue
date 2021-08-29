@@ -7,12 +7,12 @@
           <div class="bg-main-color mt-sm-9 py-9 px-9">
             <v-container class="px-sm-6 pt-sm-3 text-subtitle-2">
               <v-row>
-                <v-col cols="9" sm="10" class="d-flex align-center px-0">
+                <v-col cols="12" sm="12" class="d-flex align-center px-0">
                   <p class="ma-0">{{ postDetail.createdAt }}</p>
                 </v-col>
-                <v-col cols="3" sm="2" class="d-flex align-center px-0">
+                <!-- <v-col cols="3" sm="2" class="d-flex align-center px-0">
                   <p class="ma-0">1,000views</p>
-                </v-col>
+                </v-col> -->
                 <v-col cols="2" sm="1" class="px-0">
                   <v-avatar size="40"
                     ><img

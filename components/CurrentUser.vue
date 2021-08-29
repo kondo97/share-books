@@ -14,10 +14,10 @@
       <!-- スマホでは非表示 -->
       <v-row class="hidden-sm-and-down">
         <v-col sm="3" class="text-center d-flex align-center"
-          ><v-icon color="pink darken-1" size="24">mdi-heart</v-icon></v-col
+          ><v-icon color="pink lighten-2" size="24">mdi-heart</v-icon></v-col
         >
         <v-col sm="6" class="text-center d-flex align-center"
-          ><p class="my-0">12</p></v-col
+          ><p class="my-0">{{ totalLike }}</p></v-col
         >
         <v-col sm="2" class="text-center d-flex align-center"
           ><a :href="twitterURL" class="twitterURL" target="”_blank”"
@@ -30,10 +30,10 @@
     <v-col cols="8" class="d-sm-none d-flex align-center">
       <v-row class="ml-3">
         <v-col cols="2" class="text-center d-flex align-center"
-          ><v-icon color="pink darken-1" size="24">mdi-heart</v-icon></v-col
+          ><v-icon color="pink lighten-2" size="24">mdi-heart</v-icon></v-col
         >
         <v-col cols="4" class="text-center d-flex align-center"
-          ><p class="my-0">12</p></v-col
+          ><p class="my-0">{{ totalLike }}</p></v-col
         >
         <v-col cols="2" class="text-center d-flex align-center"
           ><a :href="twitterURL" class="twitterURL" target="”_blank”"
@@ -81,6 +81,10 @@
 <script>
 import firebase from "@/plugins/firebase";
 export default {
+  created() {
+   //トータルいいね数をリセット
+    this.$store.dispatch('like/resetLikeTotal')
+  },
   data() {
     return {
       isSelf: false,
@@ -138,8 +142,11 @@ export default {
     },
     isFollowPost() {
       return this.$store.getters["follow/isFollowPost"]
+    },
+    totalLike() {
+      return this.$store.getters['like/totalLike']
     }
-  },
+  }, 
   destroyed() {
     this.$store.dispatch('follow/destroyFollow')
   },

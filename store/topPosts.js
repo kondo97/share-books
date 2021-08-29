@@ -5,24 +5,34 @@ export const state = () => ({
   items: [
     { header: '本棚一覧' }
   ],
-  noData: false
+  noData: false,
+  //「もっと表示する」をカテゴリー検索用に切り替え
+  cateSearch: false,
+  noDataCate: false,
+  //選択中のカテゴリーの名前が入る
+  cateName: ''
 })
 
 export const getters = {
   items: state => state.items,
-  noData: state => state.noData
+  noData: state => state.noData,
+  cateSearch: state => state.cateSearch,
+  noDataCate: state => state.noDataCate,
+  cateName: state => state.cateName
 }
 
 const db = firebase.firestore()
 const auth = firebase.auth()
 
 let lastVisible = ''
+let cateVisible = ''
 
 export const actions = {
   // 最初にstateのデータを空にする。
   resetPosts({ commit }) {
     commit('resetItems')
     lastVisible = ''
+    cateVisible = ''
   },
   //firestoreから全投稿記事のデータを取得
   async getPosts({ dispatch, commit }) {
@@ -41,6 +51,26 @@ export const actions = {
       alert('データの取得に失敗しています。')
     }
   },
+  //カテゴリー検索
+  async catePosts({ commit }, name) {
+    try {
+      const catePosts = await db.collection('posts').where('articleCate', '==', name).orderBy('createdAt', 'desc').startAfter(cateVisible).limit(2)
+      console.log('test')
+      catePosts.get().then(snapshot => {
+        cateVisible = snapshot.docs[snapshot.docs.length - 1]
+        if(cateVisible == undefined) {
+          commit('noDataCate')
+        }
+        snapshot.forEach((doc) => {
+          commit('getPosts', { id: doc.id, item: doc.data() })
+        }, cateVisible)
+        console.log(cateVisible)
+      })
+      commit('cateSearch', name)
+    } catch(error) {
+      console.log('error')
+    }
+  }
 }
 
 export const mutations = {
@@ -50,6 +80,9 @@ export const mutations = {
       { header: '本棚一覧' }
     ],
     state.noData = false
+    state.noDataCate = false
+    state.cateSearch = false
+    state.cateName = ''
   },
   //itemsにデータを格納
   getPosts(state, {id, item}) {
@@ -64,5 +97,14 @@ export const mutations = {
   // 本棚の最後の記事が表示されたとき
   noData(state) {
     state.noData = true
+  },
+  //「もっと表示する」をカテゴリー検索用に切り替え
+  cateSearch(state, name) {
+    state.cateSearch = true
+    state.cateName = name
+  },
+  //カテゴリー検索時の最後の記事が表示されたとき
+  noDataCate(state) {
+    state.noDataCate = true
   }
 }

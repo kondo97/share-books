@@ -75,7 +75,8 @@ export const actions = {
         contents: contents,
         createdAt: dayjs().unix(),
         userName: userName,
-        iconURL: iconURL
+        iconURL: iconURL,
+        likeCount: 0
       })
       commit('logoutReset')
       this.$router.push('/')
@@ -85,7 +86,6 @@ export const actions = {
   },
   //画面遷移時に記事作成途中のデータをstateに保存
   savePosts({ commit }, { articleTitle, articleDescript, articleCate}) {
-    console.log('success')
     commit('savePosts', { articleTitle, articleDescript, articleCate})
   }
 }
@@ -149,7 +149,6 @@ export const mutations = {
   },
   //画面遷移時に記事作成途中のデータをstateに保存
   savePosts(state, { articleTitle, articleDescript, articleCate}) {
-    console.log(articleTitle)
     state.articleTitle = articleTitle
     state.articleDescript = articleDescript
     state.articleCate = articleCate

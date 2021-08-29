@@ -51,7 +51,7 @@ export const actions = {
   //記事へのコメントを取得
   async getCommnets({ dispatch, commit }, {nowUser, pageUid}) {
     try {
-      const comments = await db.collection(`posts/${pageUid}/comments`).orderBy('createdAt', 'asc')
+      const comments = await db.collection(`posts/${pageUid}/comments`)
       comments.get().then(snapshot => {
         snapshot.forEach((doc) => {
           dispatch('matchComments', {id: doc.id, nowUser: nowUser, comment: doc.data() })

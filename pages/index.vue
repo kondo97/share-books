@@ -74,11 +74,11 @@
                       <v-col cols="4" sm="4" md="2">
                         <v-row class="d-flex justify-center">
                           <v-col cols="6">
-                            <v-icon color="pink darken-1">mdi-heart</v-icon>
+                            <v-icon color="pink lighten-2">mdi-heart</v-icon>
                           </v-col>
                           <v-col cols="6" class="d-flex align-center pa-0"
                             ><v-list-item-subtitle
-                              v-html="item.good"
+                              v-html="item.likeCount"
                               class="text-subtitle-1"
                             ></v-list-item-subtitle
                           ></v-col>
@@ -90,8 +90,14 @@
               </template>
             </v-list>
           </div>
+          <div v-show="!cateSearch">
           <p v-if="!noData" class="text-center pointer hover-blue mt-6 pb-9" @click="showMorePosts">▼もっと表示する</p>
-        <p v-if="noData" class="text-center mt-6 pb-6">no more data</p>
+          <p v-if="noData" class="text-center mt-6 pb-6">no more data</p>
+          </div>
+          <div v-show="cateSearch">
+            <p v-if="!noDataCate" class="text-center pointer hover-blue mt-6 pb-9" @click="showMoreCatePosts">▼もっと表示する</p>
+            <p v-if="noDataCate" class="text-center mt-6 pb-6">no more date</p>
+          </div>
         </v-col>
         <v-col cols="12" sm="12" md="3"><SideMenuRight /></v-col>
       </v-row>
@@ -126,6 +132,11 @@ export default {
     goProfile(item) {
       const id = item.authorUid
       this.$router.push(`/myPage/${id}`)
+    },
+    //カテゴリー用のもっと表示する押下
+    showMoreCatePosts() {
+      const name = this.$store.getters['topPosts/cateName']
+      this.$store.dispatch('topPosts/catePosts', name)
     }
   },
   computed: {
@@ -134,7 +145,14 @@ export default {
     },
     noData() {
       return this.$store.getters['topPosts/noData']
-    }
+    },
+    //「もっと表示する」をカテゴリー検索用に切り替え
+    cateSearch() {
+      return this.$store.getters['topPosts/cateSearch']
+    },
+    noDataCate() {
+      return this.$store.getters['topPosts/noDataCate']
+    },
   }
 };
 </script>
