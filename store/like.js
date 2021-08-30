@@ -1,5 +1,6 @@
 import firebase from '@/plugins/firebase'
 import dayjs from 'dayjs'
+import { subtract } from 'lodash'
 
 export const state = () => ({
   isLike: false,
@@ -7,20 +8,25 @@ export const state = () => ({
   likes: [
     { header: 'いいねした記事' }
   ],
-  noDataLike: false
+  noDataLike: false,
+  likedUsers:[],
+  noDataLikeUser: false
 })
 
 export const getters = {
   isLike: state => state.isLike,
   totalLike: state => state.totalLike,
   likes: state => state.likes,
-  noDataLike: state => state.noDataLike
+  noDataLike: state => state.noDataLike,
+  likedUsers: state => state.likedUsers,
+  noDataLikeUser: state => state.noDataLikeUser
 }
 
 const db = firebase.firestore()
 const auth = firebase.auth()
 
 let likeVisible = ''
+let likeUserVisible = ''
 
 export const actions = {
   resetLike({commit}) {
@@ -32,6 +38,10 @@ export const actions = {
   resetLikePost({ commit }) {
     likeVisible = ''
     commit('resetLikePost')
+  },
+  resetLikedUsers({ commit }) {
+    likeUserVisible = ''
+    commit('resetLikedUsers')
   },
   //閲覧ユーザーがいいねを押しているか確認
   async checkLike({ commit }, {pageUid, currentUserId}) {
@@ -52,7 +62,8 @@ export const actions = {
   async addLike({ dispatch, commit }, {pageUid, currentUserId}) {
     try {
       await db.collection(`posts/${pageUid}/likedUsers`).doc(currentUserId).set({
-        id: currentUserId
+        id: currentUserId,
+        createdAt: dayjs().unix()
       })
       await db.collection(`users/${currentUserId}/likedPosts`).doc(pageUid).set({
         id: pageUid,
@@ -63,6 +74,7 @@ export const actions = {
       })
       commit('onIsLike')
       dispatch('postsDetail/additionLike', null, { root: true })
+      commit('additionTotalLike')
     } catch(error) {
 
     }
@@ -77,6 +89,7 @@ export const actions = {
       })
       commit('notIsLike')
       dispatch('postsDetail/subtractLike', null, { root: true })
+      commit("subtractTotalLike")
     } catch(error) {
 
     }
@@ -99,15 +112,12 @@ export const actions = {
     try {
       console.log(uid)
       const postId = await db.collection(`users/${uid}/likedPosts`).orderBy('createdAt', 'desc').startAfter(likeVisible).limit(1)
-      console.log(likeVisible)
       postId.get().then(snapshot => {
         likeVisible = snapshot.docs[snapshot.docs.length - 1]
         if (likeVisible == undefined) {
           commit('noDataLike')
         }
-        console.log(snapshot)
         snapshot.forEach((doc) => {
-          console.log('test')
           db.collection('posts').doc(doc.data().id).get()
             .then((doc) => {
               if (doc.exists) {
@@ -121,7 +131,45 @@ export const actions = {
     } catch(error) {
       console.log('error')
     }
-  }
+  },
+  //いいねしたユーザーの一覧を表示
+  async getLikeUsers({ dispatch, commit }, postId) {
+    try {
+     const userId = await db.collection(`posts/${postId}/likedUsers`).orderBy('createdAt', 'desc').startAfter(likeUserVisible).limit(1)
+     userId.get().then(snapshot => {
+      likeUserVisible = snapshot.docs[snapshot.docs.length - 1]
+      if (likeUserVisible == undefined) {
+        commit('noDataLikeUser')
+      }
+      snapshot.forEach((doc) => {
+        if (doc.exists) {
+        const likedUserId = doc.data().id
+        dispatch('matchLikedUsers', likedUserId)
+        }
+      }, likeUserVisible)
+     })
+    } catch(error) {
+
+    }
+  },
+  //いいねしたユーザーのプロフィール情報を取得
+  async matchLikedUsers({ commit }, likedUserId) {
+    console.log(likedUserId)
+    try {
+     const likedUser = db.collection(`users/${likedUserId}/profile`).doc(likedUserId)
+     likedUser.get().then((doc) => {
+       console.log(doc.data())
+       const likedUserProfile = {
+         id: doc.id,
+         userName: doc.data().userName,
+         iconURL: doc.data().iconURL
+       }
+       commit('matchLikedUsers', likedUserProfile)
+     })
+    } catch(error) {
+
+    }
+  } 
 }
 
 export const mutations = {
@@ -136,6 +184,12 @@ export const mutations = {
   },
   totalLike(state, totalLikeCounts) {
     state.totalLike = totalLikeCounts
+  },
+  additionTotalLike(state) {
+    state.totalLike += 1
+  },
+  subtractTotalLike(state) {
+   state.totalLike -= 1
   },
   resetLikeTotal(state) {
     state.totalLike = 0
@@ -157,5 +211,14 @@ export const mutations = {
   },
   noDataLike(state) {
     state.noDataLike = true
+  },
+  matchLikedUsers(state, likedUserProfile) {
+    state.likedUsers.push(likedUserProfile)
+  },
+  resetLikedUsers(state) {
+    state.likedUsers = []
+  },
+  noDataLikeUser(state) {
+    state.noDataLikeUser = true
   }
 }

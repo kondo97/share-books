@@ -20,7 +20,7 @@
                 >
               </span>
             </v-col>
-            <v-col class="py-0 text-center"><p>{{ postDetail.likeCount }}</p></v-col>
+            <v-col class="py-0 text-center hover-line pointer" @click="checkLikeUsers"><p>{{ postDetail.likeCount }}</p></v-col>
           </v-row>
         </v-col>
         <v-col class="text-center"
@@ -59,7 +59,7 @@
               </span>
             </v-col>
             <v-col cols="6" sm="4" class="text-center d-flex align-center"
-              ><p class="ma-0">12</p></v-col
+              ><p class="ma-0 hover-line pointer">{{ postDetail.likeCount }}</p></v-col
             >
           </v-row>
         </v-col>
@@ -85,6 +85,8 @@
         >
       </v-row>
     </div>
+    <RequireVerify ref="child" />
+    <RequireLogin  ref="requireLogin" />
   </div>
 </template>
 
@@ -126,9 +128,19 @@ export default {
     },
     //いいね追加
     submitAddLike() {
-      const pageUid = this.$route.params["articlesId"];
-      const currentUserId = this.$store.getters["profile/user"].uid;
-      this.$store.dispatch("like/addLike", { pageUid, currentUserId });
+      const user = this.$store.getters["profile/user"];
+      if (this.$store.getters["signIn/isAuth"]) {
+        if (user.emailVerified == true) {
+          const pageUid = this.$route.params["articlesId"];
+          const currentUserId = this.$store.getters["profile/user"].uid;
+          this.$store.dispatch("like/addLike", { pageUid, currentUserId })
+        } else {
+          this.$refs.child.childEvent();
+        } 
+      } else {
+        console.log('test')
+        this.$refs.requireLogin.requireEvent();
+      }
     },
     //いいね削除
     submitDeleteLike() {
@@ -136,6 +148,11 @@ export default {
       const currentUserId = this.$store.getters["profile/user"].uid;
       this.$store.dispatch("like/deleteLike", { pageUid, currentUserId });
     },
+    //記事にいいねしたユーザーの一覧画面へ
+    checkLikeUsers() {
+      const pageUid = this.$route.params["articlesId"];
+      this.$router.push(`/like/${pageUid}`)
+    }
   },
   computed: {
     matchUser() {

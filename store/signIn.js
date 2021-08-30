@@ -141,7 +141,6 @@ export const actions = {
       commit('posts/logoutReset', null, { root: true })
       commit('getPosts/logoutReset', null, { root: true })
       commit('myPageProfile/logoutReset', null, { root: true })
-      this.$router.push('/')
    },
    // ログイン状態にする
    authCheck({ commit }) {

@@ -60,7 +60,8 @@
 .comment-title,
 .comment-contents,
 .articleTitle,
-.mypage-border {
+.mypage-border,
+.likeUsers-border {
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
@@ -84,6 +85,9 @@
   color: #217BD4;
 }
 
+.hover-line:hover {
+  text-decoration: underline;
+}
 
 @media screen and (max-width:480px) {
   .sp-user-name,
@@ -339,6 +343,13 @@
     width: 36px !important;
     height: 36px !important;
   }
+}
+
+//likeUsers
+
+.likeUsers {
+  display: inline-block;
+  
 }
 
 

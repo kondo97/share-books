@@ -47,36 +47,34 @@
             :rules="commentRules"
           ></v-textarea>
         </v-form>
-        <v-row class="mt-4 justify-space-between">
-          <v-col cols="8" sm="10">
+        <v-row class="mt-4 justify-end" v-show="comment.displayIcon">
+          <!-- <v-col cols="8" sm="10">
             <v-row class="ml-4">
               <v-col cols="1" sm="1"
                 ><v-icon color="pink darken-1">mdi-heart</v-icon></v-col
               >
               <v-col cols="2" sm="1">12</v-col>
             </v-row>
-          </v-col>
+          </v-col> -->
           <v-col cols="2" sm="1" v-if="!commentEdit">
             <v-icon
               class="prevent-item mr-4"
               @click="editComment(index, comment)"
-              v-show="comment.displayIcon"
               >mdi-pencil</v-icon
             >
           </v-col>
           <v-col cols="2" sm="1" class="prevent-item" v-if="!commentEdit">
             <v-icon
               @click="submitDelete(index, comment)"
-              v-show="comment.displayIcon"
+              
               >mdi-delete</v-icon
             >
           </v-col>
-          <v-col>
+          <v-col v-if="commentEdit">
             <div class="text-right">
               <v-btn
                 class="primary prevent-item"
                 @click="submitComment"
-                v-if="commentEdit"
               >
                 更新
               </v-btn>
