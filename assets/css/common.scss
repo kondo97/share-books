@@ -61,7 +61,8 @@
 .comment-contents,
 .articleTitle,
 .mypage-border,
-.likeUsers-border {
+.likeUsers-border,
+.news-border {
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
@@ -87,6 +88,11 @@
 
 .hover-line:hover {
   text-decoration: underline;
+}
+
+.mypage-width,
+.news-width {
+  width: 80%;
 }
 
 @media screen and (max-width:480px) {
@@ -190,10 +196,10 @@
 }
 
 //NewsList
-.wrap-text {
-  word-break: break-all;
-  white-space: normal;
-}
+// .wrap-text {
+//   word-break: break-all;
+//   white-space: normal;
+// }
 
 .verify-title {
   background-color: #9a8478;
@@ -313,9 +319,7 @@
 }
 
 //mtPageId
-.mypage-width {
-  width: 80%;
-}
+
 
 .avatar-size {
   width: 72px !important;
@@ -349,8 +353,8 @@
 
 .likeUsers {
   display: inline-block;
-  
 }
+
 
 
 

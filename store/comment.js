@@ -4,9 +4,9 @@ import _ from "lodash"
 
 export const state = () => ({
   //編集用にコメントのデータを格納
-  EditpageUid: '',
-  EditId: '',
-  EditIndex: '',
+  // EditpageUid: '',
+  // EditId: '',
+  // EditIndex: '',
   //コメントの情報を格納
   comments: []
 })
@@ -41,6 +41,20 @@ export const actions = {
       await db.collection(`users/${userUid}/commented`).doc(pageUid).set({
         id: pageUid,
         createdAt: dayjs().unix()
+      })
+      const actionUser = await db.collection(`users/${userUid}/profile`).doc(userUid).get()
+      const refActionUser = actionUser.data()
+      const author = await db.collection('posts').doc(pageUid)
+      author.get().then((doc) => {
+        const authorUid = doc.data().authorUid
+        db.collection(`users/${authorUid}/news`).doc(userUid + 'comment').set({
+          select: 'コメント',
+          createdAt: dayjs().unix(),
+          iconURL: refActionUser.iconURL,
+          userName: refActionUser.userName,
+          id: pageUid,
+          read: false
+        })
       })
       dispatch('resetComments')
       dispatch('getCommnets', { nowUser: userUid, pageUid: pageUid })
@@ -90,9 +104,9 @@ export const actions = {
     }
   },
   //編集アイコンを押下
-  changeComment({ commit }, { pageUid, id, index }) {
-    commit('changeComment', { pageUid, id, index })
-  },
+  // changeComment({ commit }, { pageUid, id, index }) {
+  //   commit('changeComment', { pageUid, id, index })
+  // },
   //コメントを編集
   async updateComment({ getters, commit }, commentEditComment) {
     const pageUid = getters.EditpageUid
@@ -115,11 +129,11 @@ export const mutations = {
     state.comments = []
   },
   //編集アイコンを押下。コメントのIDを格納。
-  changeComment(state, { pageUid, id, index }) {
-    state.EditpageUid = pageUid,
-      state.EditId = id
-    state.EditIndex = index
-  },
+  // changeComment(state, { pageUid, id, index }) {
+  //   state.EditpageUid = pageUid,
+  //   state.EditId = id
+  //   state.EditIndex = index
+  // },
   //コメントを編集
   updateComment(state, { index, commentEditComment }) {
     state.comments[index].comment = commentEditComment

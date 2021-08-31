@@ -20,39 +20,48 @@
       </nuxt-link>
       <!-- ログイン時に表示 -->
       <!-- お知らせ -->
-        <div v-if="isAuth">
-          <v-icon
-            dark
-            class="mr-1 mr-sm-3 pointer"
-            @click="displayNews"
-            v-click-outside="clickOutsideNews"
-            >mdi-bell</v-icon
-          >
-          <div class="news">
-            <div class="news--list" v-if="showNews">
-              <NewsList @closeNews="clickOutsideNews" />
-            </div>
+      <div v-if="isAuth">
+        <v-icon
+          dark
+          class="mr-1 mr-sm-3 pointer"
+          @click="displayNews"
+          v-click-outside="clickOutsideNews"
+          v-if="newsRead"
+          >mdi-bell</v-icon
+        >
+        <v-icon
+          color="yellow lighten-1"
+          class="mr-1 mr-sm-3 pointer"
+          @click="displayNews"
+          v-click-outside="clickOutsideNews"
+          v-if="!newsRead"
+          >mdi-bell-ring</v-icon
+        >
+        <div class="news">
+          <div class="news--list" v-if="showNews">
+            <NewsList @closeNews="clickOutsideNews" />
           </div>
         </div>
+      </div>
       <!-- アバター -->
-        <div v-if="isAuth">
-          <v-avatar
-            class="mr-1 mr-sm-3 avatar pointer"
-            @click="displayMenu"
-            v-click-outside="clickOutsideMenu"
-          >
-            <img :src="iconURL" />
-          </v-avatar>
+      <div v-if="isAuth">
+        <v-avatar
+          class="mr-1 mr-sm-3 avatar pointer"
+          @click="displayMenu"
+          v-click-outside="clickOutsideMenu"
+        >
+          <img :src="iconURL" />
+        </v-avatar>
 
-          <div class="menu" v-if="showMenu">
-            <div class="menu--list">
-              <MenuList
-                @closeMenu="clickOutsideMenu"
-                @parent-event="parentEvent"
-              />
-            </div>
+        <div class="menu" v-if="showMenu">
+          <div class="menu--list">
+            <MenuList
+              @closeMenu="clickOutsideMenu"
+              @parent-event="parentEvent"
+            />
           </div>
         </div>
+      </div>
       <!-- 非ログイン時に表示 -->
       <nuxt-link to="/signIn/signUp" class="text-decoration-none">
         <span v-if="!isAuth">
@@ -64,7 +73,7 @@
         <v-btn elevation="2" color="success" @click="newPosts">新規投稿</v-btn>
       </span>
     </div>
-    </client-only>
+   </client-only>
     <RequireVerify ref="child" />
   </v-app-bar>
 </template>
@@ -91,6 +100,9 @@ export default {
     },
     displayNews() {
       this.showNews = true;
+      // this.$store.dispatch("news/resetNews");
+      // const currentUid = this.$store.getters["profile/user"].uid;
+      // this.$store.dispatch("news/getNews", currentUid);
     },
     clickOutsideNews() {
       this.showNews = false;
@@ -107,10 +119,20 @@ export default {
     parentEvent() {
       this.$refs.child.childEvent();
     },
+    getClientNews() {
+      this.$store.dispatch("news/resetNews");
+      const currentUid = this.$store.getters["profile/user"].uid;
+      this.$store.dispatch("news/getNews", currentUid);
+    }
   },
   //vue-click-outsideの仕様。
   directives: {
     ClickOutside,
+  },
+  created() {
+    this.$store.dispatch("news/resetNews");
+      const currentUid = this.$store.getters["profile/user"].uid;
+      this.$store.dispatch("news/getNews", currentUid);
   },
   computed: {
     isAuth() {
@@ -118,6 +140,9 @@ export default {
     },
     iconURL() {
       return this.$store.getters["profile/profile"].iconURL;
+    },
+    newsRead() {
+      return this.$store.getters["news/news"][0].read;
     },
   },
 };

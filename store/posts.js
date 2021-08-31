@@ -40,7 +40,6 @@ export const actions = {
   pushBook({ state, commit }, create) {
     if (state.booksCounts <= 4) {
       commit('pushBook', create)
-      console.log(state.booksCounts)
     } else {
       commit('overBooks')
     }

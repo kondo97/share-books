@@ -14,10 +14,6 @@ export default {
     AppBar: () => import("~/components/Frame/AppBar"),
     FooterBar: () => import("~/components/Frame/FooterBar"),
   },
-  data() {
-    return {};
-  },
-  methods: {},
 };
 </script>
 

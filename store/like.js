@@ -72,6 +72,20 @@ export const actions = {
       await db.collection(`posts`).doc(pageUid).update({
         likeCount: firebase.firestore.FieldValue.increment(1)
       })
+      const actionUser = await db.collection(`users/${currentUserId}/profile`).doc(currentUserId).get()
+      const refActionUser = actionUser.data()
+      const author = await db.collection('posts').doc(pageUid)
+      author.get().then((doc) => {
+        const authorUid = doc.data().authorUid
+        db.collection(`users/${authorUid}/news`).doc(currentUserId + 'like').set({
+          select: 'いいね',
+          createdAt: dayjs().unix(),
+          iconURL: refActionUser.iconURL,
+          userName: refActionUser.userName,
+          id: pageUid,
+          read: false
+        })
+      })
       commit('onIsLike')
       dispatch('postsDetail/additionLike', null, { root: true })
       commit('additionTotalLike')
@@ -154,7 +168,6 @@ export const actions = {
   },
   //いいねしたユーザーのプロフィール情報を取得
   async matchLikedUsers({ commit }, likedUserId) {
-    console.log(likedUserId)
     try {
      const likedUser = db.collection(`users/${likedUserId}/profile`).doc(likedUserId)
      likedUser.get().then((doc) => {
