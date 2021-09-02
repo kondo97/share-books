@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <v-card
       class="d-none d-sm-none d-md-block d-lg-block d-xl-block left-menu-fixed mt-6"
       color="FFFFFB"
@@ -20,7 +20,7 @@
     <!-- タブレット以下は表示 -->
     <div class="d-block d-sm-block d-md-none d-lg-none d-xl-none">
       <div class="sm-category mt-3 mx-auto">
-        <v-select :items="items" item-text="name" label="カテゴリー" solo> </v-select>
+        <v-select :items="items" item-text="name" label="カテゴリー" solo @change="cateSelect"> </v-select>
       </div>
     </div>
   </div>
@@ -38,7 +38,6 @@ export default {
         {name:"政治・社会"},
         {name:"芸術・デザイン・音楽"},
         {name:"人文・思想・宗教"},
-        {name:"暮らし・健康・料理"},
         {name:"サイエンス・テクノロジー"},
         {name:"学習・スキル・自己啓発"},
         {name:"スポーツ・フィットネス"},

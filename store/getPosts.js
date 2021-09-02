@@ -52,13 +52,11 @@ export const actions = {
   async getCommentId({ commit }, uid) {
     try {
       const id = await db.collection(`users/${uid}/commented`).orderBy('createdAt', 'desc').startAfter(lastComment).limit(1)
-      console.log(lastComment)
       id.get().then(snapshot => {
         lastComment = snapshot.docs[snapshot.docs.length - 1]
         if (lastComment == undefined) {
           commit('noDataComment')
         }
-        console.log(snapshot)
         snapshot.forEach((doc) => {
           db.collection('posts').doc(doc.data().id).get()
             .then((doc) => {

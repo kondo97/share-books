@@ -31,11 +31,12 @@ export const actions = {
             displayName: userName,
             photoURL: "https://github.com/share-hondana.png"
          }).then(() => {
-            // dispatch('profile/setUser', result.user, { root: true })
-               // .then(() => {
+            dispatch('profile/setUser', result.user, { root: true })
+               .then(() => {
                   //ユーザーデータをprofileコレクションに格納する。
-                  dispatch('profile/pushUser', true, { root: true })
-               // })
+                  const isNewUser = true
+                  dispatch('profile/pushUser', isNewUser, { root: true })
+               })
          })
       } catch (error) {
          if (error.code == "auth/email-already-in-use") {
@@ -47,8 +48,13 @@ export const actions = {
       }
    },
    //認証メールを送信
-   sendEmail({ commit }) {
-      firebase.auth().currentUser.sendEmailVerification()
+   async sendEmail({ commit }) {
+      try {
+      await firebase.auth().currentUser.sendEmailVerification() 
+      }
+      catch(error) {
+         alert('送信に失敗しました。メールアドレス登録はお済みですか？')
+      }
    },
    // エラー画面へ遷移
    errorEmail({ commit }) {
@@ -92,6 +98,8 @@ export const actions = {
             this.$router.push('/')
          } else if (error.code == "auth/email-already-in-use") {
             alert('このメールアドレスは既に使われています。')
+         } else if(error.code == "auth/requires-recent-login") {
+            alert('お手数ですが、ログアウトしてからもう一度お試し下さい。')
          } else {
             alert('メールの送信に失敗しました。')
          }
@@ -139,6 +147,7 @@ export const actions = {
       commit('posts/logoutReset', null, { root: true })
       commit('getPosts/logoutReset', null, { root: true })
       commit('myPageProfile/logoutReset', null, { root: true })
+      this.$router.push('/')
    },
    // ログイン状態にする
    authCheck({ commit }) {

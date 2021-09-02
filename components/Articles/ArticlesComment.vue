@@ -7,7 +7,8 @@
     >
       <div
         class="
-          mt-9
+          mt-3
+          mt-sm-9
           px-sm-6
           pb-sm-6
           comment-contents
@@ -17,18 +18,23 @@
         "
       >
         <v-row>
-          <v-col cols="2" sm="1">
+          <v-col
+            cols="12"
+            class="text-right sp-time d-md-none pb-0 pt-3"
+          >
+            <p>{{ comment.createdAt | day}}</p>
+          </v-col>
+          <v-col cols="2" sm="2" md="1" class="pt-0 d-md-flex align-center">
             <v-avatar size="36"
               ><img :src="comment.iconURL" alt="コメント投稿者の画像"
             /></v-avatar>
           </v-col>
-          <v-col cols="7" sm="8" class="d-flex align-center">
+          <v-col cols="8" sm="10"  md="7" class="d-flex align-center pt-0">
             <p class="ma-0 sp-user-name">@{{ comment.userName }}</p>
           </v-col>
           <v-col
-            cols="3"
-            sm="3"
-            class="d-flex align-center justify-sm-end sp-time"
+            md="4"
+            class="d-md-flex align-center justify-md-end sp-time d-none d-md-block"
           >
             <p>{{ comment.createdAt | day}}</p>
           </v-col>

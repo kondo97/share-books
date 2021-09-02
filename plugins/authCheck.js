@@ -11,7 +11,6 @@ export default function ({ route, store, redirect, $axios }) {
       //閲覧ユーザーのauth情報を取得
     } else {
       // 未ログイン時の処理
-      store.dispatch("signIn/logout");
     }
   })
 }

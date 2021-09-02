@@ -1,6 +1,6 @@
 <template>
   <v-row class="px-6 py-sm-8 py-3">
-    <v-col cols="2" sm="3" class="text-center">
+    <v-col cols="2" sm="2" class="text-center">
       <client-only>
       <v-avatar class="avatar-size"
         ><img :src="iconURL" alt="投稿者の画像" @click="goProfile" class="pointer"></v-avatar
@@ -12,7 +12,7 @@
     >
       <p class="sp-user-name ma-0 pointer hover-blue" @click="goProfile">{{ userName }}</p>
       <!-- スマホでは非表示 -->
-      <v-row class="hidden-sm-and-down">
+      <v-row class="d-none d-sm-flex">
         <v-col sm="3" class="text-center d-flex align-center"
           ><v-icon color="pink lighten-2" size="24">mdi-heart</v-icon></v-col
         >

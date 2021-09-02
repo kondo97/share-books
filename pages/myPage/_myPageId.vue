@@ -39,14 +39,14 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-row class="d-flex justify-space-between">
-                        <v-col cols="3">
+                        <v-col cols="12" sm="12" md="9">
                           <v-list-item-subtitle
                             v-html="item.userName"
                             @click="goProfile(item)"
                             class="pointer contents"
                           ></v-list-item-subtitle>
                         </v-col>
-                        <v-col cols="9" class="text-right">
+                        <v-col cols="12" sm="12" md="3" class="text-md-right pt-0 pt-md-3">
                           <v-list-item-subtitle
                             v-html="item.createdAt"
                           ></v-list-item-subtitle>
@@ -58,7 +58,7 @@
                         class="pointer hover-blue"
                       ></v-list-item-title>
                       <v-row class="d-flex justify-space-between mt-1">
-                        <v-col cols="8" sm="3" md="6">
+                        <v-col cols="8" sm="8" md="6">
                           <v-row class="d-flex justify-space-between">
                             <v-col cols="1" md="3">
                               <v-icon> mdi-tag </v-icon>
@@ -111,7 +111,7 @@
               <v-list-item v-for="(followUser, i) in followUsers" :key="i">
                 <v-card-text class="follow-border mx-sm-16">
                   <v-row class="py-3 px-sm-12">
-                    <v-col cols="2" sm="1">
+                    <v-col cols="2" sm="2" md="1">
                       <v-avatar size="36"
                         ><img
                           :src="followUser.iconURL"
@@ -120,7 +120,7 @@
                           class="pointer"
                       /></v-avatar>
                     </v-col>
-                    <v-col sm="9" class="d-flex align-center">
+                    <v-col cols="10" sm="8" md="9" class="d-flex align-center">
                       <p
                         class="ma-0 pointer hover-blue"
                         @click="goProfileFollow(followUser)"
@@ -128,8 +128,8 @@
                         {{ followUser.userName }}
                       </p>
                     </v-col>
-                    <v-col sm="2" class="text-right text-sm-left">
-                      <div v-if="isSelf">
+                    <v-col cols="12" sm="2" md="2" class="text-center text-sm-right text-sm-left">
+                      <!-- <div v-if="isSelf">
                       <span v-if="isFollower">
                         <v-btn dark color="#5F9EA0" @click="unFollow(followUser.id)"
                           >フォロー中</v-btn
@@ -141,9 +141,9 @@
                         </v-btn>
                       </span>
                       </div>
-                      <div v-if="!isSelf">
+                      <div v-if="!isSelf"> -->
                         <p style="color: #5F9EA0;">フォロー中</p>
-                      </div>
+                      <!-- </div> -->
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -167,7 +167,7 @@
                 <v-list-item v-for="(follower, i) in followedUsers" :key="i">
                   <v-card-text class="follow-border mx-sm-16">
                     <v-row class="py-3 mx-sm-12">
-                      <v-col cols="2" sm="1">
+                      <v-col cols="2" sm="2" md="1">
                         <v-avatar size="36"
                           ><img
                             :src="follower.iconURL"
@@ -176,12 +176,12 @@
                             @click="goProfileFollow(follower)"
                         /></v-avatar>
                       </v-col>
-                      <v-col cols="10" sm="9" class="d-flex align-center">
+                      <v-col cols="10" sm="2" md="9" class="d-flex align-center">
                         <p class="ma-0 pointer hover-blue" @click="goProfileFollow(follower)">
                           {{ follower.userName }}
                         </p>
                       </v-col>
-                      <v-col sm="2" class="d-flex align-sm-center justify-end">
+                      <v-col cols="12" sm="2" md="2" class="d-flex align-sm-center justify-sm-end justify-center">
                         <p class="ma-0 follower-color">フォロワー</p>
                       </v-col>
                     </v-row>
@@ -223,14 +223,14 @@
 
                     <v-list-item-content>
                       <v-row class="d-flex justify-space-between">
-                        <v-col cols="3">
+                        <v-col cols="12" sm="12" md="9">
                           <v-list-item-subtitle
                             v-html="like.userName"
                             @click="goProfile(like)"
                             class="pointer contents"
                           ></v-list-item-subtitle>
                         </v-col>
-                        <v-col cols="9" class="text-right">
+                        <v-col cols="12" sm="12" md="3" class="text-md-right pt-0 pt-md-3">
                           <v-list-item-subtitle
                             v-html="like.subtitle"
                           ></v-list-item-subtitle>
@@ -242,7 +242,7 @@
                         class="pointer hover-blue"
                       ></v-list-item-title>
                       <v-row class="d-flex justify-space-between mt-1">
-                        <v-col cols="8" sm="3" md="6">
+                        <v-col cols="8" sm="8" md="6">
                           <v-row class="d-flex justify-space-between">
                             <v-col cols="1" md="3">
                               <v-icon> mdi-tag </v-icon>
@@ -313,14 +313,14 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-row class="d-flex justify-space-between">
-                        <v-col cols="3">
+                        <v-col cols="12" sm="12" md="9">
                           <v-list-item-subtitle
                             v-html="item.userName"
                             @click="goProfile(item)"
                             class="pointer contents"
                           ></v-list-item-subtitle>
                         </v-col>
-                        <v-col cols="9" class="text-right">
+                        <v-col cols="12" sm="12" md="3" class="text-md-right pt-0 pt-md-3">
                           <v-list-item-subtitle
                             v-html="item.createdAt"
                           ></v-list-item-subtitle>
@@ -332,7 +332,7 @@
                         class="pointer hover-blue"
                       ></v-list-item-title>
                       <v-row class="d-flex justify-space-between mt-1">
-                        <v-col cols="8" sm="3" md="6">
+                        <v-col cols="8" sm="8" md="6">
                           <v-row class="d-flex justify-space-between">
                             <v-col cols="1" md="3">
                               <v-icon> mdi-tag </v-icon>
@@ -460,15 +460,15 @@ export default {
       this.$store.dispatch("follow/getFollowUser", uid);
     },
     //フォロー中ユーザーを解除する
-    unFollow(id) {
-      const currentUserId = this.$store.getters["profile/user"].uid;
-      const followedUserId = id;
-      this.$store.dispatch("follow/unFollowPost", {
-        currentUserId,
-        followedUserId,
-      });
-      this.isFollow = false
-    },
+    // unFollow(id) {
+    //   const currentUserId = this.$store.getters["profile/user"].uid;
+    //   const followedUserId = id;
+    //   this.$store.dispatch("follow/unFollowPost", {
+    //     currentUserId,
+    //     followedUserId,
+    //   });
+    //   this.isFollow = false
+    // },
     //フォロワーをもっと表示させる
     showMoreFollowed(){
      const uid = this.$store.getters["profile/user"].uid;

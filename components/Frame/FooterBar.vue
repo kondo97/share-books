@@ -8,12 +8,15 @@
     >
       <div class="d-flex justify-center my-2">
         <div v-for="icon in icons" :key="icon" class="white--text mx-3" icon>
-          <div @click="fotterIcon(icon)">
+          <div @click="fotterIcon(icon)" class="pointer">
             <v-icon size="24px">
               {{ icon }}
             </v-icon>
           </div>
         </div>
+        <nuxt-link to="/inquiry" class="text-decoration-none">
+          <p class="my-0 ml-3 white--text">お問い合わせ</p>
+        </nuxt-link>
       </div>
       <v-divider></v-divider>
 
@@ -37,7 +40,7 @@ export default {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${currentURL}`)
       }
       if (icon == "mdi-twitter") {
-        window.open(`http://twitter.com/share?url=${currentURL}&text=「share hondana」でおすすめの本を紹介しよう！&hashtags=ShareHondana`)
+        window.open(`http://twitter.com/share?url=${currentURL}&text=「Share Hondana」でおすすめの本を紹介しよう！&hashtags=ShareHondana`)
       }
     },
   },

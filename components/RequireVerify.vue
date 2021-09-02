@@ -13,9 +13,10 @@
           <v-btn color="success" @click="sendVerify">
             認証用メールを送信
           </v-btn>
-          <v-card-text class="mt-4 mb-6 pointer hover-blue" @click="twitterEmail"
+          <v-card-text class="mt-4 pointer font-weight-medium hover-blue" @click="twitterEmail"
             >Twitterログイン時にメールアドレス登録が完了していない方はこちら</v-card-text
           >
+          <p class="mb-6">認証完了後はページを再読込して下さい。</p>
         </div>
 
         <v-divider></v-divider>

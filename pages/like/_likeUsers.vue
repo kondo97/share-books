@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="mt-9 ml-4 mx-sm-12 mt-sm-12 bgMainColor likeUsers">記事にいいねしたユーザー</p>
-    <v-row class="mt-4 mx-sm-12 mt-sm-6 bgMainColor pa-sm-6 px-3">
+    <v-row class="mt-4 mx-sm-12 mt-sm-6 bgMainColor">
       <v-col cols="6" sm="3" v-for="(likedUser, i) in likedUsers" :key="i">
         <div class="text-center likeUsers-border mx-sm-6">
           <v-list-item-avatar>

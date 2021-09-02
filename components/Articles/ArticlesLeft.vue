@@ -105,7 +105,7 @@ export default {
     shareTwitter() {
       const currentURL = window.location.href;
       window.open(
-        `http://twitter.com/share?url=${currentURL}&text=「share hondana」でおすすめの本を紹介しよう！&hashtags=ShareHondana`
+        `http://twitter.com/share?url=${currentURL}&text=「Share Hondana」でおすすめの本を紹介しよう！&hashtags=ShareHondana`
       );
     },
     // facebookでシェア

@@ -11,7 +11,7 @@
         v-model="email"
       ></v-text-field>
       <v-text-field
-          placeholder="パスワード"
+          placeholder="パスワードを設定して下さい。"
           outlined
           dense
           :rules="pwRules"

@@ -59,6 +59,8 @@ export const actions = {
   },
   //フォローする(マイページ)
   async follow({ commit }, {currentUserId, followedUserId}) {
+    console.log(currentUserId)
+    console.log(followedUserId)
     try {
       await db.collection(`users/${currentUserId}/follow`).doc(followedUserId).set({
         id: followedUserId

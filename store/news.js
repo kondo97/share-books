@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 export const state = () => ({
    news: [
-     {read:true}
+     { initial:true, read:true}
    ],
    noDataNews: false
 })
@@ -21,7 +21,6 @@ let newsVisible =''
 export const actions = {
   async getNews({ commit }, currentUid) {
     try {
-      console.log('test')
       const lastMonth = dayjs().subtract(30, 'day').unix()
       const news =  db.collection(`users/${currentUid}/news`).where("createdAt", ">=", lastMonth).orderBy('createdAt', 'desc').startAfter(newsVisible).limit(3)
       news.get().then(snapshot => {
@@ -53,13 +52,23 @@ export const actions = {
       })
       batch.commit()
     })
-  }
+  },
 }
 
 export const mutations = {
+  resetNews(state) {
+    state.news = [
+      {initial:true, read:true}
+    ],
+    state.noDataNews = false
+  },
   getNews(state, newsData) {
-    state.news = []
+    if(state.news[0].initial == true) {
+      console.log('inital')
+      state.news = []
+    } 
     if(newsData.select == 'いいね') {
+      console.log('iine')
       const editNews = {
         id: newsData.id,
         iconURL: newsData.iconURL,
@@ -71,6 +80,7 @@ export const mutations = {
       state.news.push(editNews)
     } 
     if(newsData.select == 'コメント') {
+      console.log('teat')
       const editNews = {
         id: newsData.id,
         iconURL: newsData.iconURL,
@@ -81,12 +91,6 @@ export const mutations = {
       }
       state.news.push(editNews)
     }
-  },
-  resetNews(state) {
-    state.news = [
-      {read:true}
-    ],
-    state.noDataNews = false
   },
   noDataNews(state) {
     state.noDataNews = true

@@ -121,7 +121,6 @@ export const mutations = {
   //記事の必要情報をstateに格納
   getPostDetail(state, {id, item}) {
     item.id = id
-    item.userName = "@" + item.userName
     item.createdAt =  dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"
     state.postDetail = item
   },

@@ -92,9 +92,9 @@
     <v-col cols="12" sm="6" class="px-sm-3 px-md-12 create-border right-create">
       <p class="text-h5 mt-3">プレビュー</p>
       <div class="pa-6 mt-3" :class="{ bgMainColor: articleTitle }">
-        <h1 class="mt-6" :class="{ articleTitle: articleTitle }">
+        <p class="mt-6 text-h4 font-weight-bold" :class="{ articleTitle: articleTitle }">
           {{ articleTitle }}
-        </h1>
+        </p>
         <p class="mt-6">
           {{ articleDescript }}
         </p>
@@ -124,7 +124,7 @@
                       >mdi-delete</v-icon
                     >
                   </div>
-                  <h2 class="mt-4 text-sm-h5 text-h6">
+                  <h2 class="mt-4 text-sm-h5 text-h6 font-weight-bold">
                     タイトル：{{ content.title }}
                   </h2>
                   <p class="mt-3" v-if="content.author">
@@ -246,7 +246,7 @@ export default {
   methods: {
     //追加する
     nextBook() {
-      if (this.contents.length <= 47) {
+      if (this.contents.length <= 4) {
         this.contents.push(this.create);
         this.create = {
           title: "",

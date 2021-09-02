@@ -18,7 +18,7 @@
 }
 
 .fixed-width {
-  max-width: 1200px !important;
+  max-width: 1260px !important;
   width: 100%;
   height: 100%;
 }
@@ -153,13 +153,6 @@
   width: 100%;
 }
 
-//SideMenuLeft 
-//SideMenuRight
-.left-menu
-.right-menu  {
-  width: 180px;
-}
-
 
 .sm-twitter {
   text-align: right;
@@ -193,7 +186,22 @@
   position: fixed !important;
   overflow: auto;
   height: 65vh;
+  width: 250px;
 }
+
+//SideMenuLeft 
+//SideMenuRight
+
+.right-menu {
+  width: 180px;
+}
+
+@media screen and (max-width: 1200px) {
+  .left-menu-fixed {
+  width: 180px;
+ }
+}
+
 
 //NewsList
 // .wrap-text {
@@ -207,7 +215,7 @@
 
 //ArticlesBook
 .book-count-width {
-  width: 500px;
+  width: 600px;
 }
 
 // ーーーーーーーーーーー
@@ -225,9 +233,6 @@
 
 .public-btn {
   position: fixed !important;
-  top: 15%;
-  right: 3%;
-  z-index: 10;
 }
 
 // .delete-btn {
@@ -263,6 +268,31 @@
   .public-btn {
     top: 90%;
     right: 5%;
+    z-index: 10;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .public-btn {
+    top: 8%;
+    right: 5%;
+    z-index: 10;
+  }
+}
+
+@media screen and (min-width: 1201px) {
+  .public-btn {
+    top: 18%; 
+    right: 5%;
+    z-index: 10;
+  }
+}
+
+@media screen and (min-width: 1366px) {
+  .public-btn {
+    top: 11% ;
+    right: 5%;
+    z-index: 10;
   }
 }
 
@@ -275,12 +305,6 @@
   border-left: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-.public-btn {
-  position: fixed;
-  top: 15%;
-  right: 5%;
-  z-index: 10;
-}
 
 .left-create,
 .right-create {
@@ -322,8 +346,8 @@
 
 
 .avatar-size {
-  width: 72px !important;
-  height: 72px !important;
+  width: 50px !important;
+  height: 50px !important;
 }
 
 .follow-border {
@@ -355,6 +379,10 @@
   display: inline-block;
 }
 
+//inquiry
+.inquiry-width {
+  max-width: 600px !important;
+}
 
 
 

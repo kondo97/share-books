@@ -117,9 +117,9 @@
     <v-col cols="12" sm="6" class="px-sm-3 px-md-12 create-border right-create">
       <p class="text-h5 mt-3">プレビュー</p>
       <div class="pa-6 mt-3" :class="{ bgMainColor: articleTitle }">
-        <h1 class="mt-6" :class="{ articleTitle: articleTitle }">
+        <p class="mt-6 text-h4 font-weight-bold" :class="{ articleTitle: articleTitle }">
           {{ articleTitle }}
-        </h1>
+        </p>
         <p class="mt-6">
           {{ articleDescript }}
         </p>
@@ -137,6 +137,7 @@
               v-for="(content, index) in contents"
               :key="index"
               disabled
+              class="px-0"
             >
               <div class="d-flex flex-column mx-auto book-width">
                 <h2 class="mt-9">{{ index + 1 }}冊目</h2>
@@ -149,7 +150,7 @@
                       >mdi-delete</v-icon
                     >
                   </div>
-                  <h2 class="mt-4 text-sm-h5 text-h6">
+                  <h2 class="mt-4 text-sm-h5 text-h6 font-weight-bold">
                     タイトル：{{ content.title }}
                   </h2>
                   <p class="mt-3" v-if="content.author">
@@ -159,7 +160,7 @@
                     {{ content.descript }}
                   </p>
                   <div class="logo mt-6 mx-auto">
-                    <a :href="content.url">
+                    <a :href="content.url" target="_blank">
                       <img
                         src="~/static/amazon.png"
                         alt="amazonのロゴ"
@@ -223,18 +224,12 @@ export default {
         "ビジネス・経済",
         "歴史・地理",
         "政治・社会",
-        "芸術・エンターテイメント",
-        "アート・建築・デザイン",
+        "芸術・デザイン・音楽",
         "人文・思想・宗教",
-        "暮らし・健康・料理",
         "サイエンス・テクノロジー",
-        "学習・趣味・自己啓発",
-        "スポーツ・アウトドア",
-        "辞典・年間・本・言葉",
-        "音楽",
-        "旅行・紀行",
-        "絵本・児童書",
-        "コミックス",
+        "学習・スキル・自己啓発",
+        "スポーツ・フィットネス",
+        "漫画・雑誌",
         "その他",
       ],
       // 本棚のタイトル

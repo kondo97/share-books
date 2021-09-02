@@ -4,7 +4,7 @@
     clipped-left
     clipped-right
     color="app-bar"
-    class="px-1 px-sm-6"
+    class="px-sm-1 px-sm-6"
   >
   <client-only>
     <div class="d-flex align-center fixed-width px-0 mx-auto">
@@ -46,7 +46,7 @@
       <!-- アバター -->
       <div v-if="isAuth">
         <v-avatar
-          class="mr-1 mr-sm-3 avatar pointer"
+          class="mr-1 mr-sm-3 avatar-size pointer"
           @click="displayMenu"
           v-click-outside="clickOutsideMenu"
         >
@@ -130,9 +130,12 @@ export default {
     ClickOutside,
   },
   created() {
-    this.$store.dispatch("news/resetNews");
+    if(this.$store.getters["signIn/isAuth"]){
+      console.log('test')
+      this.$store.dispatch("news/resetNews");
       const currentUid = this.$store.getters["profile/user"].uid;
       this.$store.dispatch("news/getNews", currentUid);
+    }
   },
   computed: {
     isAuth() {
