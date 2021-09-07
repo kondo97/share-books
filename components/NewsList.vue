@@ -45,6 +45,7 @@ export default {
   },
   computed: {
     news() {
+      console.log(this.$store.getters['news/news'])
       return this.$store.getters['news/news']
     }
   }

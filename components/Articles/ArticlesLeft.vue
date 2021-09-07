@@ -73,14 +73,14 @@
           cols="2"
           sm="1"
           class="text-center d-flex align-center"
-          v-show="matchUser"
+          v-if="matchUser"
           ><v-icon dark @click="editArticle">mdi-pencil</v-icon></v-col
         >
         <v-col
           cols="2"
           sm="1"
           class="text-center d-flex align-center"
-          v-show="matchUser"
+          v-if="matchUser"
           ><v-icon dark @click="articleDelete">mdi-delete</v-icon></v-col
         >
       </v-row>
@@ -105,7 +105,7 @@ export default {
     shareTwitter() {
       const currentURL = window.location.href;
       window.open(
-        `http://twitter.com/share?url=${currentURL}&text=「Share Hondana」でおすすめの本を紹介しよう！&hashtags=ShareHondana`
+        `http://twitter.com/share?url=${currentURL}&text=&hashtags=ShareHondana`
       );
     },
     // facebookでシェア

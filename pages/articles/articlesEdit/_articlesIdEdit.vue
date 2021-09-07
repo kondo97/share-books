@@ -240,7 +240,6 @@ export default {
       this.contents = doc.data().contents;
       this.$store.dispatch("postsDetail/getEditInitial", doc);
     } catch (error) {
-      consile.lgo("error");
     }
   },
   methods: {

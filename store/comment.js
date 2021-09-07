@@ -3,10 +3,6 @@ import dayjs from 'dayjs'
 import _ from "lodash"
 
 export const state = () => ({
-  //編集用にコメントのデータを格納
-  // EditpageUid: '',
-  // EditId: '',
-  // EditIndex: '',
   //コメントの情報を格納
   comments: []
 })
@@ -103,10 +99,6 @@ export const actions = {
       alert('削除に失敗しました。')
     }
   },
-  //編集アイコンを押下
-  // changeComment({ commit }, { pageUid, id, index }) {
-  //   commit('changeComment', { pageUid, id, index })
-  // },
   //コメントを編集
   async updateComment({ getters, commit }, commentEditComment) {
     const pageUid = getters.EditpageUid
@@ -128,12 +120,6 @@ export const mutations = {
   resetComments(state) {
     state.comments = []
   },
-  //編集アイコンを押下。コメントのIDを格納。
-  // changeComment(state, { pageUid, id, index }) {
-  //   state.EditpageUid = pageUid,
-  //   state.EditId = id
-  //   state.EditIndex = index
-  // },
   //コメントを編集
   updateComment(state, { index, commentEditComment }) {
     state.comments[index].comment = commentEditComment

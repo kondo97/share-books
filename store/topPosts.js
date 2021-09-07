@@ -46,7 +46,7 @@ export const actions = {
   //firestoreから全投稿記事のデータを取得
   async getPosts({ dispatch, commit }) {
     try {
-      const posts = await db.collection('posts').orderBy('createdAt', 'desc').startAfter(lastVisible).limit(2)
+      const posts = await db.collection('posts').orderBy('createdAt', 'desc').startAfter(lastVisible).limit(10)
       posts.get().then(snapshot => {
         lastVisible = snapshot.docs[snapshot.docs.length - 1]
         if (lastVisible == undefined) {
@@ -63,7 +63,7 @@ export const actions = {
   //カテゴリー検索
   async catePosts({ commit }, name) {
     try {
-      const catePosts = await db.collection('posts').where('articleCate', '==', name).orderBy('createdAt', 'desc').startAfter(cateVisible).limit(2)
+      const catePosts = await db.collection('posts').where('articleCate', '==', name).orderBy('createdAt', 'desc').startAfter(cateVisible).limit(10)
       catePosts.get().then(snapshot => {
         cateVisible = snapshot.docs[snapshot.docs.length - 1]
         if (cateVisible == undefined) {
@@ -81,15 +81,24 @@ export const actions = {
   //キーワード検索イベント
   keyWordSearch({ getters, commit }, searchWords) {
     const keyVisible = getters.keyVisible
-    console.log(keyVisible)
     index.search(searchWords, {
       page: keyVisible
     }).then(({ hits }) => {
-      if(hits.length != 0) {
-        commit('keyWordSearch', hits)
+      if (hits.length != 0) {
+        commit('addKeyVisible')
+        hits.forEach(value => {
+          db.collection('posts').doc(value.objectID).get()
+            .then((doc) => {
+              let item = doc.data()
+              item.id = value.objectID
+              item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿",
+                item.userName = "@" + item.userName
+              commit('keyWordSearch', item)
+            })
+        })
       } else {
         commit('noKeySearch')
-      } 
+      }
     })
   }
 }
@@ -132,27 +141,20 @@ export const mutations = {
     state.noDataCate = true
   },
   //キーワード検索
-  keyWordSearch(state, hits) {
+  addKeyVisible(state) {
     state.keySearch = true
     state.keyVisible += 1
-    hits.forEach((value) => {
-      let item = {
-        id: value.objectID,
-        articleTitle: value.articleTitle,
-        userName: "@" + value.userName,
-        iconURL: value.iconURL,
-        createdAt: dayjs(value.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿",
-        authorUid: value.authorUid,
-        articleCate: value.articleCate
-      }
-      state.items.push(item)
-      state.items.push(
-        { divider: true, inset: true },
-      )
-    })
   },
+  keyWordSearch(state, item) {
+    state.items.push(item)
+    state.items.push(
+      { divider: true, inset: true },
+    )
+  },
+
   //キーワード検索で全て表示された時
   noKeySearch(state) {
+    state.keySearch = true
     state.noMoreKey = true
   }
 }

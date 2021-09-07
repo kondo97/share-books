@@ -35,7 +35,6 @@ export default {
   methods: {
     fotterIcon(icon) {
       const currentURL = window.location.href
-      console.log(currentURL)
       if (icon == "mdi-facebook") {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${currentURL}`)
       }

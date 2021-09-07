@@ -59,8 +59,6 @@ export const actions = {
   },
   //フォローする(マイページ)
   async follow({ commit }, {currentUserId, followedUserId}) {
-    console.log(currentUserId)
-    console.log(followedUserId)
     try {
       await db.collection(`users/${currentUserId}/follow`).doc(followedUserId).set({
         id: followedUserId
@@ -111,7 +109,7 @@ export const actions = {
   //フォロー中のユーザーを取得
   async getFollowUser({ dispatch, commit }, uid) {
     try {
-      const follows = await db.collection(`users/${uid}/follow`).orderBy('id').startAfter(followVisible).limit(2)
+      const follows = await db.collection(`users/${uid}/follow`).orderBy('id').startAfter(followVisible).limit(5)
       await follows.get().then(snapshot => {
       followVisible = snapshot.docs[snapshot.docs.length - 1]
        if (followVisible == undefined) {
@@ -140,7 +138,7 @@ export const actions = {
   //フォロワーを取得
   async getFollowedUser({ dispatch, commit }, uid) {
     try {
-    const follower = await db.collection(`users/${uid}/followed`).orderBy('id').startAfter(followerVisible).limit(2)
+    const follower = await db.collection(`users/${uid}/followed`).orderBy('id').startAfter(followerVisible).limit(5)
     await follower.get().then(snapshot => {
       followerVisible= snapshot.docs[snapshot.docs.length - 1]
        if (followerVisible == undefined) {

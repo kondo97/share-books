@@ -35,7 +35,7 @@ export const actions = {
   //firestoreから自分の投稿記事のデータを取得
   async getMyPosts({ dispatch, commit }, uid) {
     try {
-      const posts = await db.collection('posts').where("authorUid", "==", uid).orderBy('createdAt', 'desc').startAfter(lastVisible).limit(2)
+      const posts = await db.collection('posts').where("authorUid", "==", uid).orderBy('createdAt', 'desc').startAfter(lastVisible).limit(5)
       posts.get().then(snapshot => {
         lastVisible = snapshot.docs[snapshot.docs.length - 1]
         if (lastVisible == undefined) {
@@ -51,7 +51,7 @@ export const actions = {
   //コメントした記事のIdを取得
   async getCommentId({ commit }, uid) {
     try {
-      const id = await db.collection(`users/${uid}/commented`).orderBy('createdAt', 'desc').startAfter(lastComment).limit(1)
+      const id = await db.collection(`users/${uid}/commented`).orderBy('createdAt', 'desc').startAfter(lastComment).limit(5)
       id.get().then(snapshot => {
         lastComment = snapshot.docs[snapshot.docs.length - 1]
         if (lastComment == undefined) {

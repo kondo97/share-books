@@ -1,114 +1,131 @@
 <template>
   <div>
-    <v-card class="mt-9 inquiry-width mx-auto">
-      <v-container>
-        <h2>お問い合わせ</h2>
-        <v-form
-          ref="form"
-          v-model="contactFormValidation.valid"
-          lazy-validation
-        >
-          <v-text-field
-            v-model="contactForm.name"
-            :rules="contactFormValidation.nameRules"
-            label="名前"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="contactForm.email"
-            :rules="contactFormValidation.emailRules"
-            label="メールアドレス"
-            required
-          ></v-text-field>
-          <v-textarea
-            v-model="contactForm.contents"
-            :rules="contactFormValidation.contentsRules"
-            label="内容"
-            required
-          ></v-textarea>
-          <v-btn
-            :loading="contactForm.loading"
-            :disabled="!contactFormValidation.valid"
-            @click="sendMail()"
-            block
-            large
-            color="info"
-            class="mt-4 font-weight-bold"
-            >送信
-          </v-btn>
-        </v-form>
-      </v-container>
-    </v-card>
-    <v-snackbar
-      v-model="snackBar.show"
-      :color="snackBar.color"
-      bottom
-      right
-      :timeout="6000"
-      class="font-weight-bold"
+    
+    <form
+      class="p-form"
+      action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfDGsEfFimzSH9tZBmSzp--GQLhMlZhz8TN3bVTR9b3CQz5eQ/formResponse"
+      target="dummy"
     >
-      {{ snackBar.message }}
-    </v-snackbar>
+      <!-- お問い合わせ内容 セレクトボックス -->
+      <div class="p-formGroup p-formGroup__select u-mb20">
+        <label for="contactType">お問い合わせ内容を選択
+        </label>
+        <select
+          name="entry.1627256183"
+          id="contactType"
+          class="pointer"
+        >
+          <option data-value="不具合の発見" value="不具合の発見">
+            不具合の発見
+          </option>
+          <option data-value="ご意見・ご感想" value="ご意見・ご感想">ご意見・ご感想</option>
+          <option data-value="不正報告" value="不正報告">不正報告</option>
+          <option data-value="お困りごと" value="お困りごと">お困りごと</option>
+          <option data-value="その他" value="その他">その他</option>
+        </select>
+      </div>
+      <!--//End お問い合わせ内容 セレクトボックス -->
+
+      <!-- お名前 テキスト入力 -->
+      <div class="p-formGroup u-mb20">
+        <label for="userName">お名前</label>
+        <input
+          type="text"
+          id="userName"
+          name="entry.806161169"
+          required
+        />
+      </div>
+      <!--//END お名前 テキスト入力 -->
+
+      <!-- メールアドレス入力 -->
+      <div class="p-formGroup u-mb20">
+        <label for="email">メールアドレス</label>
+        <input
+          type="email"
+          id="email"
+          name="entry.1424439844"
+          required
+        />
+      </div>
+      <!--//End メールアドレス入力 -->
+
+      <!-- ご依頼内容 テキスト入力 -->
+      <div class="p-formGroup u-mb20">
+        <label for="content">お問い合わせ内容</label>
+        <textarea
+          id="content"
+          name="entry.207084762"
+          required
+        ></textarea>
+      </div>
+      <!--//End ご依頼内容 テキスト入力 -->
+
+      <!-- 送信 -->
+      <div class="p-btn">
+        <input class="primary" type="submit" value="送信する" @click="sendInquiry"/>
+      </div>
+      <!--//End 送信 -->
+    </form>
+    <iframe name="dummy" style="display:none;"></iframe>
   </div>
 </template>
 
 <script>
-import { functions } from "@/plugins/firebase";
-
 export default {
-  data: () => ({
-    contactForm: {
-      name: "",
-      contents: "",
-      email: "",
-      loading: false,
-    },
-    contactFormValidation: {
-      valid: false,
-      nameRules: [(v) => !!v || "名前は必須項目です"],
-      emailRules: [(v) => !!v || "メールアドレスは必須項目です"],
-      contentsRules: [(v) => !!v || "内容は必須項目です"],
-    },
-    snackBar: {
-      show: false,
-      color: "",
-      message: "",
-    },
-  }),
   methods: {
-    sendMail: function () {
-      if (this.$refs.form.validate()) {
-        this.contactForm.loading = true;
-        const mailer = functions.httpsCallable("sendMail");
-
-        mailer(this.contactForm)
-          .then(() => {
-            this.formReset();
-            this.showSnackBar(
-              "success",
-              "お問い合わせありがとうございます。送信完了しました"
-            );
-          })
-          .catch((err) => {
-            this.showSnackBar(
-              "error",
-              "送信に失敗しました。時間をおいて再度お試しください"
-            );
-            console.log(err);
-          })
-          .finally(() => {
-            this.contactForm.loading = false;
-          });
+    sendInquiry() {
+      if(!alert('お問い合わせを送信しました。')){
+        this.$router.push('/')
       }
-    },
-    showSnackBar: function (color, message) {
-      this.snackBar.message = message;
-      this.snackBar.color = color;
-      this.snackBar.show = true;
-    },
-    formReset: function () {
-      this.$refs.form.reset();
-    },
+    }
   },
-};
+}
 </script>
+
+<style scoped>
+ .p-form {
+   background: #fff;
+   margin: 0 auto;
+   max-width: 600px;
+   margin-top: 3%;
+   margin-bottom: 3%;
+   padding: 16px;
+ }
+
+
+select, input, textarea {
+  border: 2px solid #ccc;
+   border-radius: 3px;
+}
+
+ .p-formGroup {
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 20px;
+ }
+
+ label {
+   margin-bottom: 10px;
+   color: #3F6060;
+ }
+
+ select {
+   padding: 10px;
+ }
+
+ input {
+   padding: 6px;
+ }
+
+ textarea {
+   padding: 5px;
+ }
+
+ .p-btn {
+   color: #fff;
+   text-align: center;
+ }
+
+
+</style>

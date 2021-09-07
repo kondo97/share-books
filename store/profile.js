@@ -12,7 +12,9 @@ export const state = () => ({
   profile: {
     userName: '',
     iconURL: "https://github.com/share-hondana.png",
-  },
+    intro : '',
+    twitterUR: ''
+  }
 })
 
 export const getters = {
@@ -72,24 +74,16 @@ export const actions = {
         snapshot.forEach((doc) => {
           batch.update(doc.ref, {
             userName : myPage.userName,
-            iconURL: iconURL
+            iconURL: iconURL,
+            intro: myPage.intro,
+            twitterURL: myPage.twitterURL
           })
-          batch.commit()
         })
+        batch.commit()
       })
-    
-      // const refPosts = await db.collection('posts').where("authorUid", "==", userID)
-      // refPosts.get().then(snapshot => {
-      //   snapshot.forEach((doc) => {
-      //     const docRef = db.collection('posts').doc(doc.id)
-      //     docRef.update({
-      //       userName: myPage.userName
-      //     })
-      //   })
-      // })
-      
-      commit('editMyPage', { iconURL, myPage })
-      commit('myPageProfile/editUser', { iconURL, myPage }, { root: true })
+
+        commit('editMyPage', { iconURL, myPage })
+        commit('myPageProfile/editUser', { iconURL, myPage }, { root: true })
     } catch(error) {
       alert('更新に失敗しました。')
     }

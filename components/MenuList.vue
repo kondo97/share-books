@@ -40,12 +40,12 @@ export default {
           text: "マイページ",
           action: "myPage",
         },
-        {
-          icon: "mdi-send",
-          text: "ご利用ガイド",
-          to: "/gide",
-          action: "closeMenu",
-        },
+        // {
+        //   icon: "mdi-send",
+        //   text: "ご利用ガイド",
+        //   to: "/gide",
+        //   action: "closeMenu",
+        // },
         {
           icon: "mdi-logout",
           text: "ログアウト",

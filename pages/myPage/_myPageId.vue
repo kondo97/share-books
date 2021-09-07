@@ -459,16 +459,6 @@ export default {
       const uid = this.$route.params["myPageId"];
       this.$store.dispatch("follow/getFollowUser", uid);
     },
-    //フォロー中ユーザーを解除する
-    // unFollow(id) {
-    //   const currentUserId = this.$store.getters["profile/user"].uid;
-    //   const followedUserId = id;
-    //   this.$store.dispatch("follow/unFollowPost", {
-    //     currentUserId,
-    //     followedUserId,
-    //   });
-    //   this.isFollow = false
-    // },
     //フォロワーをもっと表示させる
     showMoreFollowed(){
      const uid = this.$store.getters["profile/user"].uid;

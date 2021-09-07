@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="display-none" :class="{ display: isActive }">
     <AppBar />
     <v-main class="bg-color">
       <Nuxt />
@@ -14,9 +14,27 @@ export default {
     AppBar: () => import("~/components/Frame/AppBar"),
     FooterBar: () => import("~/components/Frame/FooterBar"),
   },
+  mounted() {
+    this.isActive = true
+  },
+  data() {
+    return {
+      isActive: false
+    }
+  },
+  
 };
+
 </script>
 
-<style>
+<style scoped>
+
+.display-none {
+  display: none;
+}
+
+.display {
+  display: block;
+}
 
 </style>

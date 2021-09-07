@@ -19,9 +19,9 @@
             </div>
           </v-col>
         </v-row>
-        <nuxt-link to="/" class="how-to-create">
+          <nuxt-link target="_blank" to="/explanation#post" class="how-to-create">
           <p class="mt-3">作成方法はこちらから</p>
-        </nuxt-link>
+          </nuxt-link>
         <v-form ref="form" v-model="valid">
           <v-text-field
             label="本棚タイトル"
@@ -312,7 +312,6 @@ export default {
       articleCate: this.articleCate,
     })
   },
- 
 };
 </script>
 

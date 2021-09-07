@@ -20,12 +20,11 @@
       </nuxt-link>
       <!-- ログイン時に表示 -->
       <!-- お知らせ -->
-      <div v-if="isAuth">
+      <div v-if="isAuth" v-click-outside="clickOutsideNews">
         <v-icon
           dark
           class="mr-1 mr-sm-3 pointer"
           @click="displayNews"
-          v-click-outside="clickOutsideNews"
           v-if="newsRead"
           >mdi-bell</v-icon
         >
@@ -44,11 +43,10 @@
         </div>
       </div>
       <!-- アバター -->
-      <div v-if="isAuth">
+      <div v-if="isAuth" v-click-outside="clickOutsideMenu">
         <v-avatar
           class="mr-1 mr-sm-3 avatar-size pointer"
           @click="displayMenu"
-          v-click-outside="clickOutsideMenu"
         >
           <img :src="iconURL" />
         </v-avatar>
@@ -57,7 +55,6 @@
           <div class="menu--list">
             <MenuList
               @closeMenu="clickOutsideMenu"
-              @parent-event="parentEvent"
             />
           </div>
         </div>
@@ -100,9 +97,6 @@ export default {
     },
     displayNews() {
       this.showNews = true;
-      // this.$store.dispatch("news/resetNews");
-      // const currentUid = this.$store.getters["profile/user"].uid;
-      // this.$store.dispatch("news/getNews", currentUid);
     },
     clickOutsideNews() {
       this.showNews = false;
@@ -131,7 +125,6 @@ export default {
   },
   created() {
     if(this.$store.getters["signIn/isAuth"]){
-      console.log('test')
       this.$store.dispatch("news/resetNews");
       const currentUid = this.$store.getters["profile/user"].uid;
       this.$store.dispatch("news/getNews", currentUid);

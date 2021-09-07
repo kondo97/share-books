@@ -65,7 +65,7 @@ export default {
     noDataLikeUser() {
       return this.$store.getters['like/noDataLikeUser']
     }
-  }
+  },
 };
 </script>
 

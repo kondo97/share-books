@@ -124,8 +124,7 @@ export const actions = {
   //いいねした記事を取得
   async getLikePosts({ commit }, uid) {
     try {
-      console.log(uid)
-      const postId = await db.collection(`users/${uid}/likedPosts`).orderBy('createdAt', 'desc').startAfter(likeVisible).limit(1)
+      const postId = await db.collection(`users/${uid}/likedPosts`).orderBy('createdAt', 'desc').startAfter(likeVisible).limit(5)
       postId.get().then(snapshot => {
         likeVisible = snapshot.docs[snapshot.docs.length - 1]
         if (likeVisible == undefined) {
@@ -149,7 +148,7 @@ export const actions = {
   //いいねしたユーザーの一覧を表示
   async getLikeUsers({ dispatch, commit }, postId) {
     try {
-     const userId = await db.collection(`posts/${postId}/likedUsers`).orderBy('createdAt', 'desc').startAfter(likeUserVisible).limit(1)
+     const userId = await db.collection(`posts/${postId}/likedUsers`).orderBy('createdAt', 'desc').startAfter(likeUserVisible).limit(10)
      userId.get().then(snapshot => {
       likeUserVisible = snapshot.docs[snapshot.docs.length - 1]
       if (likeUserVisible == undefined) {
@@ -171,7 +170,6 @@ export const actions = {
     try {
      const likedUser = db.collection(`users/${likedUserId}/profile`).doc(likedUserId)
      likedUser.get().then((doc) => {
-       console.log(doc.data())
        const likedUserProfile = {
          id: doc.id,
          userName: doc.data().userName,
@@ -213,7 +211,6 @@ export const mutations = {
     ]
   },
   getMyPostsLike(state, { id, item }) {
-    console.log('tstts')
     item.id = id
     item.userName = "@" + item.userName
     item.createdAt = dayjs(item.createdAt * 1000).format('YYYY年MM月DD日') + "に投稿"

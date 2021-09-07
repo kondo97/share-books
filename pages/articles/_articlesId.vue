@@ -49,7 +49,7 @@
             <!-- コメント -->
             <ArticlesComment />
             <!-- コメントレイアウト -->
-            <div class="mt-sm-9 mt-6 px-sm-6 px-3 pb-6 mb-16 mb-md-0 comment-contents" v-show="isAuth">
+            <div class="mt-sm-9 mt-6 px-sm-6 px-3 pb-6 mb-sm-16 mb-md-0 comment-contents" v-show="isAuth">
               <v-row>
                 <v-col cols="2" sm="1">
                   <v-avatar size="36"
@@ -76,7 +76,7 @@
         <v-col cols="12" sm="2" class="d-none d-sm-none d-md-block d-lg-block d-xl-block">
           <SideMenuRight />
         </v-col>
-        <v-col class="mb-12 d-block d-sm-block d-md-none d-lg-none d-xl-none sp-articles-left-fixed">
+        <v-col class="mb-sm-12 d-block d-sm-block d-md-none d-lg-none d-xl-none sp-articles-left-fixed">
           <div class=""><ArticlesLeft /></div>
         </v-col>
       </v-row>
@@ -146,7 +146,7 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('postsDetail/destoryData')
-  }
+  },
 };
 </script>
 

@@ -95,6 +95,7 @@ export default {
     this.$store.dispatch('like/resetLikeTotal')
     //ユーザーのトータルいいね数を取得
     this.$store.dispatch('like/totalLike', pageUid)
+    this.$store.dispatch("myPageProfile/destroyProfile");
   },
   data() {
     return {
@@ -156,7 +157,7 @@ export default {
     }
   },
   destroyed() {
-    this.$store.dispatch("myPageProfile/destroyProfile");
+    
   },
 };
 </script>

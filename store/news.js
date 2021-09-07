@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 
 export const state = () => ({
    news: [
-     { initial:true, read:true}
+     { initial:true, read:true, text:'新しいお知らせはありません'}
    ],
    noDataNews: false
 })
@@ -22,7 +22,7 @@ export const actions = {
   async getNews({ commit }, currentUid) {
     try {
       const lastMonth = dayjs().subtract(30, 'day').unix()
-      const news =  db.collection(`users/${currentUid}/news`).where("createdAt", ">=", lastMonth).orderBy('createdAt', 'desc').startAfter(newsVisible).limit(3)
+      const news =  db.collection(`users/${currentUid}/news`).where("createdAt", ">=", lastMonth).orderBy('createdAt', 'desc').startAfter(newsVisible).limit(5)
       news.get().then(snapshot => {
         newsVisible = snapshot.docs[snapshot.docs.length - 1]
         if (newsVisible == undefined) {
@@ -58,17 +58,15 @@ export const actions = {
 export const mutations = {
   resetNews(state) {
     state.news = [
-      {initial:true, read:true}
+      {initial:true, read:true, text:'新しいお知らせはありません'}
     ],
     state.noDataNews = false
   },
   getNews(state, newsData) {
     if(state.news[0].initial == true) {
-      console.log('inital')
       state.news = []
     } 
     if(newsData.select == 'いいね') {
-      console.log('iine')
       const editNews = {
         id: newsData.id,
         iconURL: newsData.iconURL,
@@ -80,7 +78,6 @@ export const mutations = {
       state.news.push(editNews)
     } 
     if(newsData.select == 'コメント') {
-      console.log('teat')
       const editNews = {
         id: newsData.id,
         iconURL: newsData.iconURL,

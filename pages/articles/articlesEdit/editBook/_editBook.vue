@@ -107,8 +107,6 @@ export default {
     updateBook() {
       const postId = this.$route.params["editBook"]
       const editIndex = this.$store.getters['posts/editIndex']
-      console.log(postId)
-      console.log(editIndex)
       this.$store.dispatch('postsDetail/updateEditInitial', {
           postId: postId,
           create: this.create,

@@ -1,20 +1,20 @@
-import firebase from "firebase"
+import firebase from "firebase/app"
+import "firebase/auth"
 import 'firebase/firestore'
+import 'firebase/functions'
 
 if (!firebase.apps.length) {
  firebase.initializeApp({
-  apiKey: "AIzaSyBFL_zIPRn1SCErWAsAvW7zk2-x3EOlNA0",
-  authDomain: "share-hondana.firebaseapp.com",
-  projectId: "share-hondana",
-  storageBucket: "share-hondana.appspot.com",
-  messagingSenderId: "652171419991",
-  appId: "1:652171419991:web:817a3f9b7cdcef0ab09e12",
-  measurementId: "G-VYM2H115C4"
+  apiKey: "AIzaSyCaon5WazsZTgiaKg5_NteSt-zM1ojyQfM",
+  authDomain: "sharehondana.firebaseapp.com",
+  projectId: "sharehondana",
+  storageBucket: "sharehondana.appspot.com",
+  messagingSenderId: "990162981353",
+  appId: "1:990162981353:web:4d2a98f63f129780803b78",
+  measurementId: "G-P84554ZRXJ"
  })
-
-//  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-//   console.log('Initialized!')
-// })
 }
+
+export const functions = firebase.functions();
 
 export default firebase

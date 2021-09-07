@@ -42,26 +42,7 @@
         <p class="mt-6">
           {{ comment.comment }}
         </p>
-
-        <!-- <v-form ref="form" v-model="valid" v-if="commentEdit">
-          <v-textarea
-            solo
-            label="コメントを編集（最大140文字）"
-            autofocus
-            class="mt-6 prevent-item"
-            v-model="commentEditComment"
-            :rules="commentRules"
-          ></v-textarea>
-        </v-form> -->
         <v-row class="mt-4 justify-end" v-show="comment.displayIcon">
-          <!-- <v-col cols="8" sm="10">
-            <v-row class="ml-4">
-              <v-col cols="1" sm="1"
-                ><v-icon color="pink darken-1">mdi-heart</v-icon></v-col
-              >
-              <v-col cols="2" sm="1">12</v-col>
-            </v-row>
-          </v-col> -->
           <v-col cols="2" sm="1">
             <v-icon
               class="prevent-item mr-4"
@@ -76,16 +57,6 @@
               >mdi-delete</v-icon
             >
           </v-col>
-          <!-- <v-col v-if="commentEdit">
-            <div class="text-right">
-              <v-btn
-                class="primary prevent-item"
-                @click="submitComment"
-              >
-                更新
-              </v-btn>
-            </div>
-          </v-col> -->
         </v-row>
       </div>
     </v-list-item>
@@ -115,33 +86,14 @@ export default {
           action: "closeMenu",
         },
       ],
-      //ルール設定
-      // valid: false,
-      // commentRules: [
-      //   (v) => !!v || "コメントを編集できます！",
-      //   (v) => (v && v.length <= 140) || "最大140文字です。",
-      // ],
     };
   },
   methods: {
     //コメント編集ボタン押下
     editComment(index, comment) {
-      console.log(comment)
       const commentText = comment.comment
-      console.log(commentText)
-      // const pageUid = this.$route.params["articlesId"];
-      // this.$store.dispatch("comment/changeComment", {
-      //   pageUid: pageUid,
-      //   id: comment.id,
-      //   index: index,
-      // });
       this.$refs.child.editCommentEvent(commentText);
     },
-    //更新ボタン押下
-    // submitComment() {
-    //   this.$store.dispatch("comment/updateComment", this.commentEditComment);
-    //   this.commentEdit = !this.commentEdit;
-    // },
     //コメント削除ボタン押下
     submitDelete(index, comment) {
       if (confirm("このコメントを削除しますか？")) {

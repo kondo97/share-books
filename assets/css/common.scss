@@ -33,8 +33,9 @@
 }
 
 .sp-articles-left-fixed {
-  position: fixed;
-  bottom: 10%;
+  position: sticky;
+  position: -webkit-sticky;
+  bottom: 0;
   background-color: #998377;
 }
 
@@ -166,7 +167,7 @@
 .contents {
   position: relative;
   cursor: pointer;
-  border-radius: 5% !important; 
+  border-radius: 0% !important; 
 }
 
 
@@ -176,6 +177,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
+  z-index: 10;
 }
 
 .twitter {

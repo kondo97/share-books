@@ -57,10 +57,10 @@
 <script>
 export default {
   created() {
-    this.myPage.userName = this.$store.getters['profile/profile'].userName
-    this.uploadImageUrl = this.$store.getters['profile/profile'].iconURL
-    this.myPage.intro = this.$store.getters['profile/profile'].intro
-    this.myPage.twitterURL = this.$store.getters['profile/profile'].twitterURL
+    this.myPage.userName = this.$store.getters['myPageProfile/watchedProfile'].userName
+    this.uploadImageUrl = this.$store.getters['myPageProfile/watchedProfile'].iconURL
+    this.myPage.intro = this.$store.getters['myPageProfile/watchedProfile'].intro
+    this.myPage.twitterURL = this.$store.getters['myPageProfile/watchedProfile'].twitterURL
   },
   data() {
     return {

@@ -66,6 +66,8 @@ export const actions = {
       const doc = await db.collection(`users/${userUid}/profile`).doc(userUid).get()
       const userName = doc.data().userName
       const iconURL = doc.data().iconURL
+      const intro = doc.data().intro
+      const twitterURL = doc.data().twitterURL
       await  db.collection('posts').add({
         authorUid: userUid,
         articleTitle: articleTitle,
@@ -75,6 +77,8 @@ export const actions = {
         createdAt: dayjs().unix(),
         userName: userName,
         iconURL: iconURL,
+        intro: intro,
+        twitterURL: twitterURL,
         likeCount: 0
       })
       commit('logoutReset')
@@ -94,7 +98,6 @@ export const mutations = {
   pushBook(state, create) {
     state.contents.push(create)
     state.booksCounts++
-    console.log(state.booksCounts)
   },
   overBooks(state) {
     state.overBooks = true

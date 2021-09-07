@@ -27,11 +27,6 @@
 
 <script>
 export default {
-  created() {
-    // this.$store.dispatch("news/resetNews");
-    // const currentUid = this.$route.params["news"];
-    // this.$store.dispatch("news/getNews", currentUid);
-  },
   data: () => ({}),
   methods: {
     goNews(item) {
