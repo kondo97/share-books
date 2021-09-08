@@ -38,7 +38,7 @@
       </v-row>
     </div>
     <!-- タブレット以下は表示-->
-    <div class="d-block d-sm-block d-md-none d-lg-none d-xl-none white--text">
+    <div class="px-0 mx-0 d-block d-sm-block d-md-none d-lg-none d-xl-none white--text">
       <v-row class="d-flex justify-center">
         <v-col cols="4" sm="6">
           <v-row class="justify-center">
@@ -104,8 +104,9 @@ export default {
     //twitterでシェア
     shareTwitter() {
       const currentURL = window.location.href;
+      const title = this.$store.getters['postsDetail/postDetail'].articleTitle
       window.open(
-        `http://twitter.com/share?url=${currentURL}&text=&hashtags=ShareHondana`
+        `http://twitter.com/share?url=${currentURL}&text=${title}&hashtags=ShareHondana`
       );
     },
     // facebookでシェア
@@ -138,7 +139,6 @@ export default {
           this.$refs.child.childEvent();
         } 
       } else {
-        console.log('test')
         this.$refs.requireLogin.requireEvent();
       }
     },

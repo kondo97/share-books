@@ -220,6 +220,12 @@
   width: 600px;
 }
 
+@media screen and (max-width: 600px) {
+  .book-count-width {
+    width: 100%;
+  }
+}
+
 // ーーーーーーーーーーー
 //      Pages
 // ーーーーーーーーーーー

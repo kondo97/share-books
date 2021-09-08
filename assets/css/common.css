@@ -191,6 +191,12 @@
   width: 600px;
 }
 
+@media screen and (max-width: 600px) {
+  .book-count-width {
+    width: 100%;
+  }
+}
+
 .how-to-create, .twitterURL {
   text-decoration: none;
 }

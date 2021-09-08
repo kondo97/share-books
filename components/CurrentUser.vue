@@ -1,5 +1,5 @@
 <template>
-  <v-row class="px-6 py-sm-8 py-3">
+  <v-row class="px-sm-6 py-sm-8 py-3 mx-0">
     <v-col cols="2" sm="2" class="text-center">
       <client-only>
       <v-avatar class="avatar-size"
@@ -68,7 +68,7 @@
       </client-only>
     </v-col>
     
-    <v-col sm="12" class="mt-3 pb-0">
+    <v-col cols="12" sm="12" class="mt-3 pb-0">
       <p class="sp-user-name">
         {{ intro }}
       </p>
