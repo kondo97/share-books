@@ -3,7 +3,7 @@
 誰でも気軽にオススメの本を紹介できるサイトです。
 
 下記URLからご覧いただけます。
-<a href="https://sharehondana.web.app/" target="_blank">https://sharehondana.web.app/</a>
+<p><a href="https://sharehondana.web.app/" target="_blank">https://sharehondana.web.app/</a></p>
 
 ![Share Hondana](https://user-images.githubusercontent.com/85671197/134126292-4bcfe9c7-45d8-4e5c-805c-27489848e8f9.png)
 
