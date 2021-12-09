@@ -13,6 +13,10 @@
 - firebase 8.9.1
 - algoliasearch 4.10.5
 
+## 関連記事
+[Firestore×Algoliaで押さえておきたい基本的なポイント](https://qiita.com/kondo97/items/7e65d6f75358598ec237)
+[Qiitaを題材に、FirestoreのDB設計について考えてみる。](https://qiita.com/kondo97/items/b97b02c69b6761f70dd1)
+
 ## 機能
 - ユーザー登録、ログイン機能
 - 投稿機能
